@@ -1,5 +1,12 @@
 package com.mygdx.game;
 
-public class Player {
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
+public class Player extends Sprite {
+
+	
+	public Player(){
+		
+	}
 
 }
