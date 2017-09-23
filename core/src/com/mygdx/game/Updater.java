@@ -15,7 +15,9 @@ public class Updater extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture(Gdx.files.internal("1Currency.png"));
+		// When loading textures to project, the entire classpath should be included
+		// be careful with that
+		img = new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\1Currency.png")); 
 	
 	}
 
@@ -38,7 +40,7 @@ public class Updater extends ApplicationAdapter {
 		
 		
 		batch.begin();
-		batch.draw(img, 0, 0);
+		batch.draw(img, Gdx.input.getX(), Gdx.input.getY());
 		batch.end();
 	}
 	
