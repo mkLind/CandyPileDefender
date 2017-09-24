@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+ // sprite.setRegion(animation.getKeyFrame(time));
 
 public class Player extends Sprite {
 
