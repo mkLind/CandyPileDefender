@@ -54,6 +54,7 @@ public class Updater extends ApplicationAdapter {
 		}else if(Gdx.input.isKeyPressed(Keys.D)){
 			
 		}
+		
 		camera.update();
 		
 		
