@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
+/*
+ * Class for handling spritesheet based animations in the game
+ */
 public class Animator {
 private int row;
 private int column;
