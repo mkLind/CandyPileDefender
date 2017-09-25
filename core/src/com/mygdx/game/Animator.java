@@ -3,6 +3,7 @@ package com.mygdx.game;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Animator {
@@ -31,6 +32,14 @@ public Animator(int row, int column, float frametime, Texture spritesheet){
 	}
 	
 }
+
+/*
+ * Method For getting a single row of animation from the spritesheet
+ */
+public Animation getAnimation(int row){
+	return new Animation(frametime, animatedFrames.get(row));
+}
+
 
 
 }
