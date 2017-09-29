@@ -19,6 +19,7 @@ public class Updater extends ApplicationAdapter {
 	private OrthographicCamera camera;
 	private Stage stage;
 	private Vector3 mousePos;
+	private Player player;
 	
 	@Override
 	public void create () {
@@ -36,7 +37,7 @@ public class Updater extends ApplicationAdapter {
 		mousePos = new Vector3(0,0,0);
 		Cursor cursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")),0,0);
 		Gdx.graphics.setCursor(cursor);
-	
+		player = new Player(new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\badlogic.jpg")),0,0,32,32,100,100);	
 	}
 
 	@Override
@@ -46,13 +47,20 @@ public class Updater extends ApplicationAdapter {
 		
 		// Movement logic template for the character
 		if(Gdx.input.isKeyPressed(Keys.W)){
-			
+			player.setDir(Player.DIRECTION.UP);
+			player.setyVel(-1);
 		}else if(Gdx.input.isKeyPressed(Keys.A)){
-			
+			player.setDir(Player.DIRECTION.LEFT);
+			player.setxVel(-1);
 		}else if(Gdx.input.isKeyPressed(Keys.S)){
-			
+			player.setDir(Player.DIRECTION.DOWN);
+			player.setyVel(1);
 		}else if(Gdx.input.isKeyPressed(Keys.D)){
-			
+			player.setDir(Player.DIRECTION.RIGHT);
+			player.setxVel(1);
+		}else{
+			player.setxVel(0);
+			player.setyVel(0);
 		}
 		
 		camera.update();
