@@ -54,6 +54,7 @@ public class Updater extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		// Movement logic template for the character
+		/*
 		if(Gdx.input.isKeyPressed(Keys.W)){
 			player.setDir(Player.DIRECTION.UP);
 			player.setyVel(-1);
@@ -75,6 +76,7 @@ public class Updater extends ApplicationAdapter {
 			player.setyVel(0);
 			player.setCurrentFrame(statetime);
 		}
+		*/
 	//	camera.position.set(MathUtils.clamp(character.getX(), camera.viewportWidth * .5f, level.mapWidth() - camera.viewportWidth * .5f), MathUtils.clamp(character.getY(), camera.viewportHeight * .5f, level.mapHeight() - camera.viewportHeight * .5f), 0);
 // Above is for further development
 		
@@ -85,7 +87,7 @@ public class Updater extends ApplicationAdapter {
 		
 		batch.begin();
 		batch.draw(img, 50, 50);
-		player.draw(batch);
+	//	player.draw(batch);
 		batch.end();
 		
 	}
