@@ -13,6 +13,7 @@ public class Player extends Sprite {
 	private DIRECTION dir; 
 	private Animator animations;
 	
+	
 
 	
 	public Player(Texture spriteSheet, int srcX, int srcY, int width, int height, float x, float y){
@@ -34,8 +35,21 @@ public class Player extends Sprite {
 	 * @param row = which row from the spritesheet is used
 	 * @param time = used to determine which frame of the animation to use
 	 */
-	public void setCurrentFrame(int row, int time){
-		super.setRegion((Texture)animations.getAnimation(row).getKeyFrame(time));
+	public void setCurrentFrame( float time){
+		if(this.dir == DIRECTION.UP){
+			super.setRegion((Texture)animations.getAnimation(1).getKeyFrame(time));
+		}
+		if(this.dir == DIRECTION.DOWN){
+			super.setRegion((Texture)animations.getAnimation(0).getKeyFrame(time));
+				}
+		if(this.dir == DIRECTION.LEFT){
+			super.setRegion((Texture)animations.getAnimation(3).getKeyFrame(time));
+		}
+		if(this.dir == DIRECTION.RIGHT){
+			super.setRegion((Texture)animations.getAnimation(2).getKeyFrame(time));	
+		}
+		
+		
 	}
 	public float getyVel() {
 		return yVel;
