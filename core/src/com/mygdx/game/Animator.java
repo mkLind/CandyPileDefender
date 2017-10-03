@@ -16,8 +16,8 @@ private Texture spritesheet;
 private TextureRegion[][] splitImages;
 private ArrayList<TextureRegion[]> animatedFrames;
 
-public Animator(int row, int column, float frametime, Texture spritesheet){
-	this.spritesheet = spritesheet;
+public Animator(int row, int column, float frametime, Texture Spritesheet){
+	spritesheet = Spritesheet;
 	this.row = row;
 	this.column = column;
 	this.frametime = frametime;
