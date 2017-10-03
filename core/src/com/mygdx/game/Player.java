@@ -16,9 +16,11 @@ public class Player extends Sprite {
 	
 
 	
-	public Player(Texture spriteSheet, int srcX, int srcY, int width, int height, float x, float y){
-		super(spriteSheet, srcX, srcY, width, height);
+	public Player(Texture spriteSheet, int width, int height, float x, float y){
+		super(spriteSheet);
 		super.setPosition(x, y);
+		super.setRegionWidth(width);
+		super.setRegionHeight(height);
 		yVel = 0;
 		xVel = 0;
 		dir = DIRECTION.DOWN;

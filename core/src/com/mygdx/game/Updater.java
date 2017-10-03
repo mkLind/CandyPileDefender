@@ -20,7 +20,7 @@ public class Updater extends ApplicationAdapter {
 	private float aspectRatio; 
 	private OrthographicCamera camera;
 	private Stage stage;
-	private Vector3 mousePos;
+	
 	private Player player;
 	private float statetime;
 	@Override
@@ -35,12 +35,13 @@ public class Updater extends ApplicationAdapter {
 		camera.setToOrtho(false, 220f*aspectRatio, 220f);
 		camera.update();
 		stage = new Stage();
+		batch.setProjectionMatrix(camera.combined);
 		Gdx.input.setInputProcessor(stage);
 		batch.setProjectionMatrix(camera.combined);
-		mousePos = new Vector3(0,0,0);
+		
 		Cursor cursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")),0,0);
 		Gdx.graphics.setCursor(cursor);
-		player = new Player(new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\badlogic.jpg")),10,10,32,32,50,50);	
+		player = new Player(new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\BatMonster.png")),32,32,50,50);	
 		player.setAnimations(9, 4, 0.25f, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\BatMonster.png")));
 		player.setDir(DIRECTION.DOWN);
 	}
@@ -50,11 +51,11 @@ public class Updater extends ApplicationAdapter {
 	
 	public void render (float delta) {
 		statetime += delta;
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		// Movement logic template for the character
-		/*
+	/*
 		if(Gdx.input.isKeyPressed(Keys.W)){
 			player.setDir(Player.DIRECTION.UP);
 			player.setyVel(-1);
@@ -76,7 +77,10 @@ public class Updater extends ApplicationAdapter {
 			player.setyVel(0);
 			player.setCurrentFrame(statetime);
 		}
-		*/
+		player.setX(player.getX() + player.getxVel());
+		player.setY(player.getY() + player.getyVel());
+	*/
+		
 	//	camera.position.set(MathUtils.clamp(character.getX(), camera.viewportWidth * .5f, level.mapWidth() - camera.viewportWidth * .5f), MathUtils.clamp(character.getY(), camera.viewportHeight * .5f, level.mapHeight() - camera.viewportHeight * .5f), 0);
 // Above is for further development
 		
@@ -86,10 +90,15 @@ public class Updater extends ApplicationAdapter {
 		
 		
 		batch.begin();
-		batch.draw(img, 50, 50);
-	//	player.draw(batch);
-		batch.end();
+		//batch.draw(img, 50, 50);
+		//player.draw(batch);
 		
+		batch.end();
+		stage.act(statetime);
+		stage.draw();
+		
+		Gdx.app.log("Player status information ","Player position: x " + player.getX() + " y: " + player.getY() );
+	   
 	}
 	
 	@Override
