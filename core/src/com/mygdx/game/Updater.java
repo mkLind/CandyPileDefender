@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.Player.DIRECTION;
 
 public class Updater implements Screen {
@@ -29,6 +32,7 @@ public class Updater implements Screen {
 	
 	private BitmapFont f;
 	final Core game;
+	private ArrayList<Projectile> proj;
 	
 	public Updater(final Core game) {
 		this.game = game;
@@ -46,7 +50,7 @@ public class Updater implements Screen {
 		camera.update();
 		stage = new Stage();
 		game.batch.setProjectionMatrix(camera.combined);
-
+		proj = new ArrayList<Projectile>();
 		/*
 		Cursor cursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")),0,0);
 		Gdx.graphics.setCursor(cursor);
@@ -114,8 +118,25 @@ public class Updater implements Screen {
 			
 			
 		}
+		// This listens to mouse clicks
+		if(Gdx.input.justTouched()){
+			camera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0));
+		camera.update();
+		Projectile p = new Projectile(10, 10,player.getX(), player.getY(), (Gdx.input.getX() - player.getX())/50,(Gdx.input.getY() - player.getY())/50, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")));
+			p.setCurrentTime(TimeUtils.millis());
+			proj.add(p);
 		
+		}
 		
+		for(int i = 0; i<proj.size();i++){
+			if(TimeUtils.timeSinceMillis(proj.get(i).getCurrentTime())>= 2000){
+				proj.remove(i);
+			}else{
+				proj.get(i).setX(proj.get(i).getX() + proj.get(i).getxVel());
+				proj.get(i).setY(proj.get(i).getY() + proj.get(i).getyVel());
+				
+			}
+		}
 		
 	//	camera.position.set(MathUtils.clamp(character.getX(), camera.viewportWidth * .5f, level.mapWidth() - camera.viewportWidth * .5f), MathUtils.clamp(character.getY(), camera.viewportHeight * .5f, level.mapHeight() - camera.viewportHeight * .5f), 0);
 // Above is for further development
@@ -128,8 +149,13 @@ public class Updater implements Screen {
 		game.batch.begin();
 		//batch.draw(img, 50, 50);
 		
-		game.font.draw(game.batch,"Players velocities. x vel: " + player.getxVel() + " y Vel: " + player.getyVel()  , 50f,50f);
-		//game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
+	//	game.font.draw(game.batch,"Mouse just clicked: " +  Gdx.input.justTouched()  , 50f,50f);
+		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
+		
+		for(int i = 0; i<proj.size();i++){
+			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(), proj.get(i).getHeight());
+		}
+		
 		game.batch.end();
 		stage.act(statetime);
 		stage.draw();
