@@ -6,14 +6,24 @@ public class Projectile extends SpriteCommons {
 	private Texture t;
 	private long TimeAlive;
 	private long currentTime;
+	private float angle;
 
 	public Projectile(int width, int height, float x, float y, float xVel, float yVel, Texture t) {
 		super(width, height, x, y, xVel, yVel);
 		this.t = t;
 		currentTime = 0;
 		TimeAlive = 0;
+		angle = 0f;
 		
 		// TODO Auto-generated constructor stub
+	}
+
+	public float getAngle() {
+		return angle;
+	}
+
+	public void setAngle(float angle) {
+		this.angle = angle;
 	}
 
 	public Texture getT() {

@@ -45,8 +45,8 @@ public class Updater implements Screen {
 		camera = new OrthographicCamera();
 	
 		aspectRatio =  (float) Gdx.graphics.getWidth()/(float) Gdx.graphics.getHeight();
-		//camera.setToOrtho(false, 120f*aspectRatio, 120f);
-		camera.setToOrtho(false, 700f,700f);
+		camera.setToOrtho(false,220f*aspectRatio, 220f);
+	//	camera.setToOrtho(false, 700f,700f);
 		camera.update();
 		stage = new Stage();
 		game.batch.setProjectionMatrix(camera.combined);
@@ -69,13 +69,13 @@ public class Updater implements Screen {
 		
 		Gdx.gl.glClearColor(100, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		/*
+		
 		player.setX(player.getX() + player.getxVel());
 		player.setY(player.getY() + player.getyVel());
-		*/
+		
 		statetime += delta;
 		// Movement logic template for the character
-		/*
+		
 		if(Gdx.input.isKeyPressed(Keys.A)){
 			player.setDir(Player.DIRECTION.LEFT);
 			player.setxVel(-1.5f);
@@ -121,20 +121,29 @@ public class Updater implements Screen {
 			
 			
 		}
-		*/
+		
 		// This listens to mouse clicks
-		/*
+		
 		if(Gdx.input.justTouched()){
-			camera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0));
-		camera.update();
-		Projectile p = new Projectile(10, 10,player.getX(), player.getY(), (Gdx.input.getX() - player.getX())/50,(Gdx.input.getY() - player.getY())/50, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")));
+			Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
+			Vector3 reaCoords = camera.unproject(v);
+			float diffX = reaCoords.x - player.getX()+ player.getWidth()/2;
+			float diffY = reaCoords.y - player.getY() + player.getHeight()/2;
+			float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
+		
+			float velX = diffX / directionLength;
+			float velY = diffY / directionLength;		
+					
+			
+		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")));
 			p.setCurrentTime(TimeUtils.millis());
+			
 			proj.add(p);
 		
 		}
 		
 		for(int i = 0; i<proj.size();i++){
-			if(TimeUtils.timeSinceMillis(proj.get(i).getCurrentTime())>= 2000){
+			if(TimeUtils.timeSinceMillis(proj.get(i).getCurrentTime())>= 4000){
 				proj.remove(i);
 			}else{
 				proj.get(i).setX(proj.get(i).getX() + proj.get(i).getxVel());
@@ -142,7 +151,7 @@ public class Updater implements Screen {
 				
 			}
 		}
-		*/
+		
 		
 	//	camera.position.set(MathUtils.clamp(character.getX(), camera.viewportWidth * .5f, level.mapWidth() - camera.viewportWidth * .5f), MathUtils.clamp(character.getY(), camera.viewportHeight * .5f, level.mapHeight() - camera.viewportHeight * .5f), 0);
 // Above is for further development
@@ -153,15 +162,15 @@ public class Updater implements Screen {
 		
 		
 		game.batch.begin();
-		//batch.draw(img, 50, 50);
+		//game.batch.draw(img, Gdx.input.getX(), Gdx.input.getY());
 		
 	//	game.font.draw(game.batch,"Mouse just clicked: " +  Gdx.input.justTouched()  , 50f,50f);
-		//game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
-		/*
+		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
+		
 		for(int i = 0; i<proj.size();i++){
 			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(), proj.get(i).getHeight());
 		}
-		*/
+		
 		game.batch.end();
 		stage.act(statetime);
 		stage.draw();
