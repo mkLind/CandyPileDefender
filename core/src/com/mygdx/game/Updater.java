@@ -69,10 +69,13 @@ public class Updater implements Screen {
 		
 		Gdx.gl.glClearColor(100, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		/*
 		player.setX(player.getX() + player.getxVel());
 		player.setY(player.getY() + player.getyVel());
+		*/
 		statetime += delta;
 		// Movement logic template for the character
+		/*
 		if(Gdx.input.isKeyPressed(Keys.A)){
 			player.setDir(Player.DIRECTION.LEFT);
 			player.setxVel(-1.5f);
@@ -118,7 +121,9 @@ public class Updater implements Screen {
 			
 			
 		}
+		*/
 		// This listens to mouse clicks
+		/*
 		if(Gdx.input.justTouched()){
 			camera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0));
 		camera.update();
@@ -137,6 +142,7 @@ public class Updater implements Screen {
 				
 			}
 		}
+		*/
 		
 	//	camera.position.set(MathUtils.clamp(character.getX(), camera.viewportWidth * .5f, level.mapWidth() - camera.viewportWidth * .5f), MathUtils.clamp(character.getY(), camera.viewportHeight * .5f, level.mapHeight() - camera.viewportHeight * .5f), 0);
 // Above is for further development
@@ -150,12 +156,12 @@ public class Updater implements Screen {
 		//batch.draw(img, 50, 50);
 		
 	//	game.font.draw(game.batch,"Mouse just clicked: " +  Gdx.input.justTouched()  , 50f,50f);
-		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
-		
+		//game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
+		/*
 		for(int i = 0; i<proj.size();i++){
 			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(), proj.get(i).getHeight());
 		}
-		
+		*/
 		game.batch.end();
 		stage.act(statetime);
 		stage.draw();
