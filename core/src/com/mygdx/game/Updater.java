@@ -53,7 +53,7 @@ public class Updater implements Screen {
 		*/
 		
 		player = new Player(32,32,50,50);	
-		player.setAnimations(9, 4, 0.25f, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\BatMonster.png")));
+		player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\BatMonster.png")));
 		player.setDir(DIRECTION.DOWN);
 		
 	}
@@ -65,35 +65,57 @@ public class Updater implements Screen {
 		
 		Gdx.gl.glClearColor(100, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+		player.setX(player.getX() + player.getxVel());
+		player.setY(player.getY() + player.getyVel());
+		statetime += delta;
 		// Movement logic template for the character
-	
+		if(Gdx.input.isKeyPressed(Keys.A)){
+			player.setDir(Player.DIRECTION.LEFT);
+			player.setxVel(-1.5f);
+			player.setyVel(0);
+		}
 		if(Gdx.input.isKeyPressed(Keys.W)){
 			player.setDir(Player.DIRECTION.UP);
-			player.setyVel(1);
-		
-		}else if(Gdx.input.isKeyPressed(Keys.A)){
-			player.setDir(Player.DIRECTION.LEFT);
-			player.setxVel(-1);
-			
-		}else if(Gdx.input.isKeyPressed(Keys.S)){
+			player.setyVel(1.5f);
+			player.setxVel(0);
+		}  if(Gdx.input.isKeyPressed(Keys.S)){
 			player.setDir(Player.DIRECTION.DOWN);
-			player.setyVel(-1);
-			
-		}else if(Gdx.input.isKeyPressed(Keys.D)){
+			player.setyVel(-1.5f);
+			player.setxVel(0);	
+		} if(Gdx.input.isKeyPressed(Keys.D)){
 			player.setDir(Player.DIRECTION.RIGHT);
-			player.setxVel(1);
+			player.setxVel(1.5f);
+			player.setyVel(0);
 			
-		}else{
+		} 
+		
+		if(Gdx.input.isKeyPressed(Keys.W) && Gdx.input.isKeyPressed(Keys.A)){
+			player.setDir(Player.DIRECTION.LEFT);
+			player.setxVel(-1.5f);
+			player.setyVel(1.5f);
+		} if(Gdx.input.isKeyPressed(Keys.W) && Gdx.input.isKeyPressed(Keys.D)){
+			player.setDir(Player.DIRECTION.RIGHT);
+			player.setxVel(1.5f);
+			player.setyVel(1.5f);
+		} if(Gdx.input.isKeyPressed(Keys.D) && Gdx.input.isKeyPressed(Keys.S)){
+			player.setDir(Player.DIRECTION.RIGHT);
+			player.setxVel(1.5f);
+			player.setyVel(-1.5f);
+		}if(Gdx.input.isKeyPressed(Keys.S) && Gdx.input.isKeyPressed(Keys.A)){
+			player.setDir(Player.DIRECTION.LEFT);
+			player.setxVel(-1.5f);
+			player.setyVel(-1.5f);
+		}
+		
+		if(!Gdx.input.isKeyPressed(Keys.W)  && !Gdx.input.isKeyPressed(Keys.A) && !Gdx.input.isKeyPressed(Keys.S) && !Gdx.input.isKeyPressed(Keys.D)){
 			player.setDir(player.getDir());
 			player.setxVel(0);
 			player.setyVel(0);
 			
 			
 		}
-		player.setX(player.getX() + player.getxVel());
-		player.setY(player.getY() + player.getyVel());
-		statetime += delta;
+		
+		
 		
 	//	camera.position.set(MathUtils.clamp(character.getX(), camera.viewportWidth * .5f, level.mapWidth() - camera.viewportWidth * .5f), MathUtils.clamp(character.getY(), camera.viewportHeight * .5f, level.mapHeight() - camera.viewportHeight * .5f), 0);
 // Above is for further development
@@ -105,8 +127,9 @@ public class Updater implements Screen {
 		
 		game.batch.begin();
 		//batch.draw(img, 50, 50);
-		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
-		f.draw(game.batch, "Player status information Player position: x " + player.getX() + " y: " + player.getY() , 150f, 150f);
+		
+		game.font.draw(game.batch,"Players velocities. x vel: " + player.getxVel() + " y Vel: " + player.getyVel()  , 50f,50f);
+		//game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
 		game.batch.end();
 		stage.act(statetime);
 		stage.draw();

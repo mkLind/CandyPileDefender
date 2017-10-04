@@ -27,6 +27,7 @@ public class Player extends SpriteCommons {
 	// Sets all the animations for the player
 	public void setAnimations(int row, int column, float frametime, Texture spritesheet){
 		animations = new Animator(row, column, frametime, spritesheet);
+		
 	}
 	/*
 	 * Method for changing the frame of current animation. 
@@ -37,16 +38,32 @@ public class Player extends SpriteCommons {
 		
 				
 		if(this.dir == DIRECTION.UP){
-			return (TextureRegion)animations.getAnimation(1).getKeyFrame(time);
+			if(super.getxVel()== 0 && super.getyVel() == 0){
+				return (TextureRegion)animations.getAnimation(1).getKeyFrame(0,true);	
+			}else{
+			return (TextureRegion)animations.getAnimation(1).getKeyFrame(time,true);
+			}
 		}
 		if(this.dir == DIRECTION.DOWN){
-			return (TextureRegion)animations.getAnimation(0).getKeyFrame(time);
+			if(super.getxVel()== 0 && super.getyVel() == 0){
+				return (TextureRegion)animations.getAnimation(0).getKeyFrame(0,true);	
+			}else{
+			return (TextureRegion)animations.getAnimation(0).getKeyFrame(time,true);
+			}
 				}
 		if(this.dir == DIRECTION.LEFT){
-			return (TextureRegion)animations.getAnimation(3).getKeyFrame(time);
+			if(super.getxVel()== 0 && super.getyVel() == 0){
+				return (TextureRegion)animations.getAnimation(3).getKeyFrame(0,true);	
+			}else{
+			return (TextureRegion)animations.getAnimation(3).getKeyFrame(time,true);
+			}
 		}
 		if(this.dir == DIRECTION.RIGHT){
-			return (TextureRegion)animations.getAnimation(2).getKeyFrame(time);	
+			if(super.getxVel()== 0 && super.getyVel() == 0){
+				return (TextureRegion)animations.getAnimation(2).getKeyFrame(0,true);	
+			}else{
+			return (TextureRegion)animations.getAnimation(2).getKeyFrame(time,true);
+			}	
 		}
 		return null;
 		
