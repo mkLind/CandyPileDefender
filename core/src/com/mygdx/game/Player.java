@@ -9,8 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Player extends SpriteCommons {
 
-	private float yVel;
-	private float xVel;
 	private DIRECTION dir; 
 	private Animator animations;
 	
@@ -36,21 +34,22 @@ public class Player extends SpriteCommons {
 	 * @param time = used to determine which frame of the animation to use
 	 */
 	public TextureRegion getCurrentFrame( float time){
-		TextureRegion r = null;
+		
 				
 		if(this.dir == DIRECTION.UP){
-			r = (TextureRegion)animations.getAnimation(1).getKeyFrame(time);
+			return (TextureRegion)animations.getAnimation(1).getKeyFrame(time);
 		}
 		if(this.dir == DIRECTION.DOWN){
-			r = (TextureRegion)animations.getAnimation(0).getKeyFrame(time);
+			return (TextureRegion)animations.getAnimation(0).getKeyFrame(time);
 				}
 		if(this.dir == DIRECTION.LEFT){
-			r = (TextureRegion)animations.getAnimation(3).getKeyFrame(time);
+			return (TextureRegion)animations.getAnimation(3).getKeyFrame(time);
 		}
 		if(this.dir == DIRECTION.RIGHT){
-			r = (TextureRegion)animations.getAnimation(2).getKeyFrame(time);	
+			return (TextureRegion)animations.getAnimation(2).getKeyFrame(time);	
 		}
-		return r;
+		return null;
+		
 		
 	}
 	public DIRECTION getDir() {
