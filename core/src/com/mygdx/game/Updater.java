@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -26,7 +28,7 @@ public class Updater implements Screen {
 	private float aspectRatio; 
 	private OrthographicCamera camera;
 	private Stage stage;
-	
+	private ShapeRenderer r;
 	private Player player;
 	private float statetime;
 	
@@ -49,6 +51,9 @@ public class Updater implements Screen {
 	//	camera.setToOrtho(false, 700f,700f);
 		camera.update();
 		stage = new Stage();
+		r = new ShapeRenderer();
+		r.setProjectionMatrix(camera.combined);
+		
 		game.batch.setProjectionMatrix(camera.combined);
 		proj = new ArrayList<Projectile>();
 		/*
@@ -131,12 +136,14 @@ public class Updater implements Screen {
 			float diffY = reaCoords.y - player.getY() + player.getHeight()/2;
 			float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
 		
-			float velX = diffX / directionLength;
-			float velY = diffY / directionLength;		
+			float velX = diffX/directionLength;
+			float velY = diffY/directionLength;		
 					
 			
 		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")));
-			p.setCurrentTime(TimeUtils.millis());
+			p.setTargetX(reaCoords.x);
+			p.setTargetY(reaCoords.y);
+		    p.setCurrentTime(TimeUtils.millis());
 			
 			proj.add(p);
 		
@@ -146,6 +153,19 @@ public class Updater implements Screen {
 			if(TimeUtils.timeSinceMillis(proj.get(i).getCurrentTime())>= 4000){
 				proj.remove(i);
 			}else{
+				
+				
+				if(proj.get(i).getTargetX() - proj.get(i).getX()>1 && proj.get(i).getTargetY() - proj.get(i).getY()>1 ){
+				float diffX = proj.get(i).getTargetX() - proj.get(i).getX();
+				float diffY = proj.get(i).getTargetY() - proj.get(i).getY();
+				float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
+				
+				proj.get(i).setxVel(diffX/directionLength);
+				
+				proj.get(i).setyVel(diffY/directionLength);
+				
+				}
+				
 				proj.get(i).setX(proj.get(i).getX() + proj.get(i).getxVel());
 				proj.get(i).setY(proj.get(i).getY() + proj.get(i).getyVel());
 				
@@ -158,13 +178,19 @@ public class Updater implements Screen {
 		
 
 		camera.update();
-		
+		r.begin(ShapeType.Line);
+		Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
+		Vector3 reaCoords = camera.unproject(v);
+		r.line(player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2, reaCoords.x, reaCoords.y);
+		r.end();
 		
 		
 		game.batch.begin();
-		//game.batch.draw(img, Gdx.input.getX(), Gdx.input.getY());
+		Vector3 r = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
+		Vector3 reaCr = camera.unproject(r);
+		game.batch.draw(img, reaCr.x,reaCr.y);
 		
-	//	game.font.draw(game.batch,"Mouse just clicked: " +  Gdx.input.justTouched()  , 50f,50f);
+
 		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
 		
 		for(int i = 0; i<proj.size();i++){
