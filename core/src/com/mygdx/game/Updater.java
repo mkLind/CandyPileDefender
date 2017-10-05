@@ -193,9 +193,7 @@ public class Updater implements Screen {
 		
 		// Render the player and projectiles
 		game.batch.begin();
-		Vector3 r = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
-		Vector3 reaCr = camera.unproject(r);
-		game.batch.draw(img, reaCr.x,reaCr.y);
+		
 		
 
 		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
