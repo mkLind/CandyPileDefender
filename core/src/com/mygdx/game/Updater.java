@@ -25,7 +25,7 @@ public class Updater extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		// When loading textures to project, the entire path to the file should be included
 		// be careful with that
-		img = new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\badlogic.jpg")); 
+		img = new Texture(Gdx.files.internal("C:\\Users\\Tommi\\libGit\\core\\assets\\badlogic.jpg")); 
 		camera = new OrthographicCamera();
 		aspectRatio =  (float) Gdx.graphics.getWidth()/(float) Gdx.graphics.getHeight();
 		camera.setToOrtho(false, 220f*aspectRatio, 220f);
@@ -34,7 +34,7 @@ public class Updater extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(stage);
 		batch.setProjectionMatrix(camera.combined);
 		mousePos = new Vector3(0,0,0);
-		Cursor cursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")),0,0);
+		Cursor cursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("C:\\Users\\Tommi\\libGit\\core\\assets\\Pointer.png")),0,0);
 		Gdx.graphics.setCursor(cursor);
 	
 	}
