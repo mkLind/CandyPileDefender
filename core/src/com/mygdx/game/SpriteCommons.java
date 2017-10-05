@@ -1,7 +1,9 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.math.Rectangle;
-
+/*
+ * Class that has all the common aspects of a sprite like coordinates, velocities, proportions and bounding rectangle (For collisions)
+ */
 public class SpriteCommons {
 	
 private float x;

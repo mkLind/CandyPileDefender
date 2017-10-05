@@ -1,7 +1,11 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
-
+/**
+ * Class that represents the projectiles the player can shoot around in the game
+ * @author Markus
+ *
+ */
 public class Projectile extends SpriteCommons {
 	private Texture t;
 	private long TimeAlive;
@@ -9,11 +13,24 @@ public class Projectile extends SpriteCommons {
 	private float angle;
 	private float targetX;
 	private float targetY;
-	
+	/**
+	 *  initializes the projectile with following parameters 
+	 * @param width
+	 * @param height
+	 * @param x
+	 * @param y
+	 * @param xVel
+	 * @param yVel
+	 * @param t
+	 */
 
 	public Projectile(int width, int height, float x, float y, float xVel, float yVel, Texture t) {
 		super(width, height, x, y, xVel, yVel);
 		this.t = t;
+		/*
+		 * Current time = The time at which the projectile was fired
+		 * 
+		 */
 		currentTime = 0;
 		TimeAlive = 0;
 		angle = 0f;
@@ -22,7 +39,7 @@ public class Projectile extends SpriteCommons {
 		
 		// TODO Auto-generated constructor stub
 	}
-
+// getters and setters
 	public float getTargetX() {
 		return targetX;
 	}

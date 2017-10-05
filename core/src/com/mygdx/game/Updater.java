@@ -21,7 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.Player.DIRECTION;
-
+/*
+ * The class that actually makes the game visible
+ */
 public class Updater implements Screen {
 	
 	Texture img;
@@ -35,7 +37,10 @@ public class Updater implements Screen {
 	private BitmapFont f;
 	final Core game;
 	private ArrayList<Projectile> proj;
-	
+	/**
+	 * Initializes the entire game
+	 * @param game
+	 */
 	public Updater(final Core game) {
 		this.game = game;
 		statetime = 0f;
@@ -74,7 +79,7 @@ public class Updater implements Screen {
 		
 		Gdx.gl.glClearColor(100, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+		// Move the player
 		player.setX(player.getX() + player.getxVel());
 		player.setY(player.getY() + player.getyVel());
 		
@@ -130,6 +135,7 @@ public class Updater implements Screen {
 		// This listens to mouse clicks
 		
 		if(Gdx.input.justTouched()){
+			// Convert the cursor coordinates into game world coordinates. Needs to be refined
 			Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
 			Vector3 reaCoords = camera.unproject(v);
 			float diffX = reaCoords.x - player.getX()+ player.getWidth()/2;
@@ -139,7 +145,7 @@ public class Updater implements Screen {
 			float velX = diffX/directionLength;
 			float velY = diffY/directionLength;		
 					
-			
+			// Spawn a projectile with target coordinates and set the time it is visible
 		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")));
 			p.setTargetX(reaCoords.x);
 			p.setTargetY(reaCoords.y);
@@ -148,13 +154,13 @@ public class Updater implements Screen {
 			proj.add(p);
 		
 		}
-		
+		// If the projectile has been enough time visible on the screen, remove it
 		for(int i = 0; i<proj.size();i++){
 			if(TimeUtils.timeSinceMillis(proj.get(i).getCurrentTime())>= 4000){
 				proj.remove(i);
 			}else{
 				
-				
+				// attempt to correct the diection of each projectile
 				if(proj.get(i).getTargetX() - proj.get(i).getX()>1 && proj.get(i).getTargetY() - proj.get(i).getY()>1 ){
 				float diffX = proj.get(i).getTargetX() - proj.get(i).getX();
 				float diffY = proj.get(i).getTargetY() - proj.get(i).getY();
@@ -165,7 +171,7 @@ public class Updater implements Screen {
 				proj.get(i).setyVel(diffY/directionLength);
 				
 				}
-				
+				// MOve the projectile according to its x and y velocities
 				proj.get(i).setX(proj.get(i).getX() + proj.get(i).getxVel());
 				proj.get(i).setY(proj.get(i).getY() + proj.get(i).getyVel());
 				
@@ -178,13 +184,14 @@ public class Updater implements Screen {
 		
 
 		camera.update();
+		// Shape renderer used for debugging
 		r.begin(ShapeType.Line);
 		Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
 		Vector3 reaCoords = camera.unproject(v);
 		r.line(player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2, reaCoords.x, reaCoords.y);
 		r.end();
 		
-		
+		// Render the player and projectiles
 		game.batch.begin();
 		Vector3 r = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
 		Vector3 reaCr = camera.unproject(r);

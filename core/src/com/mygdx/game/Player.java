@@ -6,14 +6,24 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
  // sprite.setRegion(animation.getKeyFrame(time));
-
+/**
+ * Class for representing the player in the game. extends SpriteCommons
+ * @author Markus
+ *
+ */
 public class Player extends SpriteCommons {
 
 	private DIRECTION dir; 
 	private Animator animations;
 	
 	
-
+/**
+ * Initializes the player
+ * @param width
+ * @param height
+ * @param x
+ * @param y
+ */
 	
 	public Player( int width, int height, float x, float y){
 

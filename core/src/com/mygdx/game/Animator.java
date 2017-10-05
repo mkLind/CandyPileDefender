@@ -15,7 +15,10 @@ private float frametime;
 private Texture spritesheet;
 private TextureRegion[][] splitImages;
 private ArrayList<TextureRegion[]> animatedFrames;
-
+/*
+ * Class for processing spritesheets into animations,
+ * takes the rows and columns of the spritesheet, the time each frame of the animation is displayed and the actual spritesheet
+ */
 public Animator(int row, int column, float frametime, Texture Spritesheet){
 	spritesheet = Spritesheet;
 	this.row = row;
