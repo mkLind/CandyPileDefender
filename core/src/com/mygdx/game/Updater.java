@@ -48,7 +48,6 @@ public class Updater implements Screen {
 		
 		// When loading textures to project, the entire path to the file should be included
 		// be careful with that
-		img = new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\1Currency.png")); 
 		camera = new OrthographicCamera();
 	
 		aspectRatio =  (float) Gdx.graphics.getWidth()/(float) Gdx.graphics.getHeight();
@@ -138,12 +137,21 @@ public class Updater implements Screen {
 			// Convert the cursor coordinates into game world coordinates. Needs to be refined
 			Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
 			Vector3 reaCoords = camera.unproject(v);
+			
 			float diffX = reaCoords.x - player.getX()+ player.getWidth()/2;
 			float diffY = reaCoords.y - player.getY() + player.getHeight()/2;
 			float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
+		float velX = 0;
+		float velY = 0;
 		
-			float velX = diffX/directionLength;
-			float velY = diffY/directionLength;		
+			if(!(diffX == 0)){
+				 velX = diffX/directionLength;
+		}
+		if(!(diffY == 0)){
+			velY = diffY/directionLength;	
+		}
+			
+		 		
 					
 			// Spawn a projectile with target coordinates and set the time it is visible
 		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")));
@@ -161,7 +169,8 @@ public class Updater implements Screen {
 			}else{
 				
 				// attempt to correct the diection of each projectile
-				if(proj.get(i).getTargetX() - proj.get(i).getX()>1 && proj.get(i).getTargetY() - proj.get(i).getY()>1 ){
+				
+				if(proj.get(i).getX() - player.getX() < 1|| proj.get(i).getY() - player.getY()<1 ){
 				float diffX = proj.get(i).getTargetX() - proj.get(i).getX();
 				float diffY = proj.get(i).getTargetY() - proj.get(i).getY();
 				float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
