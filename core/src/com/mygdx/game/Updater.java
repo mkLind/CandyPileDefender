@@ -170,7 +170,7 @@ public class Updater implements Screen {
 				
 				// attempt to correct the diection of each projectile
 				
-				if(proj.get(i).getX() - player.getX() < 1|| proj.get(i).getY() - player.getY()<1 ){
+				if(proj.get(i).getX() - player.getX() < proj.get(i).getTargetX() - player.getX() || proj.get(i).getY() - player.getY()<proj.get(i).getTargetY() - player.getY() ){
 				float diffX = proj.get(i).getTargetX() - proj.get(i).getX();
 				float diffY = proj.get(i).getTargetY() - proj.get(i).getY();
 				float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
@@ -180,7 +180,10 @@ public class Updater implements Screen {
 				proj.get(i).setyVel(diffY/directionLength);
 				
 				}
+				
 				// MOve the projectile according to its x and y velocities
+				
+				
 				proj.get(i).setX(proj.get(i).getX() + proj.get(i).getxVel());
 				proj.get(i).setY(proj.get(i).getY() + proj.get(i).getyVel());
 				
