@@ -48,11 +48,12 @@ public class Updater implements Screen {
 	final Core game;
 	private ArrayList<Projectile> proj;
 	
+	/*
 	//For testing wave system for enemies with player instances
 	// private ArrayList<Player> enemies;
 	private float timeSinceWave;
 	private int timesCalled;
-	
+	*/
 	
 	/**
 	 * Initializes the entire game
@@ -61,7 +62,7 @@ public class Updater implements Screen {
 	public Updater(final Core game) {
 		this.game = game;
 		statetime = 0f;
-		timesCalled = 0;
+		//timesCalled = 0;
 		f = new BitmapFont();
 		enemies = new ArrayList<SpriteCommons>();
 		// When loading textures to project, the entire path to the file should be included
@@ -80,10 +81,13 @@ public class Updater implements Screen {
 		proj = new ArrayList<Projectile>();
 		
 
+<<<<<<< HEAD
 		
 		//enemies = new ArrayList<Player>();
 		spawnEnemies();
 
+=======
+>>>>>>> b4af5ae3df396a383ef323584f0cc2ee83ce869f
 		player = new Player(32,32,50,50);	
 		player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\BatMonster.png")));
 		player.setDir(DIRECTION.DOWN);
@@ -93,8 +97,18 @@ public class Updater implements Screen {
 		// pile located in the center of the game
 		pile = new Pile(100, 100, Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() / 2 - 50);
 		
+<<<<<<< HEAD
 	}
 		
+=======
+		enemies = new ArrayList<SpriteCommons>();
+		enemies.add(new StealingEnemy (20,20,0, 50));
+		enemies.add(new ChaserEnemy (20, 20, 0, 0));
+	}
+/*
+		enemies = new ArrayList<Player>();
+		spawnEnemies();
+>>>>>>> b4af5ae3df396a383ef323584f0cc2ee83ce869f
 
 		
 	
@@ -137,8 +151,14 @@ public class Updater implements Screen {
 			}
 	timeSinceWave = 0;
 		}
+<<<<<<< HEAD
 	
 
+=======
+		timeSinceWave = 0;
+	}
+*/
+>>>>>>> b4af5ae3df396a383ef323584f0cc2ee83ce869f
 	
 	public void render (float delta) {
 		
@@ -239,12 +259,22 @@ public class Updater implements Screen {
 			float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
 		float velX = 0;
 		float velY = 0;
+<<<<<<< HEAD
 
 			if(!(diffX == 0)){
 				 velX = diffX/100;
 		}else{
 			velX = 0;
 
+=======
+		
+
+		if(!(diffX == 0)){
+			 velX = diffX/100;
+		}else{
+			velX = 0;
+		}
+>>>>>>> b4af5ae3df396a383ef323584f0cc2ee83ce869f
 		if(!(diffY == 0)){
 			velY = diffY/100;	
 		}else{
@@ -252,10 +282,14 @@ public class Updater implements Screen {
 		}
 		}
 			// Spawn a projectile with target coordinates and set the time it is visible
+<<<<<<< HEAD
 
 		   
 		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")));
 
+=======
+		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\CandyPile\\CandyPileDefender\\core\\assets\\Pointer.png")));
+>>>>>>> b4af5ae3df396a383ef323584f0cc2ee83ce869f
 			p.setTargetX(reaCoords.x);
 			p.setTargetY(reaCoords.y);
 		    p.setCurrentTime(TimeUtils.millis());
@@ -298,6 +332,7 @@ public class Updater implements Screen {
 		r.end();
 		
 		// Render the player and projectiles
+<<<<<<< HEAD
 
 //		Matrix Transform = Matrix.CreateTranslation(offsetX, offsetY, 0);
 //
@@ -308,6 +343,10 @@ public class Updater implements Screen {
 		//at the same time
 		
 
+=======
+
+		game.batch.begin();
+>>>>>>> b4af5ae3df396a383ef323584f0cc2ee83ce869f
 		
 		// Teppo kokeilua
 		if(!pileHealth) {
@@ -332,6 +371,21 @@ public class Updater implements Screen {
 		
 		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
 
+<<<<<<< HEAD
+=======
+//		Matrix Transform = Matrix.CreateTranslation(offsetX, offsetY, 0);
+//
+//		SpriteBatch.Begin(...,...,...., Transform);
+
+	
+		//Not working properly. If one spawn point has multiple enemies they are drawn to the same spot
+		//at the same time
+		/*
+		for(Player player: enemies) {
+			game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
+		}
+*/
+>>>>>>> b4af5ae3df396a383ef323584f0cc2ee83ce869f
 		
 		for(int i = 0; i<proj.size();i++){
 			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(), proj.get(i).getHeight());
@@ -339,6 +393,7 @@ public class Updater implements Screen {
 		
 		
 		
+		/*
 		//Wait 10 sec between waves.
 		timeSinceWave += delta;
 		if(timeSinceWave > 10.0f) spawnEnemies();
@@ -346,11 +401,16 @@ public class Updater implements Screen {
 		//Move the enemies (here still players) for testing 
 	   /* Iterator<Player> iter = enemies.iterator();
 	    while(iter.hasNext()) {
-	    	Player player = iter.next();
+	    	Player player = iter.next();S
 	    	player.setX(player.getX() + 30 * Gdx.graphics.getDeltaTime());
+<<<<<<< HEAD
 	    }
 		*/
 		game.batch.end();
+=======
+	    }*/
+		
+>>>>>>> b4af5ae3df396a383ef323584f0cc2ee83ce869f
 		stage.act(statetime);
 		stage.draw();
 		}
