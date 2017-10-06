@@ -12,7 +12,7 @@ private float xVel;
 private float yVel;
 private int width;
 private int height;
-private Rectangle r;
+private Rectangle hitbox;
 
 public SpriteCommons(int width, int height, float x, float y,float xVel, float yVel){
 	this.x  = x;
@@ -21,15 +21,20 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	this.height = height;
 	this.xVel = xVel;
 	this.yVel = yVel;
-	r = new Rectangle(x, y, width, height);
+	hitbox = new Rectangle(x, y, width, height);
 }
 
-public Rectangle getR() {
-	return r;
+public Rectangle getHitbox() {
+	return hitbox;
 }
 
-public void setR(Rectangle r) {
-	this.r = r;
+public void setHitboxS(Rectangle hitbox) {
+	this.hitbox = hitbox;
+}
+
+public void updateHitbox() {
+	hitbox.setX(getX());
+	hitbox.setY(getY());
 }
 
 public float getX() {
@@ -37,7 +42,7 @@ public float getX() {
 }
 
 public void setX(float x) {
-	r.setX(x);
+	hitbox.setX(x);
 	this.x = x;
 }
 
@@ -46,7 +51,7 @@ public float getY() {
 }
 
 public void setY(float y) {
-	r.setY(y);
+	hitbox.setY(y);
 	this.y = y;
 }
 

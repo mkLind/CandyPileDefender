@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -33,6 +34,11 @@ public class Updater implements Screen {
 	private ShapeRenderer r;
 	private Player player;
 	private float statetime;
+	
+	// Teppo test
+	private Pile pile;
+	private ArrayList<SpriteCommons> enemies;
+	boolean pileHealth;
 	
 	private BitmapFont f;
 	final Core game;
@@ -66,8 +72,18 @@ public class Updater implements Screen {
 		*/
 		
 		player = new Player(32,32,50,50);	
-		player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\BatMonster.png")));
+		player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("C:\\CandyPile\\CandyPileDefender\\core\\assets\\BatMonster.png")));
 		player.setDir(DIRECTION.DOWN);
+		
+		
+		//Teppo kokeilua
+		// pile located in the center of the game
+		pile = new Pile(100, 100, Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() / 2 - 50);
+		
+		enemies = new ArrayList<SpriteCommons>();
+		enemies.add(new StealingEnemy (20,20,0, 50));
+		enemies.add(new ChaserEnemy (20, 20, 0, 0));
+		
 		
 	}
 	
@@ -81,6 +97,37 @@ public class Updater implements Screen {
 		// Move the player
 		player.setX(player.getX() + player.getxVel());
 		player.setY(player.getY() + player.getyVel());
+				
+		
+		//Teppo kokeilua
+		
+		for (int i = 0; i < enemies.size(); i++) {
+		 
+		//chase
+		if(enemies.get(i) instanceof ChaserEnemy) {	
+			double hypot = Math.hypot(player.getX(), enemies.get(i).getX());
+			
+			enemies.get(i).setxVel(((float) (1.2f / hypot  * (player.getX() - enemies.get(i).getX())))); 
+			enemies.get(i).setyVel(((float) (1.2f / hypot  * (player.getY() - enemies.get(i).getY())))); 
+		}
+		
+		// move enemies
+		enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
+		enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
+		
+		enemies.get(i).updateHitbox();
+		
+		// steal from the pile
+    	if(enemies.get(i) instanceof StealingEnemy) {
+        	if(Intersector.overlaps((enemies.get(i).getHitbox()), pile.getHitbox())){
+        		enemies.remove(i);
+        		pileHealth = pile.reduceHealth();
+    		}
+    	}
+		}
+        	
+        
+	    
 		
 		statetime += delta;
 		// Movement logic template for the character
@@ -107,20 +154,20 @@ public class Updater implements Screen {
 		
 		if(Gdx.input.isKeyPressed(Keys.W) && Gdx.input.isKeyPressed(Keys.A)){
 			player.setDir(Player.DIRECTION.LEFT);
-			player.setxVel(-1.5f);
-			player.setyVel(1.5f);
+			player.setxVel(-1.3f);
+			player.setyVel(1.3f);
 		} if(Gdx.input.isKeyPressed(Keys.W) && Gdx.input.isKeyPressed(Keys.D)){
 			player.setDir(Player.DIRECTION.RIGHT);
-			player.setxVel(1.5f);
-			player.setyVel(1.5f);
+			player.setxVel(1.3f);
+			player.setyVel(1.3f);
 		} if(Gdx.input.isKeyPressed(Keys.D) && Gdx.input.isKeyPressed(Keys.S)){
 			player.setDir(Player.DIRECTION.RIGHT);
-			player.setxVel(1.5f);
-			player.setyVel(-1.5f);
+			player.setxVel(1.3f);
+			player.setyVel(-1.3f);
 		}if(Gdx.input.isKeyPressed(Keys.S) && Gdx.input.isKeyPressed(Keys.A)){
 			player.setDir(Player.DIRECTION.LEFT);
-			player.setxVel(-1.5f);
-			player.setyVel(-1.5f);
+			player.setxVel(-1.3f);
+			player.setyVel(-1.3f);
 		}
 		
 		if(!Gdx.input.isKeyPressed(Keys.W)  && !Gdx.input.isKeyPressed(Keys.A) && !Gdx.input.isKeyPressed(Keys.S) && !Gdx.input.isKeyPressed(Keys.D)){
@@ -144,8 +191,8 @@ public class Updater implements Screen {
 		float velX = 0;
 		float velY = 0;
 		
-			if(!(diffX == 0)){
-				 velX = diffX/directionLength;
+		if(!(diffX == 0)){
+			 velX = diffX/directionLength;
 		}
 		if(!(diffY == 0)){
 			velY = diffY/directionLength;	
@@ -154,7 +201,7 @@ public class Updater implements Screen {
 		 		
 					
 			// Spawn a projectile with target coordinates and set the time it is visible
-		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")));
+		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\CandyPile\\CandyPileDefender\\core\\assets\\Pointer.png")));
 			p.setTargetX(reaCoords.x);
 			p.setTargetY(reaCoords.y);
 		    p.setCurrentTime(TimeUtils.millis());
@@ -206,8 +253,27 @@ public class Updater implements Screen {
 		// Render the player and projectiles
 		game.batch.begin();
 		
+		// Teppo kokeilua
+		if(!pileHealth) {
+			game.batch.draw(pile.getPileTexture(), pile.getX(), pile.getY());
+		}else {
+			game.batch.draw(pile.getPileTexture2(), pile.getX(), pile.getY());
+		}
 		
+		for (int i = 0; i < enemies.size(); i++) {
+			if(enemies.get(i) instanceof StealingEnemy) {
+				game.batch.draw(((StealingEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(), enemies.get(i).getY());
+			
+			}else if (enemies.get(i) instanceof ChaserEnemy){
+				game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(), enemies.get(i).getY());
+			}
+			
+			
+		}
 
+		
+		
+		
 		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
 		
 		for(int i = 0; i<proj.size();i++){

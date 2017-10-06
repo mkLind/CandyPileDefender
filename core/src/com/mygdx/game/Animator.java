@@ -24,7 +24,7 @@ public Animator(int row, int column, float frametime, Texture Spritesheet){
 	this.row = row;
 	this.column = column;
 	this.frametime = frametime;
-	animatedFrames = new ArrayList<>();
+	animatedFrames = new ArrayList<TextureRegion[]>();
 	// Split images of the spriteSheet into a matrix
 	splitImages = TextureRegion.split(spritesheet, spritesheet.getWidth()/this.column,spritesheet.getHeight()/this.row );
 	for(int i = 0; i<row; i++){
