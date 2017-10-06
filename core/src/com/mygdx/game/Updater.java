@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -21,6 +23,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.Player.DIRECTION;
 /*
  * The class that actually makes the game visible
@@ -43,6 +47,14 @@ public class Updater implements Screen {
 	private BitmapFont f;
 	final Core game;
 	private ArrayList<Projectile> proj;
+	
+	/*
+	//For testing wave system for enemies with player instances
+	private ArrayList<Player> enemies;
+	private float timeSinceWave;
+	private int timesCalled;
+	*/
+	
 	/**
 	 * Initializes the entire game
 	 * @param game
@@ -50,6 +62,7 @@ public class Updater implements Screen {
 	public Updater(final Core game) {
 		this.game = game;
 		statetime = 0f;
+		//timesCalled = 0;
 		f = new BitmapFont();
 		
 		// When loading textures to project, the entire path to the file should be included
@@ -66,11 +79,8 @@ public class Updater implements Screen {
 		
 		game.batch.setProjectionMatrix(camera.combined);
 		proj = new ArrayList<Projectile>();
-		/*
-		Cursor cursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")),0,0);
-		Gdx.graphics.setCursor(cursor);
-		*/
 		
+
 		player = new Player(32,32,50,50);	
 		player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("C:\\CandyPile\\CandyPileDefender\\core\\assets\\BatMonster.png")));
 		player.setDir(DIRECTION.DOWN);
@@ -83,12 +93,48 @@ public class Updater implements Screen {
 		enemies = new ArrayList<SpriteCommons>();
 		enemies.add(new StealingEnemy (20,20,0, 50));
 		enemies.add(new ChaserEnemy (20, 20, 0, 0));
-		
+	}
+/*
+		enemies = new ArrayList<Player>();
+		spawnEnemies();
+
 		
 	}
 	
-	
-
+	//Spawn enemies. Enemy count increases by one every time to make the wave stronger.
+	//Fixed spawn points that will be changed when the map is ready. Tested with simple
+	//player instances since enemies not ready yet.
+	private void spawnEnemies() {
+		timesCalled++;
+		int tmp;
+		for(int i = 0; i < timesCalled; i++){
+			tmp = MathUtils.random(0, 4);
+			System.out.println(tmp);
+			if(tmp > 3) {
+				player = new Player(32,32,MathUtils.random(10, 30),MathUtils.random(10, 30));
+				player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("BatMonster.png")));
+				player.setDir(DIRECTION.DOWN);
+				enemies.add(player);
+			}else if (tmp > 2) {
+				player = new Player(32,32,MathUtils.random(290, 310),MathUtils.random(170, 190));
+				player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("BatMonster.png")));
+				player.setDir(DIRECTION.DOWN);
+				enemies.add(player);
+			}else if (tmp > 1) {
+				player = new Player(32,32,MathUtils.random(290, 310),MathUtils.random(10, 30));
+				player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("BatMonster.png")));
+				player.setDir(DIRECTION.DOWN);
+				enemies.add(player);
+			}else {
+				player = new Player(32,32,MathUtils.random(10, 30),MathUtils.random(170, 190));
+				player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("BatMonster.png")));
+				player.setDir(DIRECTION.DOWN);
+				enemies.add(player);
+			}
+		}
+		timeSinceWave = 0;
+	}
+*/
 	
 	public void render (float delta) {
 		
@@ -174,8 +220,6 @@ public class Updater implements Screen {
 			player.setDir(player.getDir());
 			player.setxVel(0);
 			player.setyVel(0);
-			
-			
 		}
 		
 		// This listens to mouse clicks
@@ -191,15 +235,18 @@ public class Updater implements Screen {
 		float velX = 0;
 		float velY = 0;
 		
+
 		if(!(diffX == 0)){
-			 velX = diffX/directionLength;
+			 velX = diffX/100;
+		}else{
+			velX = 0;
 		}
 		if(!(diffY == 0)){
-			velY = diffY/directionLength;	
+			velY = diffY/100;	
+		}else{
+			velY = 0;
 		}
 			
-		 		
-					
 			// Spawn a projectile with target coordinates and set the time it is visible
 		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\CandyPile\\CandyPileDefender\\core\\assets\\Pointer.png")));
 			p.setTargetX(reaCoords.x);
@@ -209,24 +256,16 @@ public class Updater implements Screen {
 			proj.add(p);
 		
 		}
-		// If the projectile has been enough time visible on the screen, remove it
+		
+		
+//		 If the projectile has been enough time visible on the screen, remove it
 		for(int i = 0; i<proj.size();i++){
 			if(TimeUtils.timeSinceMillis(proj.get(i).getCurrentTime())>= 4000){
 				proj.remove(i);
 			}else{
 				
 				// attempt to correct the diection of each projectile
-				
-				if(proj.get(i).getX() - player.getX() < proj.get(i).getTargetX() - player.getX() || proj.get(i).getY() - player.getY()<proj.get(i).getTargetY() - player.getY() ){
-				float diffX = proj.get(i).getTargetX() - proj.get(i).getX();
-				float diffY = proj.get(i).getTargetY() - proj.get(i).getY();
-				float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
-				
-				proj.get(i).setxVel(diffX/directionLength);
-				
-				proj.get(i).setyVel(diffY/directionLength);
-				
-				}
+			
 				
 				// MOve the projectile according to its x and y velocities
 				
@@ -243,7 +282,8 @@ public class Updater implements Screen {
 		
 
 		camera.update();
-		// Shape renderer used for debugging
+		
+//		Shape renderer used for debugging
 		r.begin(ShapeType.Line);
 		Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
 		Vector3 reaCoords = camera.unproject(v);
@@ -251,6 +291,7 @@ public class Updater implements Screen {
 		r.end();
 		
 		// Render the player and projectiles
+
 		game.batch.begin();
 		
 		// Teppo kokeilua
@@ -275,12 +316,38 @@ public class Updater implements Screen {
 		
 		
 		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
+
+//		Matrix Transform = Matrix.CreateTranslation(offsetX, offsetY, 0);
+//
+//		SpriteBatch.Begin(...,...,...., Transform);
+
+	
+		//Not working properly. If one spawn point has multiple enemies they are drawn to the same spot
+		//at the same time
+		/*
+		for(Player player: enemies) {
+			game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
+		}
+*/
 		
 		for(int i = 0; i<proj.size();i++){
 			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(), proj.get(i).getHeight());
 		}
 		
 		game.batch.end();
+		
+		/*
+		//Wait 10 sec between waves.
+		timeSinceWave += delta;
+		if(timeSinceWave > 10.0f) spawnEnemies();
+		
+		//Move the enemies (here still players) for testing 
+	    Iterator<Player> iter = enemies.iterator();
+	    while(iter.hasNext()) {
+	    	Player player = iter.next();S
+	    	player.setX(player.getX() + 30 * Gdx.graphics.getDeltaTime());
+	    }*/
+		
 		stage.act(statetime);
 		stage.draw();
 		
