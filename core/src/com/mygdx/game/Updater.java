@@ -65,7 +65,7 @@ public class Updater implements Screen {
 		this.game = game;
 		statetime = 0f;
 		timesCalled = 0;
-		f = new BitmapFont();
+		
 		enemies = new ArrayList<SpriteCommons>();
 		// When loading textures to project, the entire path to the file should be included
 		// be careful with that
@@ -122,12 +122,7 @@ public class Updater implements Screen {
 			tmp = MathUtils.random(0, 4);
 			System.out.println(tmp);
 			if(tmp > 3) {
-				/*
 			
-				player = new Player(32,32,MathUtils.random(10, 30),MathUtils.random(10, 30));
-				player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("BatMonster.png")));
-				player.setDir(DIRECTION.DOWN);
-			*/
 				
 				enemies.add(new StealingEnemy (32,32,MathUtils.random(10, 30),MathUtils.random(10, 30)));
 				enemies.add(new ChaserEnemy (32,32,MathUtils.random(10, 30),MathUtils.random(10, 30)));
@@ -247,30 +242,19 @@ public class Updater implements Screen {
 			// Convert the cursor coordinates into game world coordinates. Needs to be refined
 			Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
 			Vector3 reaCoords = camera.unproject(v);
-			
+			float bulletVel = 1.5f;
+			float angle = (float) MathUtils.atan2(reaCoords.y - player.getY() + player.getHeight()/2, reaCoords.x - player.getX()+ player.getWidth()/2);
+			float velX = (float)MathUtils.cos(angle)*bulletVel;
+			float velY = (float)MathUtils.sin(angle)*bulletVel;
+			//float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
 		
-			float diffX = reaCoords.x - player.getX()+ player.getWidth();
-			float diffY = reaCoords.y - player.getY() + player.getHeight();
-			float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
-		float velX = 0;
-		float velY = 0;
 
 
 	
 
 		
 
-		if(!(diffX == 0)){
-			 velX = diffX/100;
-		}else{
-			velX = 0;
-		}
 
-		if(!(diffY == 0)){
-			velY = diffY/100;	
-		}else{
-			velY = 0;
-		}
 		
 			// Spawn a projectile with target coordinates and set the time it is visible
 
@@ -291,6 +275,7 @@ public class Updater implements Screen {
 		
 //		 If the projectile has been enough time visible on the screen, remove it
 		for(int i = 0; i<proj.size();i++){
+			
 			if(TimeUtils.timeSinceMillis(proj.get(i).getCurrentTime())>= 4000){
 				proj.remove(i);
 			}else{
@@ -311,6 +296,18 @@ public class Updater implements Screen {
 	//	camera.position.set(MathUtils.clamp(character.getX(), camera.viewportWidth * .5f, level.mapWidth() - camera.viewportWidth * .5f), MathUtils.clamp(character.getY(), camera.viewportHeight * .5f, level.mapHeight() - camera.viewportHeight * .5f), 0);
 // Above is for further development
 		
+		for(int i = 0; i<enemies.size();i++){
+			for(int j = 0; j<proj.size();j++){
+				if(Intersector.overlaps(proj.get(j).getHitbox(), enemies.get(i).getHitbox()) && TimeUtils.timeSinceMillis(proj.get(j).getCurrentTime())<4000){
+					if(enemies.size()>i){
+					enemies.remove(i);
+					proj.remove(j);
+					}else{
+						break;
+					}
+				}
+			}
+		}
 
 		camera.update();
 		
@@ -320,6 +317,11 @@ public class Updater implements Screen {
 		Vector3 reaCoordn = camera.unproject(vector);
 		r.line(player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2, reaCoordn.x, reaCoordn.y);
 		r.end();
+		
+		
+		
+		
+		
 		
 		// Render the player and projectiles
 
