@@ -72,10 +72,7 @@ public class Updater implements Screen {
 		
 		game.batch.setProjectionMatrix(camera.combined);
 		proj = new ArrayList<Projectile>();
-		/*
-		Cursor cursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")),0,0);
-		Gdx.graphics.setCursor(cursor);
-		*/
+		
 		
 		player = new Player(32,32,20,180);	
 		player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("BatMonster.png")));
@@ -190,10 +187,14 @@ public class Updater implements Screen {
 		float velY = 0;
 		
 			if(!(diffX == 0)){
-				 velX = diffX/directionLength;
+				 velX = diffX/100;
+		}else{
+			velX = 0;
 		}
 		if(!(diffY == 0)){
-			velY = diffY/directionLength;	
+			velY = diffY/100;	
+		}else{
+			velY = 0;
 		}
 			
 			// Spawn a projectile with target coordinates and set the time it is visible
@@ -214,18 +215,11 @@ public class Updater implements Screen {
 			}else{
 				
 				// attempt to correct the diection of each projectile
+			
 				
-				if(proj.get(i).getX() - player.getX() < 1|| proj.get(i).getY() - player.getY()<1 ){
-				float diffX = proj.get(i).getTargetX() - proj.get(i).getX();
-				float diffY = proj.get(i).getTargetY() - proj.get(i).getY();
-				float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
-				
-				proj.get(i).setxVel(diffX/directionLength);
-				
-				proj.get(i).setyVel(diffY/directionLength);
-				
-				}
 				// MOve the projectile according to its x and y velocities
+				
+				
 				proj.get(i).setX(proj.get(i).getX() + proj.get(i).getxVel());
 				proj.get(i).setY(proj.get(i).getY() + proj.get(i).getyVel());
 				
