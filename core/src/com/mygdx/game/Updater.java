@@ -17,11 +17,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
@@ -49,7 +52,10 @@ public class Updater implements Screen {
 	private ArrayList<Projectile> proj;
 	private int timesCalled;
 	private long timeSinceWave;
-	
+	private GameWorld world;
+	private OrthogonalTiledMapRenderer mapRender;
+	private Array<RectangleMapObject> borders;
+	private Array<RectangleMapObject> spawnPoints;
 	/*
 	//For testing wave system for enemies with player instances
 	// private ArrayList<Player> enemies;
@@ -65,6 +71,7 @@ public class Updater implements Screen {
 		this.game = game;
 		statetime = 0f;
 		timesCalled = 0;
+		world = new GameWorld();
 		
 		enemies = new ArrayList<SpriteCommons>();
 		// When loading textures to project, the entire path to the file should be included
@@ -72,9 +79,12 @@ public class Updater implements Screen {
 		camera = new OrthographicCamera();
 	
 		aspectRatio =  (float) Gdx.graphics.getWidth()/(float) Gdx.graphics.getHeight();
-		camera.setToOrtho(false,220f*aspectRatio, 220f);
+		camera.setToOrtho(false,250f*aspectRatio, 250f);
 	//	camera.setToOrtho(false, 700f,700f);
-		camera.update();
+		
+		mapRender = world.getMapRenderer(camera);
+		borders = world.getHitboxes();
+		spawnPoints = world.getSpawnPoints();
 		stage = new Stage();
 		r = new ShapeRenderer();
 		r.setProjectionMatrix(camera.combined);
@@ -86,22 +96,32 @@ public class Updater implements Screen {
 
 		
 		//enemies = new ArrayList<Player>();
-		spawnEnemies();
+		
 
+		
+		
+		for(int i = 0; i < spawnPoints.size;i++){
+			if(spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")){
+				player = new Player(32, 32, spawnPoints.get(i).getRectangle().getX(),  spawnPoints.get(i).getRectangle().getY());
+			}
+			if(spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")){
+				pile = new Pile(100, 100, spawnPoints.get(i).getRectangle().getX(), spawnPoints.get(i).getRectangle().getY());
+			}
+		}
 
-		player = new Player(32,32,50,50);	
+		
 		player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\BatMonster.png")));
 		player.setDir(DIRECTION.DOWN);
-		
-		
+		camera.position.set(player.getX(), player.getY(), 0);
 		//Teppo kokeilua
 		// pile located in the center of the game
-		pile = new Pile(100, 100, Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() / 2 - 50);
+	
 		
 
 
 		enemies = new ArrayList<SpriteCommons>();
-		
+		spawnEnemies();
+		camera.update();
 	}
 
 		//enemies = new ArrayList<Player>();
@@ -293,8 +313,7 @@ public class Updater implements Screen {
 		}
 		
 		
-	//	camera.position.set(MathUtils.clamp(character.getX(), camera.viewportWidth * .5f, level.mapWidth() - camera.viewportWidth * .5f), MathUtils.clamp(character.getY(), camera.viewportHeight * .5f, level.mapHeight() - camera.viewportHeight * .5f), 0);
-// Above is for further development
+	
 		
 		for(int i = 0; i<enemies.size();i++){
 			for(int j = 0; j<proj.size();j++){
@@ -308,15 +327,12 @@ public class Updater implements Screen {
 				}
 			}
 		}
-
+		camera.position.set(MathUtils.clamp(player.getX(), camera.viewportWidth * .5f, world.mapWidth() - camera.viewportWidth * .5f), MathUtils.clamp(player.getY(), camera.viewportHeight * .5f, world.mapHeight() - camera.viewportHeight * .5f), 0);
+		// Above is for further development
 		camera.update();
 		
 //		Shape renderer used for debugging
-		r.begin(ShapeType.Line);
-		Vector3 vector = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
-		Vector3 reaCoordn = camera.unproject(vector);
-		r.line(player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2, reaCoordn.x, reaCoordn.y);
-		r.end();
+		
 		
 		
 		
@@ -328,7 +344,10 @@ public class Updater implements Screen {
 //		Matrix Transform = Matrix.CreateTranslation(offsetX, offsetY, 0);
 //
 //		SpriteBatch.Begin(...,...,...., Transform);
-
+		mapRender.setView(camera);
+		mapRender.render();
+	
+		game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
 		//Not working properly. If one spawn point has multiple enemies they are drawn to the same spot
 		//at the same time
@@ -397,10 +416,19 @@ public class Updater implements Screen {
 	    }
 		*/
 		game.batch.end();
-
+		
+		
 	    
 		stage.act(statetime);
 		stage.draw();
+		// shape renderer for debugging
+		r.setProjectionMatrix(camera.combined);
+		r.begin(ShapeType.Line);
+		Vector3 vector = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
+		Vector3 reaCoordn = camera.unproject(vector);
+		r.line(player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2, reaCoordn.x, reaCoordn.y);
+		r.end();
+	
 		}
 		
 	   
