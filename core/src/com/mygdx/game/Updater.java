@@ -8,6 +8,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -99,7 +100,7 @@ public class Updater implements Screen {
 		
 
 		
-		
+		// Set initial coordinates from map to player and candypile
 		for(int i = 0; i < spawnPoints.size;i++){
 			if(spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")){
 				player = new Player(32, 32, spawnPoints.get(i).getRectangle().getX(),  spawnPoints.get(i).getRectangle().getY());
@@ -135,12 +136,12 @@ public class Updater implements Screen {
 	//Fixed spawn points that will be changed when the map is ready. Tested with simple
 	//player instances since enemies not ready yet.
 	private void spawnEnemies() {
-		System.out.println("SPAWNING ENEMIES");
+		//System.out.println("SPAWNING ENEMIES");
 		timesCalled++;
 		int tmp;
 		for(int i = 0; i < timesCalled; i++){
 			tmp = MathUtils.random(0, 4);
-			System.out.println(tmp);
+			//System.out.println(tmp);
 			if(tmp > 3) {
 			
 				
@@ -262,10 +263,10 @@ public class Updater implements Screen {
 			// Convert the cursor coordinates into game world coordinates. Needs to be refined
 			Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
 			Vector3 reaCoords = camera.unproject(v);
-			float bulletVel = 1.5f;
-			float angle = (float) MathUtils.atan2(reaCoords.y - player.getY() + player.getHeight()/2, reaCoords.x - player.getX()+ player.getWidth()/2);
-			float velX = (float)MathUtils.cos(angle)*bulletVel;
-			float velY = (float)MathUtils.sin(angle)*bulletVel;
+			float bulletVel = 15f;
+			
+			float velX = (float)(reaCoords.x - player.getX()+ (player.getWidth()/2))/bulletVel;
+			float velY = (float)(reaCoords.y - player.getY() + (player.getHeight()/2))/bulletVel;
 			//float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
 		
 
@@ -281,11 +282,12 @@ public class Updater implements Screen {
 
 		   
 		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")));
-
-
-
-			p.setTargetX(reaCoords.x);
+		    p.setTargetX(reaCoords.x);
 			p.setTargetY(reaCoords.y);
+		    System.out.println("New Projectile. Target x: " + p.getTargetX() + " Target y: " + p.getTargetY() + " x Velocity: " + p.getxVel() +" y Velocity " + p.getyVel());
+
+
+			
 		    p.setCurrentTime(TimeUtils.millis());
 			
 			proj.add(p);
@@ -316,13 +318,16 @@ public class Updater implements Screen {
 	
 		
 		for(int i = 0; i<enemies.size();i++){
+			
 			for(int j = 0; j<proj.size();j++){
+			
 				if(Intersector.overlaps(proj.get(j).getHitbox(), enemies.get(i).getHitbox()) && TimeUtils.timeSinceMillis(proj.get(j).getCurrentTime())<4000){
-					if(enemies.size()>i){
+					
+					if(enemies.size()>1){
+						
 					enemies.remove(i);
 					proj.remove(j);
-					}else{
-						break;
+					break;
 					}
 				}
 			}
@@ -424,9 +429,18 @@ public class Updater implements Screen {
 		// shape renderer for debugging
 		r.setProjectionMatrix(camera.combined);
 		r.begin(ShapeType.Line);
+		r.setColor(Color.GREEN);
 		Vector3 vector = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
 		Vector3 reaCoordn = camera.unproject(vector);
 		r.line(player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2, reaCoordn.x, reaCoordn.y);
+		
+		for(int i = 0; i<proj.size();i++){
+			r.setColor(Color.RED);
+		r.line(proj.get(i).getTargetX(),proj.get(i).getTargetY(),proj.get(i).getX(),proj.get(i).getY());
+		r.setColor(Color.GREEN);
+	
+		}
+		
 		r.end();
 	
 		}
