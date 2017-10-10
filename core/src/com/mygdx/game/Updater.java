@@ -57,6 +57,7 @@ public class Updater implements Screen {
 	private OrthogonalTiledMapRenderer mapRender;
 	private Array<RectangleMapObject> borders;
 	private Array<RectangleMapObject> spawnPoints;
+	private Array<RectangleMapObject> monsterSpawns;
 	/*
 	//For testing wave system for enemies with player instances
 	// private ArrayList<Player> enemies;
@@ -73,7 +74,7 @@ public class Updater implements Screen {
 		statetime = 0f;
 		timesCalled = 0;
 		world = new GameWorld();
-		
+		monsterSpawns = new Array<>();
 		enemies = new ArrayList<SpriteCommons>();
 		// When loading textures to project, the entire path to the file should be included
 		// be careful with that
@@ -109,7 +110,12 @@ public class Updater implements Screen {
 				pile = new Pile(100, 100, spawnPoints.get(i).getRectangle().getX(), spawnPoints.get(i).getRectangle().getY());
 			}
 		}
-
+		for(int i = 0; i<spawnPoints.size;i++){
+			if(spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Enemy")){
+				monsterSpawns.add(spawnPoints.get(i));
+			}
+		}
+				
 		
 		player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\BatMonster.png")));
 		player.setDir(DIRECTION.DOWN);
@@ -140,34 +146,19 @@ public class Updater implements Screen {
 		timesCalled++;
 		int tmp;
 		for(int i = 0; i < timesCalled; i++){
-			tmp = MathUtils.random(0, 4);
+			tmp = MathUtils.random(0, monsterSpawns.size-1);
 			//System.out.println(tmp);
-			if(tmp > 3) {
+			
 			
 				
-				enemies.add(new StealingEnemy (32,32,MathUtils.random(10, 30),MathUtils.random(10, 30)));
-				enemies.add(new ChaserEnemy (32,32,MathUtils.random(10, 30),MathUtils.random(10, 30)));
+				enemies.add(new StealingEnemy (32,32,monsterSpawns.get(tmp).getRectangle().getX(),monsterSpawns.get(tmp).getRectangle().getY()));
+				enemies.add(new ChaserEnemy (32,32,monsterSpawns.get(tmp).getRectangle().getX(),monsterSpawns.get(tmp).getRectangle().getY()));
 				
 				
-			}else if (tmp > 2) {
-				enemies.add(new StealingEnemy (32,32,MathUtils.random(10, 30),MathUtils.random(10, 30)));
-				enemies.add(new ChaserEnemy (32,32,MathUtils.random(10, 30),MathUtils.random(10, 30)));
-		
-			}else if (tmp > 1) {
-				enemies.add(new StealingEnemy (32,32,MathUtils.random(10, 30),MathUtils.random(10, 30)));
-				enemies.add(new ChaserEnemy (32,32,MathUtils.random(10, 30),MathUtils.random(10, 30)));
-				
-				
-			}else 
-				enemies.add(new StealingEnemy (32,32,MathUtils.random(10, 30),MathUtils.random(10, 30)));
-				enemies.add(new ChaserEnemy (32,32,MathUtils.random(10, 30),MathUtils.random(10, 30)));
-				
-				
-			}
+			
 	timeSinceWave = TimeUtils.millis();
 		}
-
-
+	}
 
 
 	public void render (float delta) {
@@ -263,10 +254,10 @@ public class Updater implements Screen {
 			// Convert the cursor coordinates into game world coordinates. Needs to be refined
 			Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
 			Vector3 reaCoords = camera.unproject(v);
-			float bulletVel = 15f;
+			float bulletVel = 20f;
 			
-			float velX = (float)(reaCoords.x - player.getX()+ (player.getWidth()/2))/bulletVel;
-			float velY = (float)(reaCoords.y - player.getY() + (player.getHeight()/2))/bulletVel;
+			float velX = (float)(reaCoords.x - (player.getX()+ (player.getWidth()/2)))/bulletVel;
+			float velY = (float)(reaCoords.y - (player.getY() + (player.getHeight()/2)))/bulletVel;
 			//float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
 		
 
@@ -284,9 +275,8 @@ public class Updater implements Screen {
 		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")));
 		    p.setTargetX(reaCoords.x);
 			p.setTargetY(reaCoords.y);
-		    System.out.println("New Projectile. Target x: " + p.getTargetX() + " Target y: " + p.getTargetY() + " x Velocity: " + p.getxVel() +" y Velocity " + p.getyVel());
-
-
+			
+		    
 			
 		    p.setCurrentTime(TimeUtils.millis());
 			
@@ -427,6 +417,7 @@ public class Updater implements Screen {
 		stage.act(statetime);
 		stage.draw();
 		// shape renderer for debugging
+		/*
 		r.setProjectionMatrix(camera.combined);
 		r.begin(ShapeType.Line);
 		r.setColor(Color.GREEN);
@@ -437,12 +428,12 @@ public class Updater implements Screen {
 		for(int i = 0; i<proj.size();i++){
 			r.setColor(Color.RED);
 		r.line(proj.get(i).getTargetX(),proj.get(i).getTargetY(),proj.get(i).getX(),proj.get(i).getY());
-		r.setColor(Color.GREEN);
-	
+		r.setColor(Color.BLUE);
+		r.line(player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2, proj.get(i).getX(), proj.get(i).getY());
 		}
 		
 		r.end();
-	
+	*/
 		}
 		
 	   
