@@ -10,12 +10,13 @@ public class Pile extends SpriteCommons {
 	private Texture pileTexture;
 	private Texture pileTexture2;
 	
-	public Pile(int width, int height, float x, float y) {
+	public Pile(int width, int height, float x, float y, Texture pileTexture, Texture pileTexture2) {
 		
 		super(width, height, x, y, 0f, 0f);
 		
-		pileTexture = new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\pileTest.png"));
-		pileTexture2 = new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\pileTest2.png"));
+		this.pileTexture = pileTexture;
+		this.pileTexture2 = pileTexture2;
+
 		
 		health = 2;
 		

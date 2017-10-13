@@ -10,10 +10,9 @@ public class StealingEnemy extends SpriteCommons {
 	// private Animator animations;
 	private Texture stealerTexture;
 	
-	public StealingEnemy(int width, int height, float x, float y) {
-		super(width, height, x, y, 0f, 0f);
-		
-		stealerTexture = new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\stealTest.png"));
+	public StealingEnemy(int width, int height, float x, float y, int HP, Texture stealerTexture) {
+		super(width, height, x, y, 0f, 0f, HP);
+		this.stealerTexture = stealerTexture;
 
 		// Looks the side of the spawn 
 		if(x == 0 ) {
