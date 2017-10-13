@@ -117,7 +117,7 @@ public class Updater implements Screen {
 		}
 				
 		
-		player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\BatMonster.png")));
+		player.setAnimations(9, 4, 0.10f, new Texture(Gdx.files.internal("C:\\CandyPile\\CandyPileDefender\\core\\assets\\BatMonster.png")));
 		player.setDir(DIRECTION.DOWN);
 		camera.position.set(player.getX(), player.getY(), 0);
 		//Teppo kokeilua
@@ -150,9 +150,16 @@ public class Updater implements Screen {
 			//System.out.println(tmp);
 			
 			
-				
-				enemies.add(new StealingEnemy (32,32,monsterSpawns.get(tmp).getRectangle().getX(),monsterSpawns.get(tmp).getRectangle().getY()));
-				enemies.add(new ChaserEnemy (32,32,monsterSpawns.get(tmp).getRectangle().getX(),monsterSpawns.get(tmp).getRectangle().getY()));
+			//stealing "pathing" doesn't work!!!d
+			// pile centre spawnPoints.get(i).getRectangle().getX()+50, spawnPoints.get(i).getRectangle().getY()+50
+			
+			double hypot = Math.hypot(spawnPoints.get(i).getRectangle().getX()+50, monsterSpawns.get(tmp).getRectangle().getX());	
+			float xVelocity = (float) (1.5f / hypot * (spawnPoints.get(i).getRectangle().getX()+50 - monsterSpawns.get(tmp).getRectangle().getX()));
+			float yVelocity = (float) (1.5f / hypot * (spawnPoints.get(i).getRectangle().getY()+50 - monsterSpawns.get(tmp).getRectangle().getY()));
+			
+			enemies.add(new StealingEnemy (32,32,monsterSpawns.get(tmp).getRectangle().getX(),monsterSpawns.get(tmp).getRectangle().getY(), xVelocity, yVelocity));
+			
+			enemies.add(new ChaserEnemy (32,32,monsterSpawns.get(tmp).getRectangle().getX(),monsterSpawns.get(tmp).getRectangle().getY()));
 				
 				
 			
@@ -165,41 +172,57 @@ public class Updater implements Screen {
 		
 		Gdx.gl.glClearColor(100, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		// Move the player
-		player.setX(player.getX() + player.getxVel());
-		player.setY(player.getY() + player.getyVel());
-				
 		
-		//Teppo kokeilua
+		//moves hitbox first to check if collisions
+		player.moveHitbox(player.getX() + player.getxVel(), player.getY() + player.getyVel());
 		
-		for (int i = 0; i < enemies.size(); i++) {
-		 
-		//chase
-		if(enemies.get(i) instanceof ChaserEnemy) {	
-			double hypot = Math.hypot(player.getX(), enemies.get(i).getX());
+		if(Intersector.overlaps(player.getHitbox(), pile.getHitbox())) {
 			
-			enemies.get(i).setxVel(((float) (1.2f / hypot  * (player.getX() - enemies.get(i).getX())))); 
-			enemies.get(i).setyVel(((float) (1.2f / hypot  * (player.getY() - enemies.get(i).getY())))); 
+			//pulls the hitbox back
+			player.updateHitbox();	
+			
+		}else {
+			// Move the player
+			player.setX(player.getX() + player.getxVel());
+			player.setY(player.getY() + player.getyVel());
+
 		}
 		
-		// move enemies
-		enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
-		enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
+		//Teppo testing
 		
-		enemies.get(i).updateHitbox();
-		
-		
-		// steal from the pile
-    	if(enemies.get(i) instanceof StealingEnemy) {
-        	if(Intersector.overlaps((enemies.get(i).getHitbox()), pile.getHitbox())){
-        		enemies.remove(i);
-        		pileHealth = pile.reduceHealth();
-    		}
-    	}
+		for (int i = 0; i < enemies.size(); i++){
+			
+			//chase
+			if(enemies.get(i) instanceof ChaserEnemy) {	
+				double hypot = Math.hypot(player.getX(), enemies.get(i).getX());
+				
+				enemies.get(i).setxVel(((float) (1.2f / hypot  * (player.getX() - enemies.get(i).getX())))); 
+				enemies.get(i).setyVel(((float) (1.2f / hypot  * (player.getY() - enemies.get(i).getY())))); 
+			}
+			
+			//move hitbox first to check if collisions
+			enemies.get(i).moveHitbox(enemies.get(i).getX() + enemies.get(i).getxVel(), enemies.get(i).getY() + enemies.get(i).getyVel());
+			
+			if(Intersector.overlaps(enemies.get(i).getHitbox(), player.getHitbox())) {
+				
+				//pulls the hitbox back
+				enemies.get(i).updateHitbox();
+	
+			}else {
+				// move enemies
+				enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
+				enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
+			}
+			
+			
+			// steal from the pile
+	    	if(enemies.get(i) instanceof StealingEnemy) {
+	        	if(Intersector.overlaps((enemies.get(i).getHitbox()), pile.getHitbox())){
+	        		enemies.remove(i);
+	        		pileHealth = pile.reduceHealth();
+	    		}
+	    	}
 		}
-        	
-        
-	    
 		
 		statetime += delta;
 		// Movement logic template for the character
@@ -247,7 +270,6 @@ public class Updater implements Screen {
 			player.setxVel(0);
 			player.setyVel(0);
 		}
-		
 		// This listens to mouse clicks
 		
 		if(Gdx.input.justTouched()){
@@ -261,18 +283,12 @@ public class Updater implements Screen {
 			//float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
 		
 
-
 	
-
-		
-
-
-		
 			// Spawn a projectile with target coordinates and set the time it is visible
 
 
 		   
-		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\Pointer.png")));
+		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, new Texture(Gdx.files.internal("C:\\CandyPile\\CandyPileDefender\\core\\assets\\Pointer.png")));
 		    p.setTargetX(reaCoords.x);
 			p.setTargetY(reaCoords.y);
 			

@@ -28,13 +28,18 @@ public Rectangle getHitbox() {
 	return hitbox;
 }
 
-public void setHitboxS(Rectangle hitbox) {
+public void setHitbox(Rectangle hitbox) {
 	this.hitbox = hitbox;
 }
 
 public void updateHitbox() {
 	hitbox.setX(getX());
 	hitbox.setY(getY());
+}
+
+public void moveHitbox(float x, float y) {
+	hitbox.setX(x);
+	hitbox.setY(y);
 }
 
 public float getX() {

@@ -14,10 +14,11 @@ public class Pile extends SpriteCommons {
 		
 		super(width, height, x, y, 0f, 0f);
 		
-		pileTexture = new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\pileTest.png"));
-		pileTexture2 = new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\pileTest2.png"));
+		pileTexture = new Texture(Gdx.files.internal("C:\\CandyPile\\CandyPileDefender\\core\\assets\\pileTest.png"));
+		pileTexture2 = new Texture(Gdx.files.internal("C:\\CandyPile\\CandyPileDefender\\core\\assets\\pileTest2.png"));
 		
-		health = 2;
+		// 8 health and ~4 animations
+		health = 8;
 		
 		
 	}

@@ -13,7 +13,7 @@ public class ChaserEnemy extends SpriteCommons {
 	public ChaserEnemy(int width, int height, float x, float y) {
 		super(width, height, x, y, 0f, 0f);
 		
-		chaserTexture = new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\chaserTest.png"));
+		chaserTexture = new Texture(Gdx.files.internal("C:\\CandyPile\\CandyPileDefender\\core\\assets\\chaserTest.png"));
 
 		// Looks the side of the spawn 
 		if(x == 0 ) {

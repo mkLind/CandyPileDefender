@@ -10,12 +10,12 @@ public class StealingEnemy extends SpriteCommons {
 	// private Animator animations;
 	private Texture stealerTexture;
 	
-	public StealingEnemy(int width, int height, float x, float y) {
-		super(width, height, x, y, 0f, 0f);
+	public StealingEnemy(int width, int height, float x, float y,float xVel, float yVel) {
+		super(width, height, x, y, xVel, yVel);
 		
-		stealerTexture = new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\stealTest.png"));
+		stealerTexture = new Texture(Gdx.files.internal("C:\\CandyPile\\CandyPileDefender\\core\\assets\\stealTest.png"));
 
-		// Looks the side of the spawn 
+		// Looks the side of the spawn DOESN'T WORK
 		if(x == 0 ) {
 			
 			dir = DIRECTION.RIGHT;			
@@ -35,10 +35,10 @@ public class StealingEnemy extends SpriteCommons {
 		
 		// replace with pathfinding or smth, maybe
 		
-		double hypot = Math.hypot(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		//double hypot = Math.hypot(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
-		setxVel((float) (1.5f / hypot  * (Gdx.graphics.getWidth() - x)));
-		setyVel((float) (1.5f / hypot * (Gdx.graphics.getHeight() - y)));
+		//setxVel((float) (1.5f / hypot  * (Gdx.graphics.getWidth() - x)));
+		//setyVel((float) (1.5f / hypot * (Gdx.graphics.getHeight() - y)));
 		
 	}
 	
