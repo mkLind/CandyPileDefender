@@ -10,10 +10,9 @@ public class ChaserEnemy extends SpriteCommons {
 	private DIRECTION dir; 
 	// private Animator animations;
 
-	public ChaserEnemy(int width, int height, float x, float y) {
-		super(width, height, x, y, 0f, 0f);
-		
-		chaserTexture = new Texture(Gdx.files.internal("C:\\Users\\Markus\\Desktop\\CandyPileDefender\\core\\assets\\chaserTest.png"));
+	public ChaserEnemy(int width, int height, float x, float y, int HP, Texture chaserTexture) {
+		super(width, height, x, y, 0f, 0f, HP);
+		this.chaserTexture = chaserTexture;
 
 		// Looks the side of the spawn 
 		if(x == 0 ) {

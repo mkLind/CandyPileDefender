@@ -25,10 +25,8 @@ public class Player extends SpriteCommons {
  * @param y
  */
 	
-	public Player( int width, int height, float x, float y){
-
-
-		super(width, height, x, y, 0f, 0f);
+	public Player(int width, int height, float x, float y, int HP){
+		super(width, height, x, y, 0f, 0f, HP);
 		dir = DIRECTION.DOWN;
 	}
 	public enum DIRECTION{

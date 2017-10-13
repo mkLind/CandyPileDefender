@@ -12,8 +12,19 @@ private float xVel;
 private float yVel;
 private int width;
 private int height;
+private int HP;
 private Rectangle hitbox;
 
+public SpriteCommons(int width, int height, float x, float y,float xVel, float yVel, int HP){
+	this.x  = x;
+	this.y = y;
+	this.width  = width;
+	this.height = height;
+	this.xVel = xVel;
+	this.yVel = yVel;
+	this.HP = HP;
+	hitbox = new Rectangle(x, y, width, height);
+}
 public SpriteCommons(int width, int height, float x, float y,float xVel, float yVel){
 	this.x  = x;
 	this.y = y;
@@ -85,6 +96,13 @@ public int getHeight() {
 
 public void setHeight(int height) {
 	this.height = height;
+}
+public int getHP() {
+    return HP;
+}
+
+public void setHP(int HP) {
+    this.HP = HP;
 }
 
 }

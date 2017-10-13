@@ -10,19 +10,24 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Core extends Game{
 public SpriteBatch batch;
 public BitmapFont font;
+public ResourceManager assetLoader;
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		font.setColor(Color.FIREBRICK);
-		this.setScreen(new Updater(this));
+		assetLoader = new ResourceManager();
+		this.setScreen(new LoadingScreen(this));
 	}
 	public void render(){
 		super.render();
 	}
 	public void dispose(){
 		batch.dispose();
+	}
+	public ResourceManager getLoader() {
+		return assetLoader;
 	}
 
 }
