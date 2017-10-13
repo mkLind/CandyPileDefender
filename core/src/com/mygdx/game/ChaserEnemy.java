@@ -15,6 +15,7 @@ public class ChaserEnemy extends SpriteCommons {
 		this.chaserTexture = chaserTexture;
 
 		// Looks the side of the spawn 
+		/*
 		if(x == 0 ) {
 			
 			dir = DIRECTION.RIGHT;			
@@ -32,7 +33,7 @@ public class ChaserEnemy extends SpriteCommons {
 			dir = DIRECTION.DOWN;		
 		}
 		
-		
+		*/
 	}
 	
 	public Texture getTexture() {

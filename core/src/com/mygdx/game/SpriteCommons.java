@@ -47,7 +47,10 @@ public void updateHitbox() {
 	hitbox.setX(getX());
 	hitbox.setY(getY());
 }
-
+public void moveHitbox(float x, float y) {
+	hitbox.setX(x);
+	hitbox.setY(y);
+}
 public float getX() {
 	return x;
 }

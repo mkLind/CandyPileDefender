@@ -148,8 +148,20 @@ public class Updater implements Screen {
 		Gdx.gl.glClearColor(100, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		// Move the player
-		player.setX(player.getX() + player.getxVel());
-		player.setY(player.getY() + player.getyVel());
+		//moves hitbox first to check if collisions
+				player.moveHitbox(player.getX() + player.getxVel(), player.getY() + player.getyVel());
+				
+				if(Intersector.overlaps(player.getHitbox(), pile.getHitbox())) {
+					
+					//pulls the hitbox back
+					player.updateHitbox();	
+					
+				}else {
+					// Move the player
+					player.setX(player.getX() + player.getxVel());
+					player.setY(player.getY() + player.getyVel());
+
+				}
 				
 		
 		//Teppo kokeilua
@@ -164,13 +176,23 @@ public class Updater implements Screen {
 			enemies.get(i).setyVel(((float) (1.2f / hypot  * (player.getY() - enemies.get(i).getY())))); 
 		}
 		
-		// move enemies
-		enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
-		enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
+	
 		
 		enemies.get(i).updateHitbox();
 		
+		//move hitbox first to check if collisions
+		enemies.get(i).moveHitbox(enemies.get(i).getX() + enemies.get(i).getxVel(), enemies.get(i).getY() + enemies.get(i).getyVel());
 		
+		if(Intersector.overlaps(enemies.get(i).getHitbox(), player.getHitbox())) {
+			
+			//pulls the hitbox back
+			enemies.get(i).updateHitbox();
+
+		}else {
+			// move enemies
+			enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
+			enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
+		}
 		// steal from the pile
     	if(enemies.get(i) instanceof StealingEnemy) {
         	if(Intersector.overlaps((enemies.get(i).getHitbox()), pile.getHitbox())){

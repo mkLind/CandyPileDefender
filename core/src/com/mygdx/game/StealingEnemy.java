@@ -15,6 +15,9 @@ public class StealingEnemy extends SpriteCommons {
 		this.stealerTexture = stealerTexture;
 
 		// Looks the side of the spawn 
+		//
+	
+		/*
 		if(x == 0 ) {
 			
 			dir = DIRECTION.RIGHT;			
@@ -31,13 +34,8 @@ public class StealingEnemy extends SpriteCommons {
 			
 			dir = DIRECTION.DOWN;		
 		}
+		*/
 		
-		// replace with pathfinding or smth, maybe
-		
-		double hypot = Math.hypot(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		
-		setxVel((float) (1.5f / hypot  * (Gdx.graphics.getWidth() - x)));
-		setyVel((float) (1.5f / hypot * (Gdx.graphics.getHeight() - y)));
 		
 	}
 	
