@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="20" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="CandypileDefender" tilewidth="32" tileheight="32">
+  <image source="terrainTiles.png" trans="ff00ff" width="640" height="480"/>
+ </tileset>
+ <layer name="Base" width="40" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztwzENAAAMA6DurH/DdbELEnpJVVVVHw6jTR9B
+  </data>
+ </layer>
+ <layer name="Middle" width="40" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztllEOgjAMhsvDxhmmD97/KHoHuAN4AVm0of626yDTxIQ/6QNj7b60XYHo0KHf6dLV7ZsWi93T7g3jtoqRlr0nYTOthryluJOy/xu60ZrPaPBO9L4+v3zOwI/7tvBLX/STOY1gJ8OwP0b69O0Fv1fjpJyNPvk5CC7Mj1QQ72VPX2mtSe8waYw5Zsk/OFxcB41N+iUnjifOE/YVMsscM4s8NyhslvbMGOwxa/ZobCOslc7fy6ax8H3J+RzEmtVvrYS9kgqMzBSVGaL1W2s2ZLAY8/rgxGjFZtXCqzX2g8e29ZsYnFmEDFoe+Z5unWk1qplFWp4kK98ZLU6Lf4ha4f9Dyz77Jz0Aq7FERw==
+  </data>
+ </layer>
+ <layer name="Top" width="40" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztzrENwCAUxNDLAiT7DwjMEFHADm4+kp/k3j3JKNo8/alrxT/CP8Y/xj/GP8Y/xj/GP+aGv/Ykb9G+0wYCOknl
+  </data>
+ </layer>
+ <objectgroup name="Borders">
+  <object x="1259" y="1" width="22" height="633"/>
+  <object x="-1" y="0" width="1264" height="21"/>
+  <object x="1" y="0" width="21" height="642"/>
+  <object x="1" y="608" width="1268" height="23"/>
+ </objectgroup>
+ <objectgroup name="Coordinates">
+  <properties>
+   <property name="Spawnpoint" value="CandyPile"/>
+  </properties>
+  <object x="592" y="332">
+   <properties>
+    <property name="Spawnpoint" value="Pile"/>
+   </properties>
+  </object>
+  <object x="39" y="47">
+   <properties>
+    <property name="Spawnpoint" value="Enemy"/>
+   </properties>
+  </object>
+  <object x="44" y="579">
+   <properties>
+    <property name="Spawnpoint" value="Enemy"/>
+   </properties>
+  </object>
+  <object x="1232" y="585">
+   <properties>
+    <property name="Spawnpoint" value="Enemy"/>
+   </properties>
+  </object>
+  <object x="1221" y="52">
+   <properties>
+    <property name="Spawnpoint" value="Enemy"/>
+   </properties>
+  </object>
+  <object x="758" y="268">
+   <properties>
+    <property name="Spawnpoint" value="Player"/>
+   </properties>
+  </object>
+  <object x="677" y="43">
+   <properties>
+    <property name="Spawnpoint" value="Enemy"/>
+   </properties>
+  </object>
+  <object x="637" y="584">
+   <properties>
+    <property name="Spawnpoint" value="Enemy"/>
+   </properties>
+  </object>
+  <object x="42" y="328">
+   <properties>
+    <property name="Spawnpoint" value="Enemy"/>
+   </properties>
+  </object>
+  <object x="1237" y="324">
+   <properties>
+    <property name="Spawnpoint" value="Enemy"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
