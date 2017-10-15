@@ -63,8 +63,8 @@ public float getMinimumY(){
 	Array<RectangleMapObject> obj = borders.getByType(RectangleMapObject.class);
 	y = obj.get(0).getRectangle().getY();
 	for(int i = 0;i<obj.size;i++){
-		if(obj.get(i).getRectangle().getX()<y){
-			y = obj.get(i).getRectangle().getX();
+		if(obj.get(i).getRectangle().getY()<y){
+			y = obj.get(i).getRectangle().getY();
 		}
 		
 	}

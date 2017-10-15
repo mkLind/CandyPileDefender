@@ -292,7 +292,7 @@ public class Updater implements Screen {
 		// Powerup spawns here
 		
 		if(TimeUtils.timeSinceMillis(timeToNextPowerup)>10000){
-			powerups.add(spawnPowerUp(world));
+			powerups.add(spawnPowerUp(world, game));
 		    timeToNextPowerup = TimeUtils.millis();
 		
 		}
@@ -414,6 +414,7 @@ public class Updater implements Screen {
 		}
 		}
 		// Update particles in the list
+		/*
 		if(!effects.isEmpty()){
 			for(int i = 0; i<effects.size();i++){
 				ParticleEffect tmp = effects.get(i);
@@ -429,10 +430,11 @@ public class Updater implements Screen {
 			
 		}
 		
-		
+		*/
 
 		//Wait 10 sec between waves.		
 		if(TimeUtils.timeSinceMillis(timeSinceWave)> 10000){ 
+			
 			spawnEnemies();
 		}
 		game.batch.end();  
@@ -459,10 +461,11 @@ public class Updater implements Screen {
 	*/
 		}
 		
-	   public Powerup spawnPowerUp(GameWorld world){
+	   public Powerup spawnPowerUp(GameWorld world, Core game){
+		   System.out.println("Spawning powerup");
 		   Powerup powerup = new Powerup(16,16,MathUtils.random(world.getMinimumX(), world.getmaximumX()),MathUtils.random(world.getMinimumY(), world.getMaximumY()),0f,0f,game);
 		   
-		  powerup.setTypeAndGraphic();
+		  powerup.setTypeAndGraphic(game);
 		  powerup.setTimeAlive(TimeUtils.millis());
 		  effects.add(powerup.getSpawnEffect());
 	      return powerup;

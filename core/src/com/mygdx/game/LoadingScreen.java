@@ -28,7 +28,8 @@ public class LoadingScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (game.getLoader().getManager().update()) {
-            game.setScreen(new Updater(game));
+        	game.getLoader().getManager().finishLoading();
+        	game.setScreen(new Updater(game));
         }else{
         	game.batch.begin();
         	game.font.draw(game.batch, "Loading: " + MathUtils.round(game.getLoader().getManager().getProgress()*100) + "%", 100, 100);
