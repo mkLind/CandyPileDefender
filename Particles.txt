@@ -1,0 +1,34 @@
+Loading particle
+
+
+public ParticleEffect getParticle() {
+        particle = new ParticleEffect();
+        particle.load(Gdx.files.internal(particleName), Gdx.files.internal(""));
+        particle.getEmitters().first().setPosition(x, y);
+        particle.scaleEffect(particlescale);
+        particle.start();
+        return particle;
+    }
+=> esim array list. peliloopissa
+
+ /**
+     * Update a list of started particle effects
+     *
+     * @param effects
+     * @param Continuous
+     * @param delta
+     */
+    public void updateParticleList(ArrayList<ParticleEffect> effects, boolean Continuous, float delta) {
+        if (effects.size() > 0) {
+            for (int i = 0; i < effects.size(); i++) {
+                effects.get(i).update(delta);
+                effects.get(i).draw(game.batch);
+                if (effects.get(i).isComplete() && Continuous) {
+                    effects.get(i).reset();
+                } else if (effects.get(i).isComplete()) {
+                    effects.get(i).dispose();
+                    effects.remove(i);
+                }
+            }
+        }
+    }
