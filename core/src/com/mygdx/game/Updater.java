@@ -15,7 +15,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer.Random;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -53,12 +56,15 @@ public class Updater implements Screen {
 	private ArrayList<Projectile> proj;
 	private int timesCalled;
 	private long timeSinceWave;
+	private long timeToNextPowerup;
 	private GameWorld world;
+	private Random randomizer;
 	private OrthogonalTiledMapRenderer mapRender;
 	private Array<RectangleMapObject> borders;
 	private Array<RectangleMapObject> spawnPoints;
 	private Array<RectangleMapObject> monsterSpawns;
-
+	private ArrayList<Powerup> powerups;
+	private ArrayList<ParticleEffect> effects;
 	
 	/**
 	 * Initializes the entire game
@@ -66,15 +72,19 @@ public class Updater implements Screen {
 	 */
 	public Updater(final Core game) {
 		this.game = game;
+		
+		
 		statetime = 0f;
 		timesCalled = 0;
+		randomizer = new Random();
 		world = new GameWorld();
+		powerups = new ArrayList<>();
 		monsterSpawns = new Array<RectangleMapObject>();
 		enemies = new ArrayList<SpriteCommons>();
 		// When loading textures to project, the entire path to the file should be included
 		// be careful with that
 		camera = new OrthographicCamera();
-	
+		effects = new ArrayList<>();
 		aspectRatio =  (float) Gdx.graphics.getWidth()/(float) Gdx.graphics.getHeight();
 		camera.setToOrtho(false,250f*aspectRatio, 250f);
 	//	camera.setToOrtho(false, 700f,700f);
@@ -119,6 +129,7 @@ public class Updater implements Screen {
 		enemies = new ArrayList<SpriteCommons>();
 		spawnEnemies();
 		camera.update();
+		timeToNextPowerup = TimeUtils.millis();
 	}
 
 		
@@ -278,6 +289,15 @@ public class Updater implements Screen {
 			proj.add(p);
 		
 		}
+		// Powerup spawns here
+		
+		if(TimeUtils.timeSinceMillis(timeToNextPowerup)>10000){
+			powerups.add(spawnPowerUp(world));
+		    timeToNextPowerup = TimeUtils.millis();
+		
+		}
+		
+		
 		
 		
 //		 If the projectile has been enough time visible on the screen, remove it
@@ -375,7 +395,41 @@ public class Updater implements Screen {
 		for(int i = 0; i<proj.size();i++){
 			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(), proj.get(i).getHeight());
 		}
-
+		if(!powerups.isEmpty()){
+		for(int i = 0; i<powerups.size();i++){
+			
+			Powerup powerup = powerups.get(i);
+			
+			if(TimeUtils.timeSinceMillis(powerup.getTimeAlive())>9000){
+			game.batch.draw(powerup.getGraphic(), powerup.getX(), powerup.getY(), 16f, 16f);
+			
+			
+			}else{
+				ParticleEffect effect = powerups.get(i).getSpawnEffect();
+				effect.reset(); 
+				effects.add(effect);
+				powerups.remove(i);
+			}
+			
+		}
+		}
+		// Update particles in the list
+		if(!effects.isEmpty()){
+			for(int i = 0; i<effects.size();i++){
+				ParticleEffect tmp = effects.get(i);
+				
+				if(!tmp.isComplete()){
+					tmp.update(statetime);
+					tmp.draw(game.batch);
+				}else{
+					effects.get(i).dispose();
+					effects.remove(i);
+				}
+			}
+			
+		}
+		
+		
 
 		//Wait 10 sec between waves.		
 		if(TimeUtils.timeSinceMillis(timeSinceWave)> 10000){ 
@@ -405,7 +459,16 @@ public class Updater implements Screen {
 	*/
 		}
 		
+	   public Powerup spawnPowerUp(GameWorld world){
+		   Powerup powerup = new Powerup(16,16,MathUtils.random(world.getMinimumX(), world.getmaximumX()),MathUtils.random(world.getMinimumY(), world.getMaximumY()),0f,0f,game);
+		   
+		  powerup.setTypeAndGraphic();
+		  powerup.setTimeAlive(TimeUtils.millis());
+		  effects.add(powerup.getSpawnEffect());
+	      return powerup;
+	    
 	   
+	   }
 	
 
 

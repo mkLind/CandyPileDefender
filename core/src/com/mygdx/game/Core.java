@@ -16,7 +16,7 @@ public ResourceManager assetLoader;
 	public void create() {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
-		font.setColor(Color.FIREBRICK);
+		font.setColor(Color.GREEN);
 		assetLoader = new ResourceManager();
 		this.setScreen(new LoadingScreen(this));
 	}

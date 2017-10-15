@@ -46,6 +46,54 @@ public void setMap(TiledMap map) {
 public MapObjects getBorders() {
 	return borders;
 }
+public float getMinimumX(){
+	float x = 0;
+	Array<RectangleMapObject> obj = borders.getByType(RectangleMapObject.class);
+	x = obj.get(0).getRectangle().getX();
+	for(int i = 0;i<obj.size;i++){
+		if(obj.get(i).getRectangle().getX()<x){
+			x = obj.get(i).getRectangle().getX();
+		}
+		
+	}
+	return x;
+}
+public float getMinimumY(){
+	float y = 0;
+	Array<RectangleMapObject> obj = borders.getByType(RectangleMapObject.class);
+	y = obj.get(0).getRectangle().getY();
+	for(int i = 0;i<obj.size;i++){
+		if(obj.get(i).getRectangle().getX()<y){
+			y = obj.get(i).getRectangle().getX();
+		}
+		
+	}
+	return y;
+}
+public float getMaximumY(){
+	float y = 0;
+	Array<RectangleMapObject> obj = borders.getByType(RectangleMapObject.class);
+	y = obj.get(0).getRectangle().getY();
+	for(int i = 0;i<obj.size;i++){
+		if(obj.get(i).getRectangle().getY()>y){
+			y = obj.get(i).getRectangle().getY();
+		}
+		
+	}
+	return y;
+}
+public float getmaximumX(){
+	float x = 0;
+	Array<RectangleMapObject> obj = borders.getByType(RectangleMapObject.class);
+	x = obj.get(0).getRectangle().getX();
+	for(int i = 0;i<obj.size;i++){
+		if(obj.get(i).getRectangle().getX()>x){
+			x = obj.get(i).getRectangle().getX();
+		}
+		
+	}
+	return x;
+}
 public void setBorders(MapObjects borders) {
 	this.borders = borders;
 }

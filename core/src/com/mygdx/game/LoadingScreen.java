@@ -11,14 +11,15 @@ import com.badlogic.gdx.math.MathUtils;
 public class LoadingScreen implements Screen {
 
 	final Core game;
-	private ResourceManager assetLoader;
+	
     private Label status;
     private Stage stage;
     private int stateTime;
 
 	public LoadingScreen(final Core game) {
 		this.game = game;
-		assetLoader = game.getLoader();
+	
+		
 
 	}
 	
@@ -26,8 +27,13 @@ public class LoadingScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if (assetLoader.getManager().update()) {
+        if (game.getLoader().getManager().update()) {
             game.setScreen(new Updater(game));
+        }else{
+        	game.batch.begin();
+        	game.font.draw(game.batch, "Loading: " + MathUtils.round(game.getLoader().getManager().getProgress()*100) + "%", 100, 100);
+       game.batch.end();
+       System.out.println("LOADED ASSETS: " + game.getLoader().getManager().getLoadedAssets() );
         }
 
 	}

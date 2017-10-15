@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.Powerup.POWERUPTYPE;
 
  // sprite.setRegion(animation.getKeyFrame(time));
 /**
@@ -15,6 +16,7 @@ public class Player extends SpriteCommons {
 
 	private DIRECTION dir; 
 	private Animator animations;
+	private POWERUPTYPE powerupType;
 	
 	
 /**
@@ -83,5 +85,18 @@ public class Player extends SpriteCommons {
 	public void setDir(DIRECTION dir) {
 		this.dir = dir;
 	}
+	public Animator getAnimations() {
+		return animations;
+	}
+	public void setAnimations(Animator animations) {
+		this.animations = animations;
+	}
+	public POWERUPTYPE getPowerupType() {
+		return powerupType;
+	}
+	public void setPowerupType(POWERUPTYPE powerupType) {
+		this.powerupType = powerupType;
+	}
+	
 
 }
