@@ -33,6 +33,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.Player.DIRECTION;
+import com.mygdx.game.Powerup.POWERUPTYPE;
 /*
  * The class that actually makes the game visible
  */
@@ -221,40 +222,40 @@ public class Updater implements Screen {
 		
 		if(Gdx.input.isKeyPressed(Keys.A)){
 			player.setDir(Player.DIRECTION.LEFT);
-			player.setxVel(-1.5f);
+			player.setxVel(-(1.5f + player.getHasteVel()));
 			player.setyVel(0);
 		}
 		if(Gdx.input.isKeyPressed(Keys.W)){
 			player.setDir(Player.DIRECTION.UP);
-			player.setyVel(1.5f);
+			player.setyVel(1.5f + player.getHasteVel());
 			player.setxVel(0);
 		}  if(Gdx.input.isKeyPressed(Keys.S)){
 			player.setDir(Player.DIRECTION.DOWN);
-			player.setyVel(-1.5f);
+			player.setyVel(-(1.5f + player.getHasteVel()));
 			player.setxVel(0);	
 		} if(Gdx.input.isKeyPressed(Keys.D)){
 			player.setDir(Player.DIRECTION.RIGHT);
-			player.setxVel(1.5f);
+			player.setxVel(1.5f + player.getHasteVel() );
 			player.setyVel(0);
 			
 		} 
 		
 		if(Gdx.input.isKeyPressed(Keys.W) && Gdx.input.isKeyPressed(Keys.A)){
 			player.setDir(Player.DIRECTION.LEFT);
-			player.setxVel(-1.3f);
-			player.setyVel(1.3f);
+			player.setxVel(-(1.3f + player.getHasteVel()));
+			player.setyVel(1.3f + player.getHasteVel());
 		} if(Gdx.input.isKeyPressed(Keys.W) && Gdx.input.isKeyPressed(Keys.D)){
 			player.setDir(Player.DIRECTION.RIGHT);
-			player.setxVel(1.3f);
-			player.setyVel(1.3f);
+			player.setxVel(1.3f + player.getHasteVel());
+			player.setyVel(1.3f + player.getHasteVel());
 		} if(Gdx.input.isKeyPressed(Keys.D) && Gdx.input.isKeyPressed(Keys.S)){
 			player.setDir(Player.DIRECTION.RIGHT);
-			player.setxVel(1.3f);
-			player.setyVel(-1.3f);
+			player.setxVel(1.3f + player.getHasteVel());
+			player.setyVel(-(1.3f + player.getHasteVel()));
 		}if(Gdx.input.isKeyPressed(Keys.S) && Gdx.input.isKeyPressed(Keys.A)){
 			player.setDir(Player.DIRECTION.LEFT);
-			player.setxVel(-1.3f);
-			player.setyVel(-1.3f);
+			player.setxVel(-(1.3f + player.getHasteVel()));
+			player.setyVel(-(1.3f + player.getHasteVel()));
 		}
 		
 		if(!Gdx.input.isKeyPressed(Keys.W)  && !Gdx.input.isKeyPressed(Keys.A) && !Gdx.input.isKeyPressed(Keys.S) && !Gdx.input.isKeyPressed(Keys.D)){
@@ -262,36 +263,119 @@ public class Updater implements Screen {
 			player.setxVel(0);
 			player.setyVel(0);
 		}
+		for(int i = 0; i<powerups.size(); i++){
+			if(Intersector.overlaps(powerups.get(i).getHitbox(), player.getHitbox())){
+				player.setPowerupType(powerups.get(i).getType());
+				player.setPowerupActiveTime(powerups.get(i).getEffectTime());
+				player.setPowerupSetTime(TimeUtils.millis());
+				powerups.remove(i);
+				
+				if(player.getPowerupType() == POWERUPTYPE.HASTE){
+					player.setHasteVel(1.0f);
+				}
+				
+				
+				if(player.getPowerupType() == POWERUPTYPE.SLOWDOWN){
+					
+				}
+				if(player.getPowerupType() == POWERUPTYPE.CLEARSCREEN){
+					enemies.clear();
+				}
+				if(player.getPowerupType() == POWERUPTYPE.RAPIDFIRE){
+					player.setShootingCooldown(100);
+				}
+				
+				
+				System.out.println("New POWERUP SET. powerup TYPE: " + player.getPowerupType());
+			}
+		}
+		 if(TimeUtils.timeSinceMillis(player.getPowerupSetTime())> player.getPowerupActiveTime() && player.getPowerupType()!= null){
+			 
+			 if(player.getPowerupType() == POWERUPTYPE.HASTE){
+					player.setHasteVel(0f);
+				}
+			
+				
+				if(player.getPowerupType() == POWERUPTYPE.SLOWDOWN){
+					
+				}
+				if(player.getPowerupType() == POWERUPTYPE.CLEARSCREEN){
+					
+				}
+				if(player.getPowerupType() == POWERUPTYPE.RAPIDFIRE){
+					player.setShootingCooldown(900);
+				}
+			 
+			 
+			 
+			 player.setPowerupType(null);
+			 System.out.println("POWERUP EFFECT ENDED");
+		 }
+		
 		
 		// This listens to mouse clicks
 		
-		if(Gdx.input.justTouched()){
-			// Convert the cursor coordinates into game world coordinates. Needs to be refined
-			Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
-			Vector3 reaCoords = camera.unproject(v);
-			float bulletVel = 20f;
+		if(Gdx.input.justTouched() && TimeUtils.timeSinceMillis(player.getLastShot()) > player.getShootingCooldown() ){
 			
-			float velX = (float)(reaCoords.x - (player.getX()+ (player.getWidth()/2)))/bulletVel;
-			float velY = (float)(reaCoords.y - (player.getY() + (player.getHeight()/2)))/bulletVel;
-			//float directionLength =(float) Math.sqrt(diffX*diffX + diffY*diffY);
+			
 
 			// Spawn a projectile with target coordinates and set the time it is visible
 
-		   
-		    Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, game.getLoader().getManager().get("Pointer.png", Texture.class));
+		   // Single shot
+		    if(player.getPowerupType() != POWERUPTYPE.TRIPLESHOT){
+		    	// Convert the cursor coordinates into game world coordinates. Needs to be refined
+				Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
+				Vector3 reaCoords = camera.unproject(v);
+				float bulletVel = 20f;
+				float velX = (float)(reaCoords.x - (player.getX()+ (player.getWidth()/2)))/bulletVel;
+				float velY = (float)(reaCoords.y - (player.getY() + (player.getHeight()/2)))/bulletVel;
+				
+			Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, game.getLoader().getManager().get("Pointer.png", Texture.class));
 		    p.setTargetX(reaCoords.x);
 			p.setTargetY(reaCoords.y);
-			
-		    
-			
 		    p.setCurrentTime(TimeUtils.millis());
-			
 			proj.add(p);
-		
+			// triple shot
+		    }else{
+		    	// Convert the cursor coordinates into game world coordinates. Needs to be refined
+				Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
+				Vector3 reaCoords = camera.unproject(v);
+				float bulletVel = 20f;
+				
+				float velX = (float)(reaCoords.x - (player.getX()+ (player.getWidth()/2)))/bulletVel;
+				float velY = (float)(reaCoords.y - (player.getY() + (player.getHeight()/2)))/bulletVel;
+			
+				float velXR = (float)((reaCoords.x + 16) - (player.getX()+ (player.getWidth()/2)))/bulletVel;
+				float velYR = (float)(reaCoords.y - (player.getY() + (player.getHeight()/2)))/bulletVel;
+				
+				float velXL = (float)(reaCoords.x - (player.getX()+ (player.getWidth()/2)))/bulletVel;
+				float velYL = (float)((reaCoords.y + 16) - (player.getY() + (player.getHeight()/2)))/bulletVel;
+				
+		    	Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, game.getLoader().getManager().get("Pointer.png", Texture.class));
+			    Projectile L = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velXR ,velYR, game.getLoader().getManager().get("Pointer.png", Texture.class));
+				Projectile R = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velXL ,velYL, game.getLoader().getManager().get("Pointer.png", Texture.class));
+				      
+		    	p.setTargetX(reaCoords.x);
+				p.setTargetY(reaCoords.y);
+				L.setTargetX(reaCoords.x);
+				L.setTargetY(reaCoords.y + 16);
+				R.setTargetX(reaCoords.x + 16);
+				R.setTargetY(reaCoords.y);
+				
+				
+			    p.setCurrentTime(TimeUtils.millis());
+			    proj.add(p);
+			    proj.add(R);
+			    proj.add(L);
+		    }
+			
+			
+			
+		player.setLastShot(TimeUtils.millis());
 		}
 		// Powerup spawns here
 		
-		if(TimeUtils.timeSinceMillis(timeToNextPowerup)>10000){
+		if(TimeUtils.timeSinceMillis(timeToNextPowerup)>20000){
 			powerups.add(spawnPowerUp(world, game));
 		    timeToNextPowerup = TimeUtils.millis();
 		
@@ -337,7 +421,10 @@ public class Updater implements Screen {
 		//If enemy and player touch they both lose HP
 		for(int i = 0; i<enemies.size();i++){	
 			if(Intersector.overlaps(player.getHitbox(), enemies.get(i).getHitbox()) && enemies.get(i).getHP() > 0 && player.getHP() > 0 ){
+				
+				if(player.getPowerupType() != POWERUPTYPE.SHIELD){
 				player.setHP(player.getHP() - 1);
+				}
 				enemies.get(i).setHP(enemies.get(i).getHP() - 1);
 
 				
@@ -407,6 +494,7 @@ public class Updater implements Screen {
 			}else{
 				ParticleEffect effect = powerups.get(i).getSpawnEffect();
 				effect.reset(); 
+				effect.start();
 				effects.add(effect);
 				powerups.remove(i);
 			}
@@ -414,23 +502,25 @@ public class Updater implements Screen {
 		}
 		}
 		// Update particles in the list
-		/*
+		
 		if(!effects.isEmpty()){
+			System.out.println("Powerup List not empty: " + effects.size());
 			for(int i = 0; i<effects.size();i++){
-				ParticleEffect tmp = effects.get(i);
 				
+				ParticleEffect tmp = effects.get(i);
+				System.out.println("Effect Fetched is COMPLETE:" + tmp.isComplete());
 				if(!tmp.isComplete()){
 					tmp.update(statetime);
 					tmp.draw(game.batch);
 				}else{
-					effects.get(i).dispose();
+					
 					effects.remove(i);
 				}
 			}
 			
 		}
 		
-		*/
+		
 
 		//Wait 10 sec between waves.		
 		if(TimeUtils.timeSinceMillis(timeSinceWave)> 10000){ 
@@ -476,9 +566,9 @@ public class Updater implements Screen {
 
 
 	public void dispose () {
-		//game.batch.dispose();
+		game.batch.dispose();
 		stage.dispose();
-		//img.dispose();
+	
 		
 	}
 

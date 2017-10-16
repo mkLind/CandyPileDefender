@@ -17,6 +17,12 @@ public class Player extends SpriteCommons {
 	private DIRECTION dir; 
 	private Animator animations;
 	private POWERUPTYPE powerupType;
+	private long powerupActiveTime;
+	private long powerupSetTime;
+	private long ShootingCooldown;
+	private long LastShot;
+	private float hasteVel;
+	
 	
 	
 /**
@@ -30,6 +36,11 @@ public class Player extends SpriteCommons {
 	public Player(int width, int height, float x, float y, int HP){
 		super(width, height, x, y, 0f, 0f, HP);
 		dir = DIRECTION.DOWN;
+		powerupActiveTime = 0;
+		powerupSetTime = 0;
+		powerupType = null;
+		hasteVel = 0f;
+		ShootingCooldown =  500;
 	}
 	public enum DIRECTION{
 		UP,DOWN,LEFT,RIGHT
@@ -97,6 +108,37 @@ public class Player extends SpriteCommons {
 	public void setPowerupType(POWERUPTYPE powerupType) {
 		this.powerupType = powerupType;
 	}
+	public long getPowerupActiveTime() {
+		return powerupActiveTime;
+	}
+	public void setPowerupActiveTime(long powerupActiveTime) {
+		this.powerupActiveTime = powerupActiveTime;
+	}
+	public long getPowerupSetTime() {
+		return powerupSetTime;
+	}
+	public void setPowerupSetTime(long powerupSetTime) {
+		this.powerupSetTime = powerupSetTime;
+	}
+	public float getHasteVel() {
+		return hasteVel;
+	}
+	public void setHasteVel(float hasteVel) {
+		this.hasteVel = hasteVel;
+	}
+	public long getShootingCooldown() {
+		return ShootingCooldown;
+	}
+	public void setShootingCooldown(long shootingCooldown) {
+		ShootingCooldown = shootingCooldown;
+	}
+	public long getLastShot() {
+		return LastShot;
+	}
+	public void setLastShot(long lastShot) {
+		LastShot = lastShot;
+	}
+	
 	
 
 }
