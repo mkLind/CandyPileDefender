@@ -32,6 +32,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
+import com.mygdx.game.MapObject.OBJECTTYPE;
 import com.mygdx.game.Player.DIRECTION;
 import com.mygdx.game.Powerup.POWERUPTYPE;
 /*
@@ -64,8 +65,11 @@ public class Updater implements Screen {
 	private Array<RectangleMapObject> borders;
 	private Array<RectangleMapObject> spawnPoints;
 	private Array<RectangleMapObject> monsterSpawns;
+	private ArrayList<MapObject> tarPools;
 	private ArrayList<Powerup> powerups;
 	private ArrayList<ParticleEffect> effects;
+	private long mpObjCooldown;
+	private long mpObjLastSet;
 	
 	/**
 	 * Initializes the entire game
@@ -73,8 +77,9 @@ public class Updater implements Screen {
 	 */
 	public Updater(final Core game) {
 		this.game = game;
-		
-		
+		mpObjCooldown = 750;
+		mpObjLastSet = 0;
+		tarPools = new ArrayList<>();
 		statetime = 0f;
 		timesCalled = 0;
 		randomizer = new Random();
@@ -149,8 +154,20 @@ public class Updater implements Screen {
 			tmp = MathUtils.random(0, monsterSpawns.size-1);
 			tmp2 = MathUtils.random(0, monsterSpawns.size-1);
 			enemies.add(new StealingEnemy (32,32,monsterSpawns.get(tmp).getRectangle().getX(), monsterSpawns.get(tmp).getRectangle().getY(), 1, game.getLoader().getManager().get("stealTest.png", Texture.class)));
+			
 			enemies.add(new ChaserEnemy (32,32,monsterSpawns.get(tmp2).getRectangle().getX(), monsterSpawns.get(tmp2).getRectangle().getY(), 2, game.getLoader().getManager().get("chaserTest.png", Texture.class)));
+			
+			
 			timeSinceWave = TimeUtils.millis();
+		}
+		// Set The direction of stealers to  pile
+		for(int i = 0; i<enemies.size();i++){
+			if(enemies.get(i) instanceof StealingEnemy) {	
+				double hypot = Math.hypot(pile.getX(), enemies.get(i).getX());
+				
+				enemies.get(i).setxVel(((float) (1.2f / hypot  * (pile.getX() - enemies.get(i).getX())))); 
+				enemies.get(i).setyVel(((float) (1.2f / hypot  * (pile.getY() - enemies.get(i).getY())))); 
+			}
 		}
 	}
 
@@ -172,8 +189,17 @@ public class Updater implements Screen {
 					// Move the player
 					player.setX(player.getX() + player.getxVel());
 					player.setY(player.getY() + player.getyVel());
+					
+					if(player.getPowerupType() == POWERUPTYPE.SLOWDOWN && TimeUtils.timeSinceMillis(mpObjLastSet)>mpObjCooldown){
+						MapObject obj =new MapObject(32, 32, player.getX(), player.getY(), 0, 0, 10000, game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarstain.png",Texture.class), OBJECTTYPE.HAZARD); 
+						obj.setSpawnTime(TimeUtils.millis());
+						tarPools.add(obj);
+						mpObjLastSet = TimeUtils.millis();
+						System.out.println("SPAWNING TAR");
+					}
 
 				}
+				
 				
 		
 		//Teppo kokeilua
@@ -202,11 +228,28 @@ public class Updater implements Screen {
 
 		}else {
 			// move enemies
+		
+			
+			if(player.getPowerupType()!= POWERUPTYPE.SLOWDOWN){
 			enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
 			enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
+			}else{
+				
+				// SLOW THE ENEMIES DOWN IF ONE OF THEM HITS A POOL OF TAR
+				for(int j = 0; i<tarPools.size();i++){
+					if(tarPools.get(j).getHitbox().overlaps(enemies.get(i).getHitbox())){
+						System.out.println("ENEMY AT: " + i + " IS STUCK IN TAR");
+						enemies.get(i).setX(enemies.get(i).getX() + (enemies.get(i).getxVel()/10));
+						enemies.get(i).setY(enemies.get(i).getY() + (enemies.get(i).getyVel()/10));				
+					}
+					
+				}
+			}
+			
 		}
 		// steal from the pile
     	if(enemies.get(i) instanceof StealingEnemy) {
+    		
         	if(Intersector.overlaps((enemies.get(i).getHitbox()), pile.getHitbox())){
         		enemies.remove(i);
         		pileHealth = pile.reduceHealth();
@@ -214,7 +257,7 @@ public class Updater implements Screen {
     	}
 		}
         	
-        
+
 	    
 		
 		statetime += delta;
@@ -263,6 +306,17 @@ public class Updater implements Screen {
 			player.setxVel(0);
 			player.setyVel(0);
 		}
+		
+		if(!tarPools.isEmpty()){
+			for(int i = 0; i<tarPools.size();i++){
+				if(TimeUtils.timeSinceMillis(tarPools.get(i).getSpawnTime())> tarPools.get(i).getTimeAlive()){
+					tarPools.remove(i);
+				}
+			}
+		}
+		
+		
+		
 		for(int i = 0; i<powerups.size(); i++){
 			if(Intersector.overlaps(powerups.get(i).getHitbox(), player.getHitbox())){
 				player.setPowerupType(powerups.get(i).getType());
@@ -275,9 +329,7 @@ public class Updater implements Screen {
 				}
 				
 				
-				if(player.getPowerupType() == POWERUPTYPE.SLOWDOWN){
-					
-				}
+				
 				if(player.getPowerupType() == POWERUPTYPE.CLEARSCREEN){
 					enemies.clear();
 				}
@@ -294,14 +346,7 @@ public class Updater implements Screen {
 			 if(player.getPowerupType() == POWERUPTYPE.HASTE){
 					player.setHasteVel(0f);
 				}
-			
-				
-				if(player.getPowerupType() == POWERUPTYPE.SLOWDOWN){
-					
-				}
-				if(player.getPowerupType() == POWERUPTYPE.CLEARSCREEN){
-					
-				}
+		
 				if(player.getPowerupType() == POWERUPTYPE.RAPIDFIRE){
 					player.setShootingCooldown(900);
 				}
@@ -375,7 +420,7 @@ public class Updater implements Screen {
 		}
 		// Powerup spawns here
 		
-		if(TimeUtils.timeSinceMillis(timeToNextPowerup)>20000){
+		if(TimeUtils.timeSinceMillis(timeToNextPowerup)>10000){
 			powerups.add(spawnPowerUp(world, game));
 		    timeToNextPowerup = TimeUtils.millis();
 		
@@ -458,8 +503,7 @@ public class Updater implements Screen {
 	
 		game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
-
-
+	
 		// Teppo kokeilua
 		if(!pileHealth) {
 			game.batch.draw(pile.getPileTexture(), pile.getX(), pile.getY());
@@ -523,9 +567,14 @@ public class Updater implements Screen {
 		
 
 		//Wait 10 sec between waves.		
-		if(TimeUtils.timeSinceMillis(timeSinceWave)> 10000){ 
+		if(TimeUtils.timeSinceMillis(timeSinceWave)> 10000 && enemies.isEmpty()){ 
 			
 			spawnEnemies();
+		}
+		if(!tarPools.isEmpty()){
+			for(int i = 0; i<tarPools.size();i++){
+				game.batch.draw(tarPools.get(i).getGraphic(), tarPools.get(i).getX(), tarPools.get(i).getY());
+			}
 		}
 		game.batch.end();  
 		
@@ -566,9 +615,10 @@ public class Updater implements Screen {
 
 
 	public void dispose () {
-		game.batch.dispose();
+		
 		stage.dispose();
-	
+		mapRender.dispose();
+	    
 		
 	}
 
