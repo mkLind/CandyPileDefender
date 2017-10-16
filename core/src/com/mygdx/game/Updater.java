@@ -400,7 +400,7 @@ public class Updater implements Screen {
 			
 			Powerup powerup = powerups.get(i);
 			
-			if(TimeUtils.timeSinceMillis(powerup.getTimeAlive())>9000){
+			if(TimeUtils.timeSinceMillis(powerup.getTimeAlive())<9000){
 			game.batch.draw(powerup.getGraphic(), powerup.getX(), powerup.getY(), 16f, 16f);
 			
 			

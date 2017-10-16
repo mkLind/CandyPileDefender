@@ -64,7 +64,7 @@ public class Powerup extends SpriteCommons {
 			graphic = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tripleshotdummy.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.SHIELD){
-			graphic = game.getLoader().getManager().get("shielddummy.png");
+			graphic = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/shielddummy.png");
 		}
 		
 		
