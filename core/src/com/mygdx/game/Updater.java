@@ -77,7 +77,7 @@ public class Updater implements Screen {
 	 */
 	public Updater(final Core game) {
 		this.game = game;
-		mpObjCooldown = 750;
+		mpObjCooldown = 500;
 		mpObjLastSet = 0;
 		tarPools = new ArrayList<>();
 		statetime = 0f;
@@ -230,31 +230,45 @@ public class Updater implements Screen {
 			// move enemies
 		
 			
-			if(player.getPowerupType()!= POWERUPTYPE.SLOWDOWN){
-			enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
-			enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
-			}else{
-				
+			if(!tarPools.isEmpty()){
 				// SLOW THE ENEMIES DOWN IF ONE OF THEM HITS A POOL OF TAR
-				for(int j = 0; i<tarPools.size();i++){
+				for(int j = 0; j<tarPools.size();j++){
 					if(tarPools.get(j).getHitbox().overlaps(enemies.get(i).getHitbox())){
 						System.out.println("ENEMY AT: " + i + " IS STUCK IN TAR");
-						enemies.get(i).setX(enemies.get(i).getX() + (enemies.get(i).getxVel()/10));
-						enemies.get(i).setY(enemies.get(i).getY() + (enemies.get(i).getyVel()/10));				
+						
+						enemies.get(i).setxVel(enemies.get(i).getxVel()/100);
+						enemies.get(i).setyVel(enemies.get(i).getyVel()/100);
+						
+						enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
+						enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());	
+						break;
+						
+					}else{
+						// Not in tar.
+						enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
+						enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
 					}
 					
 				}
+			}else{
+				enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
+				enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
+				
 			}
 			
 		}
 		// steal from the pile
-    	if(enemies.get(i) instanceof StealingEnemy) {
+		for(int k = 0; k<enemies.size();k++){
+    	if(enemies.get(k) instanceof StealingEnemy) {
     		
-        	if(Intersector.overlaps((enemies.get(i).getHitbox()), pile.getHitbox())){
-        		enemies.remove(i);
+        	if(Intersector.overlaps((enemies.get(k).getHitbox()), pile.getHitbox())){
+        		enemies.remove(k);
         		pileHealth = pile.reduceHealth();
     		}
     	}
+    	
+		}
+    	
 		}
         	
 
@@ -306,7 +320,7 @@ public class Updater implements Screen {
 			player.setxVel(0);
 			player.setyVel(0);
 		}
-		
+		// Remove tar pools when set time has passed
 		if(!tarPools.isEmpty()){
 			for(int i = 0; i<tarPools.size();i++){
 				if(TimeUtils.timeSinceMillis(tarPools.get(i).getSpawnTime())> tarPools.get(i).getTimeAlive()){
@@ -384,6 +398,7 @@ public class Updater implements Screen {
 		    }else{
 		    	// Convert the cursor coordinates into game world coordinates. Needs to be refined
 				Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
+				
 				Vector3 reaCoords = camera.unproject(v);
 				float bulletVel = 20f;
 				
@@ -477,8 +492,10 @@ public class Updater implements Screen {
 					enemies.remove(i);
 				}
 				if(player.getHP() < 1) {
-					dispose();
+					System.out.println("Player HP now zero");
+					
 					game.setScreen(new LoadingScreen(game));
+					this.dispose();
 				}
 			}
 		}
@@ -503,7 +520,12 @@ public class Updater implements Screen {
 	
 		game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
-	
+		
+		if(!tarPools.isEmpty()){
+			for(int i = 0; i<tarPools.size();i++){
+				game.batch.draw(tarPools.get(i).getGraphic(), tarPools.get(i).getX(), tarPools.get(i).getY());
+			}
+		}
 		// Teppo kokeilua
 		if(!pileHealth) {
 			game.batch.draw(pile.getPileTexture(), pile.getX(), pile.getY());
@@ -571,11 +593,7 @@ public class Updater implements Screen {
 			
 			spawnEnemies();
 		}
-		if(!tarPools.isEmpty()){
-			for(int i = 0; i<tarPools.size();i++){
-				game.batch.draw(tarPools.get(i).getGraphic(), tarPools.get(i).getX(), tarPools.get(i).getY());
-			}
-		}
+		
 		game.batch.end();  
 		
 		stage.act(statetime);
@@ -615,7 +633,7 @@ public class Updater implements Screen {
 
 
 	public void dispose () {
-		
+		game.batch.dispose();
 		stage.dispose();
 		mapRender.dispose();
 	    
