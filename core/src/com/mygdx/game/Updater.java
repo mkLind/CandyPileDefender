@@ -77,7 +77,7 @@ public class Updater implements Screen {
 	 */
 	public Updater(final Core game) {
 		this.game = game;
-		mpObjCooldown = 500;
+		mpObjCooldown = 250;
 		mpObjLastSet = 0;
 		tarPools = new ArrayList<>();
 		statetime = 0f;
@@ -206,14 +206,37 @@ public class Updater implements Screen {
 		
 		for (int i = 0; i < enemies.size(); i++) {
 		 
-		//chase
-		if(enemies.get(i) instanceof ChaserEnemy) {	
-			double hypot = Math.hypot(player.getX(), enemies.get(i).getX());
+			if(enemies.get(i) instanceof ChaserEnemy) {	
+				double hypot = Math.hypot(player.getX(), enemies.get(i).getX());
+				
+				enemies.get(i).setxVel(((float) (1.2f / hypot  * (player.getX() - enemies.get(i).getX())))); 
+				enemies.get(i).setyVel(((float) (1.2f / hypot  * (player.getY() - enemies.get(i).getY())))); 
+			}
+			if(enemies.get(i) instanceof StealingEnemy && enemies.get(i).getxVel() == 0 &&enemies.get(i).getyVel() == 0 ) {	
+				double hypot = Math.hypot(pile.getX(), enemies.get(i).getX());
+				
+				enemies.get(i).setxVel(((float) (1.2f / hypot  * (pile.getX() - enemies.get(i).getX())))); 
+				enemies.get(i).setyVel(((float) (1.2f / hypot  * (pile.getY() - enemies.get(i).getY())))); 
+			}
 			
-			enemies.get(i).setxVel(((float) (1.2f / hypot  * (player.getX() - enemies.get(i).getX())))); 
-			enemies.get(i).setyVel(((float) (1.2f / hypot  * (player.getY() - enemies.get(i).getY())))); 
-		}
-		
+			
+			
+			if(!tarPools.isEmpty()){
+				// SLOW THE ENEMIES DOWN IF ONE OF THEM HITS A POOL OF TAR
+				for(int j = 0; j<tarPools.size();j++){
+					if(tarPools.get(j).getHitbox().contains(enemies.get(i).getX(),enemies.get(i).getY())){
+						System.out.println("ENEMY AT: " + i + " IS STUCK IN TAR");
+						
+						enemies.get(i).setxVel(enemies.get(i).getxVel()/100);
+						enemies.get(i).setyVel(enemies.get(i).getyVel()/100);
+						
+				
+					
+						
+					}
+					
+				}
+			}
 	
 		
 		enemies.get(i).updateHitbox();
@@ -228,33 +251,10 @@ public class Updater implements Screen {
 
 		}else {
 			// move enemies
-		
+			enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
+			enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
 			
-			if(!tarPools.isEmpty()){
-				// SLOW THE ENEMIES DOWN IF ONE OF THEM HITS A POOL OF TAR
-				for(int j = 0; j<tarPools.size();j++){
-					if(tarPools.get(j).getHitbox().overlaps(enemies.get(i).getHitbox())){
-						System.out.println("ENEMY AT: " + i + " IS STUCK IN TAR");
-						
-						enemies.get(i).setxVel(enemies.get(i).getxVel()/100);
-						enemies.get(i).setyVel(enemies.get(i).getyVel()/100);
-						
-						enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
-						enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());	
-						break;
-						
-					}else{
-						// Not in tar.
-						enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
-						enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
-					}
-					
-				}
-			}else{
-				enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
-				enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
-				
-			}
+		
 			
 		}
 		// steal from the pile
