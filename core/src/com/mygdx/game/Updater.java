@@ -404,29 +404,17 @@ public class Updater implements Screen {
 				
 				float velX = (float)(reaCoords.x - (player.getX()+ (player.getWidth()/2)))/bulletVel;
 				float velY = (float)(reaCoords.y - (player.getY() + (player.getHeight()/2)))/bulletVel;
-			
-				float velXR = (float)((reaCoords.x + 16) - (player.getX()+ (player.getWidth()/2)))/bulletVel;
-				float velYR = (float)(reaCoords.y - (player.getY() + (player.getHeight()/2)))/bulletVel;
-				
-				float velXL = (float)(reaCoords.x - (player.getX()+ (player.getWidth()/2)))/bulletVel;
-				float velYL = (float)((reaCoords.y + 16) - (player.getY() + (player.getHeight()/2)))/bulletVel;
-				
+		
 		    	Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, game.getLoader().getManager().get("Pointer.png", Texture.class));
-			    Projectile L = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velXR ,velYR, game.getLoader().getManager().get("Pointer.png", Texture.class));
-				Projectile R = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velXL ,velYL, game.getLoader().getManager().get("Pointer.png", Texture.class));
-				      
+			
 		    	p.setTargetX(reaCoords.x);
 				p.setTargetY(reaCoords.y);
-				L.setTargetX(reaCoords.x);
-				L.setTargetY(reaCoords.y + 16);
-				R.setTargetX(reaCoords.x + 16);
-				R.setTargetY(reaCoords.y);
+			
 				
 				
 			    p.setCurrentTime(TimeUtils.millis());
 			    proj.add(p);
-			    proj.add(R);
-			    proj.add(L);
+			  ;
 		    }
 			
 			
