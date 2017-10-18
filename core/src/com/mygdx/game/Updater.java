@@ -400,21 +400,43 @@ public class Updater implements Screen {
 				Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
 				
 				Vector3 reaCoords = camera.unproject(v);
+				// A radius of a circle at the center of which the player is
+				float Radius = (float) Math.sqrt(Math.pow(reaCoords.x - player.getX(),2) + Math.pow(reaCoords.y - player.getY(),2));
+				// The angle of clicking point
+				float angle = MathUtils.atan2(reaCoords.y - player.getY(), reaCoords.x - player.getX());
+				
+				
+				
 				float bulletVel = 20f;
 				
+				
+				
+				// Straight shot
 				float velX = (float)(reaCoords.x - (player.getX()+ (player.getWidth()/2)))/bulletVel;
 				float velY = (float)(reaCoords.y - (player.getY() + (player.getHeight()/2)))/bulletVel;
-		
+				// Right side shot
+				float velXR = (float)((MathUtils.cos(angle)*Radius) - (player.getX()+ (player.getWidth()/2)))/bulletVel;
+				float velYR = (float)((MathUtils.sin(angle)*Radius) - (player.getY() + (player.getHeight()/2)))/bulletVel;
+				
+				
+				// Left side shot
+				float velXL = (float)((Math.cos(angle)*Radius) - (player.getX()+ (player.getWidth()/2)))/bulletVel;
+				float velYL = (float)((Math.sin(angle)*Radius) - (player.getY() + (player.getHeight()/2)))/bulletVel;
+				
+				
 		    	Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, game.getLoader().getManager().get("Pointer.png", Texture.class));
-			
-		    	p.setTargetX(reaCoords.x);
-				p.setTargetY(reaCoords.y);
+		    	Projectile l = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velXR ,velYR, game.getLoader().getManager().get("Pointer.png", Texture.class));
+		    	Projectile r = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velXL ,velYL, game.getLoader().getManager().get("Pointer.png", Texture.class));
+		    	
 			
 				
-				
+				l.setCurrentTime(TimeUtils.millis());
 			    p.setCurrentTime(TimeUtils.millis());
+			    r.setCurrentTime(TimeUtils.millis());
 			    proj.add(p);
-			  ;
+			    proj.add(l);
+			    proj.add(r);
+			  
 		    }
 			
 			
@@ -587,7 +609,7 @@ public class Updater implements Screen {
 		stage.act(statetime);
 		stage.draw();
 		// shape renderer for debugging
-		/*
+		
 		r.setProjectionMatrix(camera.combined);
 		r.begin(ShapeType.Line);
 		r.setColor(Color.GREEN);
@@ -603,7 +625,7 @@ public class Updater implements Screen {
 		}
 		
 		r.end();
-	*/
+	
 		}
 		
 	   public Powerup spawnPowerUp(GameWorld world, Core game){
