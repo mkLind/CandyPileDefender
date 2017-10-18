@@ -35,24 +35,25 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.MapObject.OBJECTTYPE;
 import com.mygdx.game.Player.DIRECTION;
 import com.mygdx.game.Powerup.POWERUPTYPE;
+
 /*
  * The class that actually makes the game visible
  */
 public class Updater implements Screen {
-	
-	//Texture img;
-	private float aspectRatio; 
+
+	// Texture img;
+	private float aspectRatio;
 	private OrthographicCamera camera;
 	private Stage stage;
 	private ShapeRenderer r;
 	private Player player;
 	private float statetime;
-	
+
 	// Teppo test
 	private Pile pile;
 	private ArrayList<SpriteCommons> enemies;
 	boolean pileHealth;
-	
+
 	private BitmapFont f;
 	final Core game;
 	private ArrayList<Projectile> proj;
@@ -70,9 +71,10 @@ public class Updater implements Screen {
 	private ArrayList<ParticleEffect> effects;
 	private long mpObjCooldown;
 	private long mpObjLastSet;
-	
+
 	/**
 	 * Initializes the entire game
+	 * 
 	 * @param game
 	 */
 	public Updater(final Core game) {
@@ -87,50 +89,49 @@ public class Updater implements Screen {
 		powerups = new ArrayList<>();
 		monsterSpawns = new Array<RectangleMapObject>();
 		enemies = new ArrayList<SpriteCommons>();
-		// When loading textures to project, the entire path to the file should be included
+		// When loading textures to project, the entire path to the file should
+		// be included
 		// be careful with that
 		camera = new OrthographicCamera();
 		effects = new ArrayList<>();
-		aspectRatio =  (float) Gdx.graphics.getWidth()/(float) Gdx.graphics.getHeight();
-		camera.setToOrtho(false,250f*aspectRatio, 250f);
-	//	camera.setToOrtho(false, 700f,700f);
-		
+		aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
+		camera.setToOrtho(false, 250f * aspectRatio, 250f);
+		// camera.setToOrtho(false, 700f,700f);
+
 		mapRender = world.getMapRenderer(camera);
 		borders = world.getHitboxes();
 		spawnPoints = world.getSpawnPoints();
 		stage = new Stage();
 		r = new ShapeRenderer();
 		r.setProjectionMatrix(camera.combined);
-		
+
 		game.batch.setProjectionMatrix(camera.combined);
 		proj = new ArrayList<Projectile>();
-		
-
 
 		// Set initial coordinates from map to player and candypile
-		for(int i = 0; i < spawnPoints.size;i++){
-			if(spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")){
-				player = new Player(32, 32, spawnPoints.get(i).getRectangle().getX(), spawnPoints.get(i).getRectangle().getY(), 5);
+		for (int i = 0; i < spawnPoints.size; i++) {
+			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
+				player = new Player(32, 32, spawnPoints.get(i).getRectangle().getX(),
+						spawnPoints.get(i).getRectangle().getY(), 5);
 			}
-			if(spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")){
-				pile = new Pile(100, 100, spawnPoints.get(i).getRectangle().getX(), spawnPoints.get(i).getRectangle().getY(), game.getLoader().getManager().get("pileTest.png", Texture.class),  game.getLoader().getManager().get("pileTest2.png", Texture.class));
+			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")) {
+				pile = new Pile(100, 100, spawnPoints.get(i).getRectangle().getX(),
+						spawnPoints.get(i).getRectangle().getY(),
+						game.getLoader().getManager().get("pileTest.png", Texture.class),
+						game.getLoader().getManager().get("pileTest2.png", Texture.class));
 			}
 		}
-		for(int i = 0; i<spawnPoints.size;i++){
-			if(spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Enemy")){
+		for (int i = 0; i < spawnPoints.size; i++) {
+			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Enemy")) {
 				monsterSpawns.add(spawnPoints.get(i));
 			}
 		}
-				
-		
+
 		player.setAnimations(9, 4, 0.10f, game.getLoader().getManager().get("BatMonster.png", Texture.class));
 		player.setDir(DIRECTION.DOWN);
 		camera.position.set(player.getX(), player.getY(), 0);
-		//Teppo kokeilua
+		// Teppo kokeilua
 		// pile located in the center of the game
-	
-		
-
 
 		enemies = new ArrayList<SpriteCommons>();
 		spawnEnemies();
@@ -138,560 +139,537 @@ public class Updater implements Screen {
 		timeToNextPowerup = TimeUtils.millis();
 	}
 
-		
-
-
-		
-		
-	
-	//Spawn enemies. Enemy count increases by one every time to make the wave stronger.
+	// Spawn enemies. Enemy count increases by one every time to make the wave
+	// stronger.
 	private void spawnEnemies() {
-		//System.out.println("SPAWNING ENEMIES");
+		// System.out.println("SPAWNING ENEMIES");
 		timesCalled++;
 		int tmp;
 		int tmp2;
-		for(int i = 0; i < timesCalled; i++){
-			tmp = MathUtils.random(0, monsterSpawns.size-1);
-			tmp2 = MathUtils.random(0, monsterSpawns.size-1);
-			enemies.add(new StealingEnemy (32,32,monsterSpawns.get(tmp).getRectangle().getX(), monsterSpawns.get(tmp).getRectangle().getY(), 1, game.getLoader().getManager().get("stealTest.png", Texture.class)));
-			
-			enemies.add(new ChaserEnemy (32,32,monsterSpawns.get(tmp2).getRectangle().getX(), monsterSpawns.get(tmp2).getRectangle().getY(), 2, game.getLoader().getManager().get("chaserTest.png", Texture.class)));
-			
-			
+		for (int i = 0; i < timesCalled; i++) {
+			tmp = MathUtils.random(0, monsterSpawns.size - 1);
+			tmp2 = MathUtils.random(0, monsterSpawns.size - 1);
+			enemies.add(new StealingEnemy(32, 32, monsterSpawns.get(tmp).getRectangle().getX(),
+					monsterSpawns.get(tmp).getRectangle().getY(), 1,
+					game.getLoader().getManager().get("stealTest.png", Texture.class)));
+
+			enemies.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
+					monsterSpawns.get(tmp2).getRectangle().getY(), 2,
+					game.getLoader().getManager().get("chaserTest.png", Texture.class)));
+
 			timeSinceWave = TimeUtils.millis();
 		}
-		// Set The direction of stealers to  pile
-		for(int i = 0; i<enemies.size();i++){
-			if(enemies.get(i) instanceof StealingEnemy) {	
+		// Set The direction of stealers to pile
+		for (int i = 0; i < enemies.size(); i++) {
+			if (enemies.get(i) instanceof StealingEnemy) {
 				double hypot = Math.hypot(pile.getX(), enemies.get(i).getX());
-				
-				enemies.get(i).setxVel(((float) (1.2f / hypot  * (pile.getX() - enemies.get(i).getX())))); 
-				enemies.get(i).setyVel(((float) (1.2f / hypot  * (pile.getY() - enemies.get(i).getY())))); 
+
+				enemies.get(i).setxVel(((float) (1.2f / hypot * (pile.getX() - enemies.get(i).getX()))));
+				enemies.get(i).setyVel(((float) (1.2f / hypot * (pile.getY() - enemies.get(i).getY()))));
 			}
 		}
 	}
 
+	public void render(float delta) {
 
-	public void render (float delta) {
-		
 		Gdx.gl.glClearColor(100, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		// Move the player
-		//moves hitbox first to check if collisions
-				player.moveHitbox(player.getX() + player.getxVel(), player.getY() + player.getyVel());
-				
-				if(Intersector.overlaps(player.getHitbox(), pile.getHitbox())) {
-					
-					//pulls the hitbox back
-					player.updateHitbox();	
-					
-				}else {
-					// Move the player
-					player.setX(player.getX() + player.getxVel());
-					player.setY(player.getY() + player.getyVel());
-					
-					if(player.getPowerupType() == POWERUPTYPE.SLOWDOWN && TimeUtils.timeSinceMillis(mpObjLastSet)>mpObjCooldown){
-						MapObject obj =new MapObject(32, 32, player.getX(), player.getY(), 0, 0, 10000, game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarstain.png",Texture.class), OBJECTTYPE.HAZARD); 
-						obj.setSpawnTime(TimeUtils.millis());
-						tarPools.add(obj);
-						mpObjLastSet = TimeUtils.millis();
-						System.out.println("SPAWNING TAR");
+		// moves hitbox first to check if collisions
+		player.moveHitbox(player.getX() + player.getxVel(), player.getY() + player.getyVel());
+
+		if (Intersector.overlaps(player.getHitbox(), pile.getHitbox())) {
+
+			// pulls the hitbox back
+			player.updateHitbox();
+
+		} else {
+			// Move the player
+			player.setX(player.getX() + player.getxVel());
+			player.setY(player.getY() + player.getyVel());
+
+			if (player.getPowerupType() == POWERUPTYPE.SLOWDOWN
+					&& TimeUtils.timeSinceMillis(mpObjLastSet) > mpObjCooldown) {
+				MapObject obj = new MapObject(32, 32, player.getX(), player.getY(), 0, 0, 10000,
+						game.getLoader().getManager().get(
+								"C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarstain.png", Texture.class),
+						OBJECTTYPE.HAZARD);
+				obj.setSpawnTime(TimeUtils.millis());
+				tarPools.add(obj);
+				mpObjLastSet = TimeUtils.millis();
+				System.out.println("SPAWNING TAR");
+			}
+
+		}
+
+		// Teppo kokeilua
+
+		for (int i = 0; i < enemies.size(); i++) {
+
+			if (enemies.get(i) instanceof ChaserEnemy) {
+				double hypot = Math.hypot(player.getX(), enemies.get(i).getX());
+
+				enemies.get(i).setxVel(((float) (1.2f / hypot * (player.getX() - enemies.get(i).getX()))));
+				enemies.get(i).setyVel(((float) (1.2f / hypot * (player.getY() - enemies.get(i).getY()))));
+			}
+			if (enemies.get(i) instanceof StealingEnemy && enemies.get(i).getxVel() == 0
+					&& enemies.get(i).getyVel() == 0) {
+				double hypot = Math.hypot(pile.getX(), enemies.get(i).getX());
+
+				enemies.get(i).setxVel(((float) (1.2f / hypot * (pile.getX() - enemies.get(i).getX()))));
+				enemies.get(i).setyVel(((float) (1.2f / hypot * (pile.getY() - enemies.get(i).getY()))));
+			}
+
+			if (!tarPools.isEmpty()) {
+				// SLOW THE ENEMIES DOWN IF ONE OF THEM HITS A POOL OF TAR
+				for (int j = 0; j < tarPools.size(); j++) {
+					if (tarPools.get(j).getHitbox().contains(enemies.get(i).getX(), enemies.get(i).getY())) {
+						System.out.println("ENEMY AT: " + i + " IS STUCK IN TAR");
+
+						enemies.get(i).setxVel(enemies.get(i).getxVel() / 100);
+						enemies.get(i).setyVel(enemies.get(i).getyVel() / 100);
+
 					}
 
 				}
-				
-				
-		
-		//Teppo kokeilua
-		
-		for (int i = 0; i < enemies.size(); i++) {
-		 
-			if(enemies.get(i) instanceof ChaserEnemy) {	
-				double hypot = Math.hypot(player.getX(), enemies.get(i).getX());
-				
-				enemies.get(i).setxVel(((float) (1.2f / hypot  * (player.getX() - enemies.get(i).getX())))); 
-				enemies.get(i).setyVel(((float) (1.2f / hypot  * (player.getY() - enemies.get(i).getY())))); 
 			}
-			if(enemies.get(i) instanceof StealingEnemy && enemies.get(i).getxVel() == 0 &&enemies.get(i).getyVel() == 0 ) {	
-				double hypot = Math.hypot(pile.getX(), enemies.get(i).getX());
-				
-				enemies.get(i).setxVel(((float) (1.2f / hypot  * (pile.getX() - enemies.get(i).getX())))); 
-				enemies.get(i).setyVel(((float) (1.2f / hypot  * (pile.getY() - enemies.get(i).getY())))); 
-			}
-			
-			
-			
-			if(!tarPools.isEmpty()){
-				// SLOW THE ENEMIES DOWN IF ONE OF THEM HITS A POOL OF TAR
-				for(int j = 0; j<tarPools.size();j++){
-					if(tarPools.get(j).getHitbox().contains(enemies.get(i).getX(),enemies.get(i).getY())){
-						System.out.println("ENEMY AT: " + i + " IS STUCK IN TAR");
-						
-						enemies.get(i).setxVel(enemies.get(i).getxVel()/100);
-						enemies.get(i).setyVel(enemies.get(i).getyVel()/100);
-						
-				
-					
-						
-					}
-					
-				}
-			}
-	
-		
-		enemies.get(i).updateHitbox();
-		
-		//move hitbox first to check if collisions
-		enemies.get(i).moveHitbox(enemies.get(i).getX() + enemies.get(i).getxVel(), enemies.get(i).getY() + enemies.get(i).getyVel());
-		
-		if(Intersector.overlaps(enemies.get(i).getHitbox(), player.getHitbox())) {
-			
-			//pulls the hitbox back
+
 			enemies.get(i).updateHitbox();
 
-		}else {
-			// move enemies
-			enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
-			enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
-			
-		
-			
-		}
-		// steal from the pile
-		for(int k = 0; k<enemies.size();k++){
-    	if(enemies.get(k) instanceof StealingEnemy) {
-    		
-        	if(Intersector.overlaps((enemies.get(k).getHitbox()), pile.getHitbox())){
-        		enemies.remove(k);
-        		pileHealth = pile.reduceHealth();
-    		}
-    	}
-    	
-		}
-    	
-		}
-        	
+			// move hitbox first to check if collisions
+			enemies.get(i).moveHitbox(enemies.get(i).getX() + enemies.get(i).getxVel(),
+					enemies.get(i).getY() + enemies.get(i).getyVel());
 
-	    
-		
+			if (Intersector.overlaps(enemies.get(i).getHitbox(), player.getHitbox())) {
+
+				// pulls the hitbox back
+				enemies.get(i).updateHitbox();
+
+			} else {
+				// move enemies
+				enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
+				enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
+
+			}
+			// steal from the pile
+			for (int k = 0; k < enemies.size(); k++) {
+				if (enemies.get(k) instanceof StealingEnemy) {
+
+					if (Intersector.overlaps((enemies.get(k).getHitbox()), pile.getHitbox())) {
+						enemies.remove(k);
+						pileHealth = pile.reduceHealth();
+					}
+				}
+
+			}
+
+		}
+
 		statetime += delta;
 		// Movement logic template for the character
-		
-		if(Gdx.input.isKeyPressed(Keys.A)){
+
+		if (Gdx.input.isKeyPressed(Keys.A)) {
 			player.setDir(Player.DIRECTION.LEFT);
 			player.setxVel(-(1.5f + player.getHasteVel()));
 			player.setyVel(0);
 		}
-		if(Gdx.input.isKeyPressed(Keys.W)){
+		if (Gdx.input.isKeyPressed(Keys.W)) {
 			player.setDir(Player.DIRECTION.UP);
 			player.setyVel(1.5f + player.getHasteVel());
 			player.setxVel(0);
-		}  if(Gdx.input.isKeyPressed(Keys.S)){
+		}
+		if (Gdx.input.isKeyPressed(Keys.S)) {
 			player.setDir(Player.DIRECTION.DOWN);
 			player.setyVel(-(1.5f + player.getHasteVel()));
-			player.setxVel(0);	
-		} if(Gdx.input.isKeyPressed(Keys.D)){
+			player.setxVel(0);
+		}
+		if (Gdx.input.isKeyPressed(Keys.D)) {
 			player.setDir(Player.DIRECTION.RIGHT);
-			player.setxVel(1.5f + player.getHasteVel() );
+			player.setxVel(1.5f + player.getHasteVel());
 			player.setyVel(0);
-			
-		} 
-		
-		if(Gdx.input.isKeyPressed(Keys.W) && Gdx.input.isKeyPressed(Keys.A)){
+
+		}
+
+		if (Gdx.input.isKeyPressed(Keys.W) && Gdx.input.isKeyPressed(Keys.A)) {
 			player.setDir(Player.DIRECTION.LEFT);
 			player.setxVel(-(1.3f + player.getHasteVel()));
 			player.setyVel(1.3f + player.getHasteVel());
-		} if(Gdx.input.isKeyPressed(Keys.W) && Gdx.input.isKeyPressed(Keys.D)){
+		}
+		if (Gdx.input.isKeyPressed(Keys.W) && Gdx.input.isKeyPressed(Keys.D)) {
 			player.setDir(Player.DIRECTION.RIGHT);
 			player.setxVel(1.3f + player.getHasteVel());
 			player.setyVel(1.3f + player.getHasteVel());
-		} if(Gdx.input.isKeyPressed(Keys.D) && Gdx.input.isKeyPressed(Keys.S)){
+		}
+		if (Gdx.input.isKeyPressed(Keys.D) && Gdx.input.isKeyPressed(Keys.S)) {
 			player.setDir(Player.DIRECTION.RIGHT);
 			player.setxVel(1.3f + player.getHasteVel());
 			player.setyVel(-(1.3f + player.getHasteVel()));
-		}if(Gdx.input.isKeyPressed(Keys.S) && Gdx.input.isKeyPressed(Keys.A)){
+		}
+		if (Gdx.input.isKeyPressed(Keys.S) && Gdx.input.isKeyPressed(Keys.A)) {
 			player.setDir(Player.DIRECTION.LEFT);
 			player.setxVel(-(1.3f + player.getHasteVel()));
 			player.setyVel(-(1.3f + player.getHasteVel()));
 		}
-		
-		if(!Gdx.input.isKeyPressed(Keys.W)  && !Gdx.input.isKeyPressed(Keys.A) && !Gdx.input.isKeyPressed(Keys.S) && !Gdx.input.isKeyPressed(Keys.D)){
+
+		if (!Gdx.input.isKeyPressed(Keys.W) && !Gdx.input.isKeyPressed(Keys.A) && !Gdx.input.isKeyPressed(Keys.S)
+				&& !Gdx.input.isKeyPressed(Keys.D)) {
 			player.setDir(player.getDir());
 			player.setxVel(0);
 			player.setyVel(0);
 		}
 		// Remove tar pools when set time has passed
-		if(!tarPools.isEmpty()){
-			for(int i = 0; i<tarPools.size();i++){
-				if(TimeUtils.timeSinceMillis(tarPools.get(i).getSpawnTime())> tarPools.get(i).getTimeAlive()){
+		if (!tarPools.isEmpty()) {
+			for (int i = 0; i < tarPools.size(); i++) {
+				if (TimeUtils.timeSinceMillis(tarPools.get(i).getSpawnTime()) > tarPools.get(i).getTimeAlive()) {
 					tarPools.remove(i);
 				}
 			}
 		}
-		
-		
-		
-		for(int i = 0; i<powerups.size(); i++){
-			if(Intersector.overlaps(powerups.get(i).getHitbox(), player.getHitbox())){
+
+		for (int i = 0; i < powerups.size(); i++) {
+			if (Intersector.overlaps(powerups.get(i).getHitbox(), player.getHitbox())) {
 				player.setPowerupType(powerups.get(i).getType());
 				player.setPowerupActiveTime(powerups.get(i).getEffectTime());
 				player.setPowerupSetTime(TimeUtils.millis());
 				powerups.remove(i);
-				
-				if(player.getPowerupType() == POWERUPTYPE.HASTE){
+
+				if (player.getPowerupType() == POWERUPTYPE.HASTE) {
 					player.setHasteVel(1.0f);
 				}
-				
-				
-				
-				if(player.getPowerupType() == POWERUPTYPE.CLEARSCREEN){
+
+				if (player.getPowerupType() == POWERUPTYPE.CLEARSCREEN) {
 					enemies.clear();
 				}
-				if(player.getPowerupType() == POWERUPTYPE.RAPIDFIRE){
+				if (player.getPowerupType() == POWERUPTYPE.RAPIDFIRE) {
 					player.setShootingCooldown(100);
 				}
-				
-				
+
 				System.out.println("New POWERUP SET. powerup TYPE: " + player.getPowerupType());
 			}
 		}
-		 if(TimeUtils.timeSinceMillis(player.getPowerupSetTime())> player.getPowerupActiveTime() && player.getPowerupType()!= null){
-			 
-			 if(player.getPowerupType() == POWERUPTYPE.HASTE){
-					player.setHasteVel(0f);
-				}
-		
-				if(player.getPowerupType() == POWERUPTYPE.RAPIDFIRE){
-					player.setShootingCooldown(900);
-				}
-			 
-			 
-			 
-			 player.setPowerupType(null);
-			 System.out.println("POWERUP EFFECT ENDED");
-		 }
-		
-		
+		if (TimeUtils.timeSinceMillis(player.getPowerupSetTime()) > player.getPowerupActiveTime()
+				&& player.getPowerupType() != null) {
+
+			if (player.getPowerupType() == POWERUPTYPE.HASTE) {
+				player.setHasteVel(0f);
+			}
+
+			if (player.getPowerupType() == POWERUPTYPE.RAPIDFIRE) {
+				player.setShootingCooldown(900);
+			}
+
+			player.setPowerupType(null);
+			System.out.println("POWERUP EFFECT ENDED");
+		}
+
 		// This listens to mouse clicks
-		
-		if(Gdx.input.justTouched() && TimeUtils.timeSinceMillis(player.getLastShot()) > player.getShootingCooldown() ){
-			
-			
 
-			// Spawn a projectile with target coordinates and set the time it is visible
+		if (Gdx.input.justTouched() && TimeUtils.timeSinceMillis(player.getLastShot()) > player.getShootingCooldown()) {
 
-		   // Single shot
-		    if(player.getPowerupType() != POWERUPTYPE.TRIPLESHOT){
-		    	// Convert the cursor coordinates into game world coordinates. Needs to be refined
-				Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
+			// Spawn a projectile with target coordinates and set the time it is
+			// visible
+
+			// Single shot
+			if (player.getPowerupType() != POWERUPTYPE.TRIPLESHOT) {
+				// Convert the cursor coordinates into game world coordinates.
+				// Needs to be refined
+				Vector3 v = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 				Vector3 reaCoords = camera.unproject(v);
 				float bulletVel = 20f;
-				float velX = (float)(reaCoords.x - (player.getX()+ (player.getWidth()/2)))/bulletVel;
-				float velY = (float)(reaCoords.y - (player.getY() + (player.getHeight()/2)))/bulletVel;
-				
-			Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, game.getLoader().getManager().get("Pointer.png", Texture.class));
-		    p.setTargetX(reaCoords.x);
-			p.setTargetY(reaCoords.y);
-		    p.setCurrentTime(TimeUtils.millis());
-			proj.add(p);
-			// triple shot
-		    }else{
-		    	// Convert the cursor coordinates into game world coordinates. Needs to be refined
-				Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
-				
+				float velX = (float) (reaCoords.x - (player.getX() + (player.getWidth() / 2))) / bulletVel;
+				float velY = (float) (reaCoords.y - (player.getY() + (player.getHeight() / 2))) / bulletVel;
+
+				Projectile p = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
+						player.getY() + player.getHeight() / 2, velX, velY,
+						game.getLoader().getManager().get("Pointer.png", Texture.class));
+				p.setTargetX(reaCoords.x);
+				p.setTargetY(reaCoords.y);
+				p.setCurrentTime(TimeUtils.millis());
+				proj.add(p);
+				// triple shot
+			} else {
+				// Convert the cursor coordinates into game world coordinates.
+				// Needs to be refined
+				Vector3 v = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+
 				Vector3 reaCoords = camera.unproject(v);
-				// A radius of a circle at the center of which the player is
-				float Radius = (float) Math.sqrt(Math.pow(reaCoords.x - player.getX(),2) + Math.pow(reaCoords.y - player.getY(),2));
-				// The angle of clicking point
-				float angle = MathUtils.atan2(reaCoords.y - player.getY(), reaCoords.x - player.getX());
-				
-				
-				
+
 				float bulletVel = 20f;
-				
-				
-				
+
 				// Straight shot
-				float velX = (float)(reaCoords.x - (player.getX()+ (player.getWidth()/2)))/bulletVel;
-				float velY = (float)(reaCoords.y - (player.getY() + (player.getHeight()/2)))/bulletVel;
-				// Right side shot
-				float velXR = (float)((MathUtils.cos(angle)*Radius) - (player.getX()+ (player.getWidth()/2)))/bulletVel;
-				float velYR = (float)((MathUtils.sin(angle)*Radius) - (player.getY() + (player.getHeight()/2)))/bulletVel;
+				float velX = (float) (reaCoords.x - (player.getX() + (player.getWidth() / 2))) / bulletVel;
+				float velY = (float) (reaCoords.y - (player.getY() + (player.getHeight() / 2))) / bulletVel;
+
+				float velXR = (float) (reaCoords.x - (player.getX() + (player.getWidth() / 2))) / bulletVel;
+				float velYR = (float) (reaCoords.y  - (player.getY() + (player.getHeight() / 2))) / bulletVel;
+
+				float velXL = (float) (reaCoords.x - (player.getX() + (player.getWidth() / 2))) / bulletVel;
+				float velYL = (float) (reaCoords.y  - (player.getY() + (player.getHeight() / 2))) / bulletVel;
+
+				Projectile p = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
+						player.getY() + player.getHeight() / 2, velX, velY,
+						game.getLoader().getManager().get("Pointer.png", Texture.class));
 				
+				Projectile l = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
+						player.getY() + player.getHeight() / 2, velXR , velYR,
+						game.getLoader().getManager().get("Pointer.png", Texture.class));
 				
-				// Left side shot
-				float velXL = (float)((Math.cos(angle)*Radius) - (player.getX()+ (player.getWidth()/2)))/bulletVel;
-				float velYL = (float)((Math.sin(angle)*Radius) - (player.getY() + (player.getHeight()/2)))/bulletVel;
-				
-				
-		    	Projectile p = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velX ,velY, game.getLoader().getManager().get("Pointer.png", Texture.class));
-		    	Projectile l = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velXR ,velYR, game.getLoader().getManager().get("Pointer.png", Texture.class));
-		    	Projectile r = new Projectile(10, 10,player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2,velXL ,velYL, game.getLoader().getManager().get("Pointer.png", Texture.class));
-		    	
-			
-				
+				Projectile r = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
+						player.getY() + player.getHeight() / 2, velXL , velYL,
+						game.getLoader().getManager().get("Pointer.png", Texture.class));
+
 				l.setCurrentTime(TimeUtils.millis());
-			    p.setCurrentTime(TimeUtils.millis());
-			    r.setCurrentTime(TimeUtils.millis());
-			    proj.add(p);
-			    proj.add(l);
-			    proj.add(r);
-			  
-		    }
-			
-			
-			
-		player.setLastShot(TimeUtils.millis());
+				p.setCurrentTime(TimeUtils.millis());
+				r.setCurrentTime(TimeUtils.millis());
+				proj.add(p);
+				proj.add(l);
+				proj.add(r);
+
+			}
+
+			player.setLastShot(TimeUtils.millis());
 		}
 		// Powerup spawns here
-		
-		if(TimeUtils.timeSinceMillis(timeToNextPowerup)>10000){
+
+		if (TimeUtils.timeSinceMillis(timeToNextPowerup) > 10000) {
 			powerups.add(spawnPowerUp(world, game));
-		    timeToNextPowerup = TimeUtils.millis();
-		
+			timeToNextPowerup = TimeUtils.millis();
+
 		}
-		
-		
-		
-		
-//		 If the projectile has been enough time visible on the screen, remove it
-		for(int i = 0; i<proj.size();i++){
-			
-			if(TimeUtils.timeSinceMillis(proj.get(i).getCurrentTime())>= 4000){
+
+		// If the projectile has been enough time visible on the screen, remove
+		// it
+		for (int i = 0; i < proj.size(); i++) {
+
+			if (TimeUtils.timeSinceMillis(proj.get(i).getCurrentTime()) >= 4000) {
 				proj.remove(i);
-			}else{
-				
+			} else {
+
 				// attempt to correct the diection of each projectile
 				// MOve the projectile according to its x and y velocities
-				
-				
+
 				proj.get(i).setX(proj.get(i).getX() + proj.get(i).getxVel());
 				proj.get(i).setY(proj.get(i).getY() + proj.get(i).getyVel());
-				
+
 			}
 		}
-		
-		
-	
-		
-		for(int i = 0; i<enemies.size();i++){
-			
-			for(int j = 0; j<proj.size();j++){
-			
-				if(Intersector.overlaps(proj.get(j).getHitbox(), enemies.get(i).getHitbox()) && TimeUtils.timeSinceMillis(proj.get(j).getCurrentTime())<4000){
+
+		for (int i = 0; i < enemies.size(); i++) {
+
+			for (int j = 0; j < proj.size(); j++) {
+
+				if (Intersector.overlaps(proj.get(j).getHitbox(), enemies.get(i).getHitbox())
+						&& TimeUtils.timeSinceMillis(proj.get(j).getCurrentTime()) < 4000) {
 					enemies.get(i).setHP(enemies.get(i).getHP() - 1);
 					proj.remove(j);
-					if(enemies.get(i).getHP() <= 0 && enemies.size() > 0){
+					if (enemies.get(i).getHP() <= 0 && enemies.size() > 0) {
 						enemies.remove(i);
 						break;
 					}
 				}
 			}
 		}
-		//If enemy and player touch they both lose HP
-		for(int i = 0; i<enemies.size();i++){	
-			if(Intersector.overlaps(player.getHitbox(), enemies.get(i).getHitbox()) && enemies.get(i).getHP() > 0 && player.getHP() > 0 ){
-				
-				if(player.getPowerupType() != POWERUPTYPE.SHIELD){
-				player.setHP(player.getHP() - 1);
+		// If enemy and player touch they both lose HP
+		for (int i = 0; i < enemies.size(); i++) {
+			if (Intersector.overlaps(player.getHitbox(), enemies.get(i).getHitbox()) && enemies.get(i).getHP() > 0
+					&& player.getHP() > 0) {
+
+				if (player.getPowerupType() != POWERUPTYPE.SHIELD) {
+					player.setHP(player.getHP() - 1);
 				}
 				enemies.get(i).setHP(enemies.get(i).getHP() - 1);
 
-				
-				if(enemies.get(i).getHP() <= 0) {
+				if (enemies.get(i).getHP() <= 0) {
 					enemies.remove(i);
 				}
-				if(player.getHP() < 1) {
+				if (player.getHP() < 1) {
 					System.out.println("Player HP now zero");
-					
+
 					game.setScreen(new LoadingScreen(game));
 					this.dispose();
 				}
 			}
 		}
 
-		
-		camera.position.set(MathUtils.clamp(player.getX(), camera.viewportWidth * .5f, world.mapWidth() - camera.viewportWidth * .5f), MathUtils.clamp(player.getY(), camera.viewportHeight * .5f, world.mapHeight() - camera.viewportHeight * .5f), 0);
+		camera.position.set(
+				MathUtils.clamp(player.getX(), camera.viewportWidth * .5f,
+						world.mapWidth() - camera.viewportWidth * .5f),
+				MathUtils.clamp(player.getY(), camera.viewportHeight * .5f,
+						world.mapHeight() - camera.viewportHeight * .5f),
+				0);
 		// Above is for further development
 		camera.update();
-		
-//		Shape renderer used for debugging
-		
-		
-		
-		
-		
-		
-		
+
+		// Shape renderer used for debugging
+
 		// Render the player and projectiles
 
 		mapRender.setView(camera);
 		mapRender.render();
-	
+
 		game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
-		
-		if(!tarPools.isEmpty()){
-			for(int i = 0; i<tarPools.size();i++){
+
+		if (!tarPools.isEmpty()) {
+			for (int i = 0; i < tarPools.size(); i++) {
 				game.batch.draw(tarPools.get(i).getGraphic(), tarPools.get(i).getX(), tarPools.get(i).getY());
 			}
 		}
 		// Teppo kokeilua
-		if(!pileHealth) {
+		if (!pileHealth) {
 			game.batch.draw(pile.getPileTexture(), pile.getX(), pile.getY());
-		}else {
+		} else {
 			game.batch.draw(pile.getPileTexture2(), pile.getX(), pile.getY());
 		}
-		
-		for (int i = 0; i < enemies.size(); i++) {
-			if(enemies.get(i) instanceof StealingEnemy) {
-				game.batch.draw(((StealingEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(), enemies.get(i).getY());
-			
-			}else if (enemies.get(i) instanceof ChaserEnemy){
-				game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(), enemies.get(i).getY());
-			}
-			
-			
-		}
-		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
 
-		for(int i = 0; i<proj.size();i++){
-			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(), proj.get(i).getHeight());
-		}
-		if(!powerups.isEmpty()){
-		for(int i = 0; i<powerups.size();i++){
-			
-			Powerup powerup = powerups.get(i);
-			
-			if(TimeUtils.timeSinceMillis(powerup.getTimeAlive())<9000){
-			game.batch.draw(powerup.getGraphic(), powerup.getX(), powerup.getY(), 16f, 16f);
-			
-			
-			}else{
-				ParticleEffect effect = powerups.get(i).getSpawnEffect();
-				effect.reset(); 
-				effect.start();
-				effects.add(effect);
-				powerups.remove(i);
+		for (int i = 0; i < enemies.size(); i++) {
+			if (enemies.get(i) instanceof StealingEnemy) {
+				game.batch.draw(((StealingEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
+						enemies.get(i).getY());
+
+			} else if (enemies.get(i) instanceof ChaserEnemy) {
+				game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
+						enemies.get(i).getY());
 			}
-			
+
 		}
+		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(),
+				player.getHeight());
+
+		for (int i = 0; i < proj.size(); i++) {
+			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(),
+					proj.get(i).getHeight());
+		}
+		if (!powerups.isEmpty()) {
+			for (int i = 0; i < powerups.size(); i++) {
+
+				Powerup powerup = powerups.get(i);
+
+				if (TimeUtils.timeSinceMillis(powerup.getTimeAlive()) < 9000) {
+					game.batch.draw(powerup.getGraphic(), powerup.getX(), powerup.getY(), 16f, 16f);
+
+				} else {
+					ParticleEffect effect = powerups.get(i).getSpawnEffect();
+					effect.reset();
+					effect.start();
+					effects.add(effect);
+					powerups.remove(i);
+				}
+
+			}
 		}
 		// Update particles in the list
-		
-		if(!effects.isEmpty()){
+
+		if (!effects.isEmpty()) {
 			System.out.println("Powerup List not empty: " + effects.size());
-			for(int i = 0; i<effects.size();i++){
-				
+			for (int i = 0; i < effects.size(); i++) {
+
 				ParticleEffect tmp = effects.get(i);
 				System.out.println("Effect Fetched is COMPLETE:" + tmp.isComplete());
-				if(!tmp.isComplete()){
+				if (!tmp.isComplete()) {
 					tmp.update(statetime);
 					tmp.draw(game.batch);
-				}else{
-					
+				} else {
+
 					effects.remove(i);
 				}
 			}
-			
-		}
-		
-		
 
-		//Wait 10 sec between waves.		
-		if(TimeUtils.timeSinceMillis(timeSinceWave)> 10000 && enemies.isEmpty()){ 
-			
+		}
+
+		// Wait 10 sec between waves.
+		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10000 && enemies.isEmpty()) {
+
 			spawnEnemies();
 		}
-		
-		game.batch.end();  
-		
+
+		game.batch.end();
+
 		stage.act(statetime);
 		stage.draw();
 		// shape renderer for debugging
-		
+
 		r.setProjectionMatrix(camera.combined);
 		r.begin(ShapeType.Line);
 		r.setColor(Color.GREEN);
-		Vector3 vector = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
+		Vector3 vector = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 		Vector3 reaCoordn = camera.unproject(vector);
-		r.line(player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2, reaCoordn.x, reaCoordn.y);
-		
-		for(int i = 0; i<proj.size();i++){
+		r.line(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, reaCoordn.x, reaCoordn.y);
+
+		for (int i = 0; i < proj.size(); i++) {
 			r.setColor(Color.RED);
-		r.line(proj.get(i).getTargetX(),proj.get(i).getTargetY(),proj.get(i).getX(),proj.get(i).getY());
-		r.setColor(Color.BLUE);
-		r.line(player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2, proj.get(i).getX(), proj.get(i).getY());
+			r.line(proj.get(i).getTargetX(), proj.get(i).getTargetY(), proj.get(i).getX(), proj.get(i).getY());
+			r.setColor(Color.BLUE);
+			r.line(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, proj.get(i).getX(),
+					proj.get(i).getY());
 		}
-		
+
 		r.end();
-	
-		}
-		
-	   public Powerup spawnPowerUp(GameWorld world, Core game){
-		   System.out.println("Spawning powerup");
-		   Powerup powerup = new Powerup(16,16,MathUtils.random(world.getMinimumX(), world.getmaximumX()),MathUtils.random(world.getMinimumY(), world.getMaximumY()),0f,0f,game);
-		   
-		  powerup.setTypeAndGraphic(game);
-		  powerup.setTimeAlive(TimeUtils.millis());
-		  effects.add(powerup.getSpawnEffect());
-	      return powerup;
-	    
-	   
-	   }
-	
 
+	}
 
-	public void dispose () {
+	public Powerup spawnPowerUp(GameWorld world, Core game) {
+		System.out.println("Spawning powerup");
+		Powerup powerup = new Powerup(16, 16, MathUtils.random(world.getMinimumX(), world.getmaximumX()),
+				MathUtils.random(world.getMinimumY(), world.getMaximumY()), 0f, 0f, game);
+
+		powerup.setTypeAndGraphic(game);
+		powerup.setTimeAlive(TimeUtils.millis());
+		effects.add(powerup.getSpawnEffect());
+		return powerup;
+
+	}
+
+	public void dispose() {
 		game.batch.dispose();
 		stage.dispose();
 		mapRender.dispose();
-	    
-		
+
 	}
-
-
-
 
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
-
 
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
-
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
-
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
-
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
+
+	}
+	
+	public void resolveOverlaps(SpriteCommons common1, SpriteCommons common2){
+		
+		
+		
+		
+		
 		
 	}
+	
+	
+	
+	
+	
+	
+	
 }

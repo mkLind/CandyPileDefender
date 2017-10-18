@@ -26,7 +26,7 @@ public class Powerup extends SpriteCommons {
 		spawnEffect.scaleEffect(20f);
 		spawnEffect.start();
 	
-		effectTime = (long) 5000;
+		effectTime = (long) 10000;
 		
 	}
 
