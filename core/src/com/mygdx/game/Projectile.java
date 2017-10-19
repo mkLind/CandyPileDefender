@@ -103,41 +103,41 @@ public static Vector3[] getSideShots(Player player, Vector3 ClickCoords){
 	float xl = 0f;
 	float yl = 0f;
 	// Norhwest
-	if(player.getX()>ClickCoords.x && player.getY()  < ClickCoords.y  ){
-		xl = player.getX() - (player.getWidth()/2);
-		yl = player.getY() - (player.getHeight()/2);
+	if(player.getMiddleX()>ClickCoords.x && player.getMiddleY()  < ClickCoords.y  ){
+		xl = player.getMiddleX() - (player.getWidth()/2);
+		yl = player.getMiddleY() - (player.getHeight()/2);
 			
 		
 		// southwest
-	}else if(player.getX()>ClickCoords.x && player.getY()  > ClickCoords.y){
-		xl = player.getX() + (player.getWidth()/2);
-		yl = player.getY() - (player.getHeight()/2);
+	}else if(player.getMiddleX()>ClickCoords.x && player.getMiddleY()  > ClickCoords.y){
+		xl = player.getMiddleX() + (player.getWidth()/2);
+		yl = player.getMiddleY() - (player.getHeight()/2);
 		
 		// NorthEast
-	}else if(player.getX()<ClickCoords.x && player.getY()  <ClickCoords.y ){
-		xl = player.getX() -(player.getWidth()/2);
-		yl = player.getY() + (player.getHeight()/2);
+	}else if(player.getMiddleX()<ClickCoords.x && player.getMiddleY()  <ClickCoords.y ){
+		xl = player.getMiddleX() -(player.getWidth()/2);
+		yl = player.getMiddleY() + (player.getHeight()/2);
 		
 		//SouthEast
-	}else if (player.getX()<ClickCoords.x && player.getY()  >ClickCoords.y ){
-		xl = player.getX() +(player.getWidth()/2);
-		yl = player.getY() + (player.getHeight()/2);
+	}else if (player.getMiddleX()<ClickCoords.x && player.getMiddleY()  >ClickCoords.y ){
+		xl = player.getMiddleX() +(player.getWidth()/2);
+		yl = player.getMiddleY() + (player.getHeight()/2);
 	}// UP
-	else if(player.getY()  < ClickCoords.y && ClickCoords.x>(player.getX() - player.getWidth()/3) && ClickCoords.x<(player.getX() + player.getWidth()/3)){
-	xl = player.getX() - player.getWidth()/2;
-	yl = player.getY();
+	else if(player.getMiddleY()  < ClickCoords.y && ClickCoords.x>(player.getMiddleX() - player.getWidth()/3) && ClickCoords.x<(player.getMiddleX() + player.getWidth()/3)){
+	xl = player.getMiddleX() - player.getWidth()/2;
+	yl = player.getMiddleY();
 	} // Down
-	else if(player.getY()  > ClickCoords.y && ClickCoords.x>(player.getX() - player.getWidth()/3) && ClickCoords.x<(player.getX() + player.getWidth()/3)){
-		xl = player.getX() + player.getWidth()/2;
-		yl = player.getY(); 
+	else if(player.getMiddleY()  > ClickCoords.y && ClickCoords.x>(player.getMiddleX() - player.getWidth()/3) && ClickCoords.x<(player.getMiddleX() + player.getWidth()/3)){
+		xl = player.getMiddleX() + player.getWidth()/2;
+		yl = player.getMiddleY(); 
 	}//left
-	else if(player.getX()  < ClickCoords.x && ClickCoords.y>(player.getY() - player.getHeight()/3) && ClickCoords.y<(player.getY() + player.getHeight()/3)){
-		xl = player.getX();
-		yl = player.getY() - player.getHeight()/2;
+	else if(player.getMiddleX()  < ClickCoords.x && ClickCoords.y>(player.getMiddleY() - player.getHeight()/3) && ClickCoords.y<(player.getMiddleY() + player.getHeight()/3)){
+		xl = player.getMiddleX();
+		yl = player.getMiddleY() - player.getHeight()/2;
 	}//right
-	else if(player.getX()  < ClickCoords.x && ClickCoords.y>(player.getY() - player.getHeight()/3) && ClickCoords.y<(player.getY() + player.getHeight()/3)){
-		xl = player.getX();
-		yl = player.getY() - player.getHeight()/2;
+	else if(player.getMiddleX()  < ClickCoords.x && ClickCoords.y>(player.getMiddleY() - player.getHeight()/3) && ClickCoords.y<(player.getMiddleY() + player.getHeight()/3)){
+		xl = player.getMiddleX();
+		yl = player.getMiddleY() - player.getHeight()/2;
 	}
 	
 	
@@ -147,41 +147,41 @@ public static Vector3[] getSideShots(Player player, Vector3 ClickCoords){
 	// Norhwest
 	float xr = 0f;
 	float yr = 0f;
-		if(player.getX()>ClickCoords.x && player.getY()  < ClickCoords.y  ){
-			xr = player.getX() + (player.getWidth()/2);
-			yr = player.getY() + (player.getHeight()/2);
+		if(player.getMiddleX()>ClickCoords.x && player.getMiddleY()  < ClickCoords.y  ){
+			xr = player.getMiddleX() + (player.getWidth()/2);
+			yr = player.getMiddleY() + (player.getHeight()/2);
 				
 			
 			// southwest
-		}else if(player.getX()>ClickCoords.x && player.getY()  > ClickCoords.y){
-			xr = player.getX() - (player.getWidth()/2);
-			yr = player.getY() + (player.getHeight()/2);
+		}else if(player.getMiddleX()>ClickCoords.x && player.getMiddleY()  > ClickCoords.y){
+			xr = player.getMiddleX() - (player.getWidth()/2);
+			yr = player.getMiddleY() + (player.getHeight()/2);
 			
 			// NorthEast
-		}else if(player.getX()<ClickCoords.x && player.getY()  < ClickCoords.y ){
-			xr = player.getX() +(player.getWidth()/2);
-			yr = player.getY() - (player.getHeight()/2);
+		}else if(player.getMiddleX()<ClickCoords.x && player.getMiddleY()  < ClickCoords.y ){
+			xr = player.getMiddleX() +(player.getWidth()/2);
+			yr = player.getMiddleY() - (player.getHeight()/2);
 			
 			//SouthEast
-		}else if (player.getX()<ClickCoords.x && player.getY()  > ClickCoords.y ){
-			xr = player.getX() -(player.getWidth()/2);
-			yr = player.getY() - (player.getHeight()/2);
+		}else if (player.getMiddleX()<ClickCoords.x && player.getMiddleY()  > ClickCoords.y ){
+			xr = player.getMiddleX() -(player.getWidth()/2);
+			yr = player.getMiddleY() - (player.getHeight()/2);
 		}// UP
-		else if(player.getY()  < ClickCoords.y && ClickCoords.x>(player.getX() - player.getWidth()/3) && ClickCoords.x<(player.getX() + player.getWidth()/3)){
-			xr = player.getX() + player.getWidth()/2;
-			yr = player.getY();
+		else if(player.getMiddleY()  < ClickCoords.y && ClickCoords.x>(player.getMiddleX() - player.getWidth()/3) && ClickCoords.x<(player.getMiddleX() + player.getWidth()/3)){
+			xr = player.getMiddleX() + player.getWidth()/2;
+			yr = player.getMiddleY();
 			} // Down
-			else if(player.getY()  > ClickCoords.y && ClickCoords.x>(player.getX() - player.getWidth()/3) && ClickCoords.x<(player.getX() + player.getWidth()/3)){
-				xr = player.getX() - player.getWidth()/2;
-				yr = player.getY(); 
+			else if(player.getMiddleY()  > ClickCoords.y && ClickCoords.x>(player.getMiddleX() - player.getWidth()/3) && ClickCoords.x<(player.getMiddleX() + player.getWidth()/3)){
+				xr = player.getMiddleX() - player.getWidth()/2;
+				yr = player.getMiddleY(); 
 			}//left
-			else if(player.getX()  < ClickCoords.x && ClickCoords.y>(player.getY() - player.getHeight()/3) && ClickCoords.y<(player.getY() + player.getHeight()/3)){
-				xr = player.getX();
-				yr = player.getY() + player.getHeight()/2;
+			else if(player.getMiddleX()  < ClickCoords.x && ClickCoords.y>(player.getMiddleY() - player.getHeight()/3) && ClickCoords.y<(player.getMiddleY() + player.getHeight()/3)){
+				xr = player.getMiddleX();
+				yr = player.getMiddleY() + player.getHeight()/2;
 			}//right
-			else if(player.getX()  < ClickCoords.x && ClickCoords.y>(player.getY() - player.getHeight()/3) && ClickCoords.y<(player.getY() + player.getHeight()/3)){
-				xr = player.getX();
-				yr = player.getY() - player.getHeight()/2;
+			else if(player.getMiddleX()  < ClickCoords.x && ClickCoords.y>(player.getMiddleY() - player.getHeight()/3) && ClickCoords.y<(player.getMiddleY() + player.getHeight()/3)){
+				xr = player.getMiddleX();
+				yr = player.getMiddleY() - player.getHeight()/2;
 			}
 			
 		Vector3 rightShot = new Vector3(xr,yr,0);	

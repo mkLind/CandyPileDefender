@@ -139,6 +139,7 @@ public class Player extends SpriteCommons {
 		LastShot = lastShot;
 	}
 	
-	
+	public float getMiddleY(){return super.getY()+super.getHeight()/2;}
+	public float getMiddleX(){return super.getX()+super.getWidth()/2;}
 
 }
