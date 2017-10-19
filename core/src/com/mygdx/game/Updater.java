@@ -154,7 +154,7 @@ public class Updater implements Screen {
 		
 		//For score points
 		timeScore = TimeUtils.millis();
-		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		mySkin = new Skin(Gdx.files.internal("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/skin/uiskin.json"));
 		scores = new Label("Score: " + game.getLoader().getScore(), mySkin);
     	scores.setPosition(Gdx.graphics.getWidth()/1.37f , Gdx.graphics.getHeight() - 20);
         scores.setAlignment(Align.topRight);
@@ -243,7 +243,7 @@ public class Updater implements Screen {
 			if (player.getPowerupType() == POWERUPTYPE.SLOWDOWN
 					&& TimeUtils.timeSinceMillis(mpObjLastSet) > mpObjCooldown) {
 				MapObject obj = new MapObject(32, 32, player.getX(), player.getY(), 0, 0, 10000,
-						game.getLoader().getManager().get("tarstain.png", Texture.class),
+						game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarstain.png", Texture.class),
 						OBJECTTYPE.HAZARD);
 				obj.setSpawnTime(TimeUtils.millis());
 				tarPools.add(obj);
@@ -448,14 +448,14 @@ public class Updater implements Screen {
 				float bulletVel = 20f;
 
 				// Straight shot
-				float velX = (float) (reaCoords.x - (player.getX() + (player.getWidth() / 2))) / bulletVel;
-				float velY = (float) (reaCoords.y - (player.getY() + (player.getHeight() / 2))) / bulletVel;
+				float velX = (float) (reaCoords.x - (player.getX() + (player.getWidth()))) / bulletVel;
+				float velY = (float) (reaCoords.y - (player.getY() + (player.getHeight()))) / bulletVel;
 
 				float velXR = (float) (reaCoords.x - (player.getX() + (player.getWidth() / 2))) / bulletVel;
 				float velYR = (float) (reaCoords.y  - (player.getY() + (player.getHeight() / 2))) / bulletVel;
 
-				float velXL = (float) (reaCoords.x - (player.getX() + (player.getWidth() / 2))) / bulletVel;
-				float velYL = (float) (reaCoords.y  - (player.getY() + (player.getHeight() / 2))) / bulletVel;
+				float velXL = (float) (reaCoords.x - (player.getX())) / bulletVel;
+				float velYL = (float) (reaCoords.y  - (player.getY() )) / bulletVel;
 
 				Projectile p = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
 						player.getY() + player.getHeight() / 2, velX, velY,

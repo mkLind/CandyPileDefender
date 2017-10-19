@@ -24,7 +24,7 @@ public class MainMenuScreen implements Screen {
 		this.game = game;
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
-		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		mySkin = new Skin(Gdx.files.internal("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/skin/uiskin.json"));
 		playButton = new TextButton("Play", mySkin);
 		playButton.setWidth(Gdx.graphics.getWidth()/3);
         playButton.setPosition(Gdx.graphics.getWidth()/3 - playButton.getWidth()/2,Gdx.graphics.getHeight()/2 - playButton.getHeight()/3);

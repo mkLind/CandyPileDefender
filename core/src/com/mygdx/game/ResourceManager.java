@@ -28,13 +28,13 @@ public class ResourceManager {
 		manager.load("stealTest.png", Texture.class);
 		manager.load("pileTest.png", Texture.class);
 		manager.load("pileTest2.png", Texture.class);
-		manager.load("fastwalkdummy.png", Texture.class);
-		manager.load("rapidfiredummy.png", Texture.class);
-		manager.load("screencleardummy.png", Texture.class);
-		manager.load("shielddummy.png", Texture.class);
-		manager.load("tarbarreldummy.png", Texture.class);
-		manager.load("tripleshotdummy.png", Texture.class);
-		manager.load("tarstain.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/fastwalkdummy.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/rapidfiredummy.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/screencleardummy.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/shielddummy.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarbarreldummy.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tripleshotdummy.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarstain.png",Texture.class);
 		
 		
 		
