@@ -663,7 +663,7 @@ public class Updater implements Screen {
 		stage.act(statetime);
 		stage.draw();
 		// shape renderer for debugging
-
+/*
 		r.setProjectionMatrix(camera.combined);
 		r.begin(ShapeType.Line);
 		r.setColor(Color.GREEN);
@@ -680,7 +680,7 @@ public class Updater implements Screen {
 		}
 
 		r.end();
-
+*/
 	}
 
 	public Powerup spawnPowerUp(GameWorld world, Core game) {
