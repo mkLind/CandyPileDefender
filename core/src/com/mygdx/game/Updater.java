@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -28,6 +29,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
@@ -60,6 +66,7 @@ public class Updater implements Screen {
 	private int timesCalled;
 	private long timeSinceWave;
 	private long timeToNextPowerup;
+	private long timeScore;
 	private GameWorld world;
 	private Random randomizer;
 	private OrthogonalTiledMapRenderer mapRender;
@@ -71,6 +78,13 @@ public class Updater implements Screen {
 	private ArrayList<ParticleEffect> effects;
 	private long mpObjCooldown;
 	private long mpObjLastSet;
+	
+	private Label scores;
+	private Skin mySkin;
+	private Pixmap pixmap;
+	private ProgressBar healthBar;
+	private TextureRegionDrawable drawable;
+	
 
 	/**
 	 * Initializes the entire game
@@ -112,7 +126,7 @@ public class Updater implements Screen {
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
 				player = new Player(32, 32, spawnPoints.get(i).getRectangle().getX(),
-						spawnPoints.get(i).getRectangle().getY(), 5);
+						spawnPoints.get(i).getRectangle().getY(), 10);
 			}
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")) {
 				pile = new Pile(100, 100, spawnPoints.get(i).getRectangle().getX(),
@@ -137,6 +151,44 @@ public class Updater implements Screen {
 		spawnEnemies();
 		camera.update();
 		timeToNextPowerup = TimeUtils.millis();
+		
+		//For score points
+		timeScore = TimeUtils.millis();
+		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		scores = new Label("Score: " + game.getLoader().getScore(), mySkin);
+    	scores.setPosition(Gdx.graphics.getWidth()/1.37f , Gdx.graphics.getHeight() - 20);
+        scores.setAlignment(Align.topRight);
+        scores.setWidth(Gdx.graphics.getWidth()/4);
+        stage.addActor(scores);
+        
+        //Health bar
+        pixmap = new Pixmap(100, 10, Format.RGBA8888);
+        pixmap.setColor(Color.RED);
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        healthBar = new ProgressBar(0f, 1f, 0.01f, false, new ProgressBarStyle());
+        healthBar.getStyle().background = drawable;
+        
+        pixmap = new Pixmap(0, 10, Format.RGBA8888);
+        pixmap.setColor(Color.GREEN);
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        healthBar.getStyle().knob = drawable;
+        
+        pixmap = new Pixmap(100, 10, Format.RGBA8888);
+        pixmap.setColor(Color.GREEN);
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        healthBar.getStyle().knobBefore = drawable;
+        pixmap.dispose();
+        
+        healthBar.setWidth(100);
+        healthBar.setHeight(10);
+//        healthBar.setAnimateDuration(0.0f);
+        healthBar.setValue(1f);
+//        healthBar.setAnimateDuration(0.25f);
+        healthBar.setPosition(10, Gdx.graphics.getHeight() - 20);
+        stage.addActor(healthBar);
 	}
 
 	// Spawn enemies. Enemy count increases by one every time to make the wave
@@ -191,8 +243,7 @@ public class Updater implements Screen {
 			if (player.getPowerupType() == POWERUPTYPE.SLOWDOWN
 					&& TimeUtils.timeSinceMillis(mpObjLastSet) > mpObjCooldown) {
 				MapObject obj = new MapObject(32, 32, player.getX(), player.getY(), 0, 0, 10000,
-						game.getLoader().getManager().get(
-								"C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarstain.png", Texture.class),
+						game.getLoader().getManager().get("tarstain.png", Texture.class),
 						OBJECTTYPE.HAZARD);
 				obj.setSpawnTime(TimeUtils.millis());
 				tarPools.add(obj);
@@ -463,6 +514,13 @@ public class Updater implements Screen {
 					enemies.get(i).setHP(enemies.get(i).getHP() - 1);
 					proj.remove(j);
 					if (enemies.get(i).getHP() <= 0 && enemies.size() > 0) {
+						//Get points
+						if (enemies.get(i) instanceof StealingEnemy) {
+							game.getLoader().setScore(game.getLoader().getScore() + 500);
+						}
+						if (enemies.get(i) instanceof ChaserEnemy) {
+							game.getLoader().setScore(game.getLoader().getScore() + 1000);
+						}
 						enemies.remove(i);
 						break;
 					}
@@ -476,10 +534,20 @@ public class Updater implements Screen {
 
 				if (player.getPowerupType() != POWERUPTYPE.SHIELD) {
 					player.setHP(player.getHP() - 1);
+					//Update healthbar
+					healthBar.setValue(healthBar.getValue() - 0.1f);
 				}
 				enemies.get(i).setHP(enemies.get(i).getHP() - 1);
 
+
 				if (enemies.get(i).getHP() <= 0) {
+					//Get points
+					if (enemies.get(i) instanceof StealingEnemy) {
+						game.getLoader().setScore(game.getLoader().getScore() + 500);
+					}
+					if (enemies.get(i) instanceof ChaserEnemy) {
+						game.getLoader().setScore(game.getLoader().getScore() + 1000);
+					}
 					enemies.remove(i);
 				}
 				if (player.getHP() < 1) {
@@ -582,9 +650,16 @@ public class Updater implements Screen {
 
 			spawnEnemies();
 		}
-
+		
 		game.batch.end();
-
+		
+		//Get points for alive time
+		if(TimeUtils.timeSinceMillis(timeScore) > 1000) { 
+			game.getLoader().setScore(game.getLoader().getScore() + 20);
+			scores.setText("Score: " + game.getLoader().getScore());
+			timeScore = TimeUtils.millis();
+		}
+		
 		stage.act(statetime);
 		stage.draw();
 		// shape renderer for debugging
@@ -621,9 +696,9 @@ public class Updater implements Screen {
 	}
 
 	public void dispose() {
-		game.batch.dispose();
+//		game.batch.dispose();
 		stage.dispose();
-		mapRender.dispose();
+//		mapRender.dispose();
 
 	}
 
