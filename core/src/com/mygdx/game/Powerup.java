@@ -46,10 +46,11 @@ public class Powerup extends SpriteCommons {
 
 	public void setTypeAndGraphic(Core game){
 		
-		//this.type = POWERUPTYPE.values()[MathUtils.random(0, POWERUPTYPE.values().length-1)];
-		this.type = POWERUPTYPE.TRIPLESHOT;
+		this.type = POWERUPTYPE.values()[MathUtils.random(0, POWERUPTYPE.values().length-1)];
+		//this.type = POWERUPTYPE.CLEARSCREEN;
 		if(type == POWERUPTYPE.CLEARSCREEN){
 			 graphic = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/screencleardummy.png",Texture.class);
+			 effectTime = (long) 1000;
 		}
 		if(type == POWERUPTYPE.HASTE){
 			graphic = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/fastwalkdummy.png",Texture.class);

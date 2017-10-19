@@ -51,8 +51,8 @@ public float getMinimumX(){
 	Array<RectangleMapObject> obj = borders.getByType(RectangleMapObject.class);
 	x = obj.get(0).getRectangle().getX();
 	for(int i = 0;i<obj.size;i++){
-		if(obj.get(i).getRectangle().getX()<x){
-			x = obj.get(i).getRectangle().getX();
+		if(obj.get(i).getRectangle().getX() + obj.get(i).getRectangle().getWidth()<x){
+			x = obj.get(i).getRectangle().getX() + obj.get(i).getRectangle().getWidth();
 		}
 		
 	}
@@ -63,8 +63,8 @@ public float getMinimumY(){
 	Array<RectangleMapObject> obj = borders.getByType(RectangleMapObject.class);
 	y = obj.get(0).getRectangle().getY();
 	for(int i = 0;i<obj.size;i++){
-		if(obj.get(i).getRectangle().getY()<y){
-			y = obj.get(i).getRectangle().getY();
+		if(obj.get(i).getRectangle().getY() + obj.get(i).getRectangle().getHeight()<y){
+			y = obj.get(i).getRectangle().getY() + obj.get(i).getRectangle().getHeight();
 		}
 		
 	}
@@ -76,7 +76,7 @@ public float getMaximumY(){
 	y = obj.get(0).getRectangle().getY();
 	for(int i = 0;i<obj.size;i++){
 		if(obj.get(i).getRectangle().getY()>y){
-			y = obj.get(i).getRectangle().getY();
+			y = obj.get(i).getRectangle().getY() - obj.get(i).getRectangle().getHeight();
 		}
 		
 	}
@@ -88,7 +88,7 @@ public float getmaximumX(){
 	x = obj.get(0).getRectangle().getX();
 	for(int i = 0;i<obj.size;i++){
 		if(obj.get(i).getRectangle().getX()>x){
-			x = obj.get(i).getRectangle().getX();
+			x = obj.get(i).getRectangle().getX() - obj.get(i).getRectangle().getWidth();
 		}
 		
 	}

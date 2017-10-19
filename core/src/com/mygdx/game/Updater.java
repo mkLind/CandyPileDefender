@@ -73,18 +73,18 @@ public class Updater implements Screen {
 	private Array<RectangleMapObject> borders;
 	private Array<RectangleMapObject> spawnPoints;
 	private Array<RectangleMapObject> monsterSpawns;
-	private ArrayList<MapObject> tarPools;
+	private ArrayList<MapObject> mapObjects;
+
 	private ArrayList<Powerup> powerups;
 	private ArrayList<ParticleEffect> effects;
 	private long mpObjCooldown;
 	private long mpObjLastSet;
-	
+
 	private Label scores;
 	private Skin mySkin;
 	private Pixmap pixmap;
 	private ProgressBar healthBar;
 	private TextureRegionDrawable drawable;
-	
 
 	/**
 	 * Initializes the entire game
@@ -93,9 +93,9 @@ public class Updater implements Screen {
 	 */
 	public Updater(final Core game) {
 		this.game = game;
-		mpObjCooldown = 250;
+		mpObjCooldown = 200;
 		mpObjLastSet = 0;
-		tarPools = new ArrayList<>();
+		mapObjects = new ArrayList<>();
 		statetime = 0f;
 		timesCalled = 0;
 		randomizer = new Random();
@@ -151,44 +151,44 @@ public class Updater implements Screen {
 		spawnEnemies();
 		camera.update();
 		timeToNextPowerup = TimeUtils.millis();
-		
-		//For score points
+
+		// For score points
 		timeScore = TimeUtils.millis();
 		mySkin = new Skin(Gdx.files.internal("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/skin/uiskin.json"));
 		scores = new Label("Score: " + game.getLoader().getScore(), mySkin);
-    	scores.setPosition(Gdx.graphics.getWidth()/1.37f , Gdx.graphics.getHeight() - 20);
-        scores.setAlignment(Align.topRight);
-        scores.setWidth(Gdx.graphics.getWidth()/4);
-        stage.addActor(scores);
-        
-        //Health bar
-        pixmap = new Pixmap(100, 10, Format.RGBA8888);
-        pixmap.setColor(Color.RED);
-        pixmap.fill();
-        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-        healthBar = new ProgressBar(0f, 1f, 0.01f, false, new ProgressBarStyle());
-        healthBar.getStyle().background = drawable;
-        
-        pixmap = new Pixmap(0, 10, Format.RGBA8888);
-        pixmap.setColor(Color.GREEN);
-        pixmap.fill();
-        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-        healthBar.getStyle().knob = drawable;
-        
-        pixmap = new Pixmap(100, 10, Format.RGBA8888);
-        pixmap.setColor(Color.GREEN);
-        pixmap.fill();
-        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-        healthBar.getStyle().knobBefore = drawable;
-        pixmap.dispose();
-        
-        healthBar.setWidth(100);
-        healthBar.setHeight(10);
-//        healthBar.setAnimateDuration(0.0f);
-        healthBar.setValue(1f);
-//        healthBar.setAnimateDuration(0.25f);
-        healthBar.setPosition(10, Gdx.graphics.getHeight() - 20);
-        stage.addActor(healthBar);
+		scores.setPosition(Gdx.graphics.getWidth() / 1.37f, Gdx.graphics.getHeight() - 20);
+		scores.setAlignment(Align.topRight);
+		scores.setWidth(Gdx.graphics.getWidth() / 4);
+		stage.addActor(scores);
+
+		// Health bar
+		pixmap = new Pixmap(100, 10, Format.RGBA8888);
+		pixmap.setColor(Color.RED);
+		pixmap.fill();
+		drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+		healthBar = new ProgressBar(0f, 1f, 0.01f, false, new ProgressBarStyle());
+		healthBar.getStyle().background = drawable;
+
+		pixmap = new Pixmap(0, 10, Format.RGBA8888);
+		pixmap.setColor(Color.GREEN);
+		pixmap.fill();
+		drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+		healthBar.getStyle().knob = drawable;
+
+		pixmap = new Pixmap(100, 10, Format.RGBA8888);
+		pixmap.setColor(Color.GREEN);
+		pixmap.fill();
+		drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+		healthBar.getStyle().knobBefore = drawable;
+		pixmap.dispose();
+
+		healthBar.setWidth(100);
+		healthBar.setHeight(10);
+		// healthBar.setAnimateDuration(0.0f);
+		healthBar.setValue(1f);
+		// healthBar.setAnimateDuration(0.25f);
+		healthBar.setPosition(10, Gdx.graphics.getHeight() - 20);
+		stage.addActor(healthBar);
 	}
 
 	// Spawn enemies. Enemy count increases by one every time to make the wave
@@ -243,10 +243,11 @@ public class Updater implements Screen {
 			if (player.getPowerupType() == POWERUPTYPE.SLOWDOWN
 					&& TimeUtils.timeSinceMillis(mpObjLastSet) > mpObjCooldown) {
 				MapObject obj = new MapObject(32, 32, player.getX(), player.getY(), 0, 0, 10000,
-						game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarstain.png", Texture.class),
+						game.getLoader().getManager().get(
+								"C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarstain.png", Texture.class),
 						OBJECTTYPE.HAZARD);
 				obj.setSpawnTime(TimeUtils.millis());
-				tarPools.add(obj);
+				mapObjects.add(obj);
 				mpObjLastSet = TimeUtils.millis();
 				System.out.println("SPAWNING TAR");
 			}
@@ -271,10 +272,10 @@ public class Updater implements Screen {
 				enemies.get(i).setyVel(((float) (1.2f / hypot * (pile.getY() - enemies.get(i).getY()))));
 			}
 
-			if (!tarPools.isEmpty()) {
+			if (!mapObjects.isEmpty()) {
 				// SLOW THE ENEMIES DOWN IF ONE OF THEM HITS A POOL OF TAR
-				for (int j = 0; j < tarPools.size(); j++) {
-					if (tarPools.get(j).getHitbox().contains(enemies.get(i).getX(), enemies.get(i).getY())) {
+				for (int j = 0; j < mapObjects.size(); j++) {
+					if (mapObjects.get(j).getHitbox().contains(enemies.get(i).getX(), enemies.get(i).getY())) {
 						System.out.println("ENEMY AT: " + i + " IS STUCK IN TAR");
 
 						enemies.get(i).setxVel(enemies.get(i).getxVel() / 100);
@@ -369,16 +370,17 @@ public class Updater implements Screen {
 			player.setyVel(0);
 		}
 		// Remove tar pools when set time has passed
-		if (!tarPools.isEmpty()) {
-			for (int i = 0; i < tarPools.size(); i++) {
-				if (TimeUtils.timeSinceMillis(tarPools.get(i).getSpawnTime()) > tarPools.get(i).getTimeAlive()) {
-					tarPools.remove(i);
+		if (!mapObjects.isEmpty()) {
+			for (int i = 0; i < mapObjects.size(); i++) {
+				if (TimeUtils.timeSinceMillis(mapObjects.get(i).getSpawnTime()) > mapObjects.get(i).getTimeAlive()) {
+					mapObjects.remove(i);
 				}
 			}
 		}
 
 		for (int i = 0; i < powerups.size(); i++) {
 			if (Intersector.overlaps(powerups.get(i).getHitbox(), player.getHitbox())) {
+				player.setPowerupType(null);
 				player.setPowerupType(powerups.get(i).getType());
 				player.setPowerupActiveTime(powerups.get(i).getEffectTime());
 				player.setPowerupSetTime(TimeUtils.millis());
@@ -387,8 +389,25 @@ public class Updater implements Screen {
 				if (player.getPowerupType() == POWERUPTYPE.HASTE) {
 					player.setHasteVel(1.0f);
 				}
+				if (player.getPowerupType() == POWERUPTYPE.SHIELD) {
+					MapObject obj = new MapObject(40, 40, player.getX() - player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, 0, 0, 10000,
+							game.getLoader().getManager().get(
+									"C:/Users/Markus/Desktop/CandyPileDefender/core/assets/SHIELD.png", Texture.class),
+							OBJECTTYPE.FOLLOWER);
+					obj.setSpawnTime(TimeUtils.millis());
+					mapObjects.add(obj);
+				}
 
 				if (player.getPowerupType() == POWERUPTYPE.CLEARSCREEN) {
+					MapObject obj = new MapObject(32, 32, player.getX() - player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, 0, 0, 10000,
+							game.getLoader().getManager().get(
+									"C:/Users/Markus/Desktop/CandyPileDefender/core/assets/ScreenClear.png",
+									Texture.class),
+							OBJECTTYPE.EXPANDER);
+					obj.setSpawnTime(TimeUtils.millis());
+					mapObjects.add(obj);
 					enemies.clear();
 				}
 				if (player.getPowerupType() == POWERUPTYPE.RAPIDFIRE) {
@@ -400,13 +419,20 @@ public class Updater implements Screen {
 		}
 		if (TimeUtils.timeSinceMillis(player.getPowerupSetTime()) > player.getPowerupActiveTime()
 				&& player.getPowerupType() != null) {
-
+		
 			if (player.getPowerupType() == POWERUPTYPE.HASTE) {
 				player.setHasteVel(0f);
 			}
 
 			if (player.getPowerupType() == POWERUPTYPE.RAPIDFIRE) {
 				player.setShootingCooldown(900);
+			}
+			if (player.getPowerupType() == POWERUPTYPE.SHIELD) {
+				mapObjects.clear();
+			}
+
+			if (player.getPowerupType() == POWERUPTYPE.CLEARSCREEN) {
+				mapObjects.clear();
 			}
 
 			player.setPowerupType(null);
@@ -448,25 +474,25 @@ public class Updater implements Screen {
 				float bulletVel = 20f;
 
 				// Straight shot
-				float velX = (float) (reaCoords.x - (player.getX() + (player.getWidth())/2)) / bulletVel;
-				float velY = (float) (reaCoords.y - (player.getY() + (player.getHeight()/2))) / bulletVel;
+				float velX = (float) (reaCoords.x - (player.getX() + (player.getWidth()) / 2)) / bulletVel;
+				float velY = (float) (reaCoords.y - (player.getY() + (player.getHeight() / 2))) / bulletVel;
 
-				float velXR = (float) (reaCoords.x- (Projectile.getSideShots(player, reaCoords)[1].x)) / bulletVel;
-				float velYR = (float) (reaCoords.y  - (Projectile.getSideShots(player, reaCoords)[1].y)) / bulletVel;
+				float velXR = (float) (reaCoords.x - (Projectile.getSideShots(player, reaCoords)[1].x)) / bulletVel;
+				float velYR = (float) (reaCoords.y - (Projectile.getSideShots(player, reaCoords)[1].y)) / bulletVel;
 
-				float velXL = (float) (reaCoords.x  - (Projectile.getSideShots(player, reaCoords)[0].x)) / bulletVel;
-				float velYL = (float) (reaCoords.y  - (Projectile.getSideShots(player, reaCoords)[0].y)) / bulletVel;
+				float velXL = (float) (reaCoords.x - (Projectile.getSideShots(player, reaCoords)[0].x)) / bulletVel;
+				float velYL = (float) (reaCoords.y - (Projectile.getSideShots(player, reaCoords)[0].y)) / bulletVel;
 
 				Projectile p = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
 						player.getY() + player.getHeight() / 2, velX, velY,
 						game.getLoader().getManager().get("Pointer.png", Texture.class));
-				
+
 				Projectile l = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
-						player.getY() + player.getHeight() / 2, velXR , velYR,
+						player.getY() + player.getHeight() / 2, velXR, velYR,
 						game.getLoader().getManager().get("Pointer.png", Texture.class));
-				
+
 				Projectile r = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
-						player.getY() + player.getHeight() / 2, velXL , velYL,
+						player.getY() + player.getHeight() / 2, velXL, velYL,
 						game.getLoader().getManager().get("Pointer.png", Texture.class));
 
 				l.setCurrentTime(TimeUtils.millis());
@@ -514,7 +540,7 @@ public class Updater implements Screen {
 					enemies.get(i).setHP(enemies.get(i).getHP() - 1);
 					proj.remove(j);
 					if (enemies.get(i).getHP() <= 0 && enemies.size() > 0) {
-						//Get points
+						// Get points
 						if (enemies.get(i) instanceof StealingEnemy) {
 							game.getLoader().setScore(game.getLoader().getScore() + 500);
 						}
@@ -534,14 +560,13 @@ public class Updater implements Screen {
 
 				if (player.getPowerupType() != POWERUPTYPE.SHIELD) {
 					player.setHP(player.getHP() - 1);
-					//Update healthbar
+					// Update healthbar
 					healthBar.setValue(healthBar.getValue() - 0.1f);
 				}
 				enemies.get(i).setHP(enemies.get(i).getHP() - 1);
 
-
 				if (enemies.get(i).getHP() <= 0) {
-					//Get points
+					// Get points
 					if (enemies.get(i) instanceof StealingEnemy) {
 						game.getLoader().setScore(game.getLoader().getScore() + 500);
 					}
@@ -577,18 +602,36 @@ public class Updater implements Screen {
 
 		game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
+		// Teppo kokeilua
+				if (!pileHealth) {
+					game.batch.draw(pile.getPileTexture(), pile.getX(), pile.getY());
+				} else {
+					game.batch.draw(pile.getPileTexture2(), pile.getX(), pile.getY());
+				}
+				
+		if (!mapObjects.isEmpty()) {
+			for (int i = 0; i < mapObjects.size(); i++) {
+				// Draw Follower Object
+				if (mapObjects.get(i).getType() == OBJECTTYPE.FOLLOWER) {
+					game.batch.draw(mapObjects.get(i).getGraphic(), player.getX(), player.getY(),
+							mapObjects.get(i).getWidth(), mapObjects.get(i).getHeight());
 
-		if (!tarPools.isEmpty()) {
-			for (int i = 0; i < tarPools.size(); i++) {
-				game.batch.draw(tarPools.get(i).getGraphic(), tarPools.get(i).getX(), tarPools.get(i).getY());
+					// DRaw expander
+				} else if (mapObjects.get(i).getType() == OBJECTTYPE.EXPANDER) {
+					mapObjects.get(i).setHeight(mapObjects.get(i).getHeight() + 20);
+					mapObjects.get(i).setWidth(mapObjects.get(i).getWidth() + 20);
+					mapObjects.get(i).setX(mapObjects.get(i).getX() - 10);
+					mapObjects.get(i).setY(mapObjects.get(i).getY() - 10);
+					game.batch.draw(mapObjects.get(i).getGraphic(), mapObjects.get(i).getX(), mapObjects.get(i).getY(),
+							mapObjects.get(i).getWidth(), mapObjects.get(i).getHeight());
+				} else {
+
+					// IF mapObject is not expanding object, draw it normally
+					game.batch.draw(mapObjects.get(i).getGraphic(), mapObjects.get(i).getX(), mapObjects.get(i).getY());
+				}
 			}
 		}
-		// Teppo kokeilua
-		if (!pileHealth) {
-			game.batch.draw(pile.getPileTexture(), pile.getX(), pile.getY());
-		} else {
-			game.batch.draw(pile.getPileTexture2(), pile.getX(), pile.getY());
-		}
+		
 
 		for (int i = 0; i < enemies.size(); i++) {
 			if (enemies.get(i) instanceof StealingEnemy) {
@@ -608,6 +651,7 @@ public class Updater implements Screen {
 			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(),
 					proj.get(i).getHeight());
 		}
+
 		if (!powerups.isEmpty()) {
 			for (int i = 0; i < powerups.size(); i++) {
 
@@ -617,10 +661,7 @@ public class Updater implements Screen {
 					game.batch.draw(powerup.getGraphic(), powerup.getX(), powerup.getY(), 16f, 16f);
 
 				} else {
-					ParticleEffect effect = powerups.get(i).getSpawnEffect();
-					effect.reset();
-					effect.start();
-					effects.add(effect);
+
 					powerups.remove(i);
 				}
 
@@ -632,11 +673,11 @@ public class Updater implements Screen {
 			System.out.println("Powerup List not empty: " + effects.size());
 			for (int i = 0; i < effects.size(); i++) {
 
-				ParticleEffect tmp = effects.get(i);
-				System.out.println("Effect Fetched is COMPLETE:" + tmp.isComplete());
-				if (!tmp.isComplete()) {
-					tmp.update(statetime);
-					tmp.draw(game.batch);
+				
+				System.out.println("Effect Fetched is COMPLETE:" + effects.get(i).isComplete());
+				if (!effects.get(i).isComplete()) {
+					effects.get(i).update(statetime);
+					effects.get(i).draw(game.batch);
 				} else {
 
 					effects.remove(i);
@@ -646,59 +687,86 @@ public class Updater implements Screen {
 		}
 
 		// Wait 10 sec between waves.
-		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10000 && enemies.isEmpty()) {
+		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10000 && enemies.isEmpty() && mapObjects.isEmpty()) {
 
 			spawnEnemies();
 		}
-		
+
 		game.batch.end();
-		
-		//Get points for alive time
-		if(TimeUtils.timeSinceMillis(timeScore) > 1000) { 
+
+		// Get points for alive time
+		if (TimeUtils.timeSinceMillis(timeScore) > 1000) {
 			game.getLoader().setScore(game.getLoader().getScore() + 20);
 			scores.setText("Score: " + game.getLoader().getScore());
 			timeScore = TimeUtils.millis();
 		}
-		
+
 		stage.act(statetime);
 		stage.draw();
 		// shape renderer for debugging
-/*
-		r.setProjectionMatrix(camera.combined);
-		r.begin(ShapeType.Line);
-		r.setColor(Color.GREEN);
-		Vector3 vector = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-		Vector3 reaCoordn = camera.unproject(vector);
-		r.line(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, reaCoordn.x, reaCoordn.y);
-
-		for (int i = 0; i < proj.size(); i++) {
-			r.setColor(Color.RED);
-			r.line(proj.get(i).getTargetX(), proj.get(i).getTargetY(), proj.get(i).getX(), proj.get(i).getY());
-			r.setColor(Color.BLUE);
-			r.line(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, proj.get(i).getX(),
-					proj.get(i).getY());
-		}
-
-		r.end();
-*/
+		/*
+		 * r.setProjectionMatrix(camera.combined); r.begin(ShapeType.Line);
+		 * r.setColor(Color.GREEN); Vector3 vector = new
+		 * Vector3(Gdx.input.getX(), Gdx.input.getY(), 0); Vector3 reaCoordn =
+		 * camera.unproject(vector); r.line(player.getX() + player.getWidth() /
+		 * 2, player.getY() + player.getHeight() / 2, reaCoordn.x, reaCoordn.y);
+		 * 
+		 * for (int i = 0; i < proj.size(); i++) { r.setColor(Color.RED);
+		 * r.line(proj.get(i).getTargetX(), proj.get(i).getTargetY(),
+		 * proj.get(i).getX(), proj.get(i).getY()); r.setColor(Color.BLUE);
+		 * r.line(player.getX() + player.getWidth() / 2, player.getY() +
+		 * player.getHeight() / 2, proj.get(i).getX(), proj.get(i).getY()); }
+		 * 
+		 * r.end();
+		 */
 	}
 
 	public Powerup spawnPowerUp(GameWorld world, Core game) {
 		System.out.println("Spawning powerup");
-		Powerup powerup = new Powerup(16, 16, MathUtils.random(world.getMinimumX(), world.getmaximumX()),
-				MathUtils.random(world.getMinimumY(), world.getMaximumY()), 0f, 0f, game);
+		float x = MathUtils.random(world.getMinimumX(), world.getmaximumX());
+		float y = MathUtils.random(world.getMinimumY(), world.getMaximumY());
+		for (int i = 0; i < borders.size; i++) {
+			if (borders.get(i).getRectangle().contains(x, y)) {
+				boolean overlaps = true;
+				while (overlaps) {
+					if (borders.get(i).getRectangle().contains(x, y)) {
+						x++;
+						y++;
+					} else {
+						overlaps = false;
+					}
+				}
+
+			}
+		}
+		for (int i = 0; i < spawnPoints.size; i++) {
+			if (spawnPoints.get(i).getRectangle().contains(x, y)) {
+				boolean overlaps = true;
+				while (overlaps) {
+					if (spawnPoints.get(i).getRectangle().contains(x, y)) {
+						x++;
+						y--;
+					} else {
+						overlaps = false;
+					}
+				}
+			}
+		}
+		Powerup powerup = new Powerup(16, 16, x, y, 0f, 0f, game);
 
 		powerup.setTypeAndGraphic(game);
 		powerup.setTimeAlive(TimeUtils.millis());
-		effects.add(powerup.getSpawnEffect());
+		ParticleEffect effect = powerup.getSpawnEffect();
+		effect.start();
+		effects.add(effect);
 		return powerup;
 
 	}
 
 	public void dispose() {
-//		game.batch.dispose();
+		// game.batch.dispose();
 		stage.dispose();
-//		mapRender.dispose();
+		// mapRender.dispose();
 
 	}
 
@@ -731,20 +799,5 @@ public class Updater implements Screen {
 		// TODO Auto-generated method stub
 
 	}
-	
-	public void resolveOverlaps(SpriteCommons common1, SpriteCommons common2){
-		
-		
-		
-		
-		
-		
-	}
-	
-	
-	
-	
-	
-	
-	
+
 }

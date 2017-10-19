@@ -35,7 +35,8 @@ public class ResourceManager {
 		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarbarreldummy.png", Texture.class);
 		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tripleshotdummy.png", Texture.class);
 		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarstain.png",Texture.class);
-		
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/SHIELD.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/ScreenClear.png",Texture.class);
 		
 		
 		//manager.load("", Music.class);
