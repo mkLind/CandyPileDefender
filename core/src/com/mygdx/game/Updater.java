@@ -448,14 +448,14 @@ public class Updater implements Screen {
 				float bulletVel = 20f;
 
 				// Straight shot
-				float velX = (float) (reaCoords.x - (player.getX() + (player.getWidth()))) / bulletVel;
-				float velY = (float) (reaCoords.y - (player.getY() + (player.getHeight()))) / bulletVel;
+				float velX = (float) (reaCoords.x - (player.getX() + (player.getWidth())/2)) / bulletVel;
+				float velY = (float) (reaCoords.y - (player.getY() + (player.getHeight()/2))) / bulletVel;
 
-				float velXR = (float) (reaCoords.x - (player.getX() + (player.getWidth() / 2))) / bulletVel;
-				float velYR = (float) (reaCoords.y  - (player.getY() + (player.getHeight() / 2))) / bulletVel;
+				float velXR = (float) (Projectile.getSideShots(player, reaCoords)[1].x - (player.getX() + (player.getWidth()/2 ))) / bulletVel;
+				float velYR = (float) (Projectile.getSideShots(player, reaCoords)[1].y   - (player.getY() + (player.getHeight()/2 ))) / bulletVel;
 
-				float velXL = (float) (reaCoords.x - (player.getX())) / bulletVel;
-				float velYL = (float) (reaCoords.y  - (player.getY() )) / bulletVel;
+				float velXL = (float) (Projectile.getSideShots(player, reaCoords)[0].x  - (player.getX() + (player.getWidth()/2))) / bulletVel;
+				float velYL = (float) (Projectile.getSideShots(player, reaCoords)[0].y   - (player.getY() + (player.getHeight()/2) )) / bulletVel;
 
 				Projectile p = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
 						player.getY() + player.getHeight() / 2, velX, velY,
