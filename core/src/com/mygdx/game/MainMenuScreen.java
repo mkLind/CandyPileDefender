@@ -42,41 +42,33 @@ public class MainMenuScreen implements Screen {
             }
         });
         stage.addActor(playButton);
-//        game.getLoader().setScore(3);
+//        game.getLoader().setScore(30);
 //        game.getLoader().setHighScore(3);
+    	label1 = new Label("Highscore: " + game.getLoader().getHighScore(), mySkin);
+    	label1.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight() - Gdx.graphics.getWidth() /10);
+        label1.setAlignment(Align.topRight);
+        label1.setWidth(Gdx.graphics.getWidth()/4);
+        stage.addActor(label1);
+        
+        label2 = new Label("Your score: " + game.getLoader().getScore(), mySkin);
+    	label2.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight() - Gdx.graphics.getWidth()/8);
+        label2.setAlignment(Align.topRight);
+        label2.setWidth(Gdx.graphics.getWidth()/4);
+        stage.addActor(label2);
+        
         if(game.getLoader().getScore() == 0) {
-        	label1 = new Label("Highscore: " + game.getLoader().getHighScore(), mySkin);
-        	label1.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight() - Gdx.graphics.getWidth() /10);
-            label1.setAlignment(Align.topRight);
-            label1.setWidth(Gdx.graphics.getWidth()/4);
-            stage.addActor(label1);
+        	label1.setText("Highscore: " + game.getLoader().getHighScore());
             
-            label2 = new Label("Your score: " + game.getLoader().getScore(), mySkin);
-        	label2.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight() - Gdx.graphics.getWidth()/8);
-            label2.setAlignment(Align.topRight);
-            label2.setWidth(Gdx.graphics.getWidth()/4);
-            stage.addActor(label2);
+            label2.setText("Your score: " + game.getLoader().getScore());
         }
         if(game.getLoader().getScore() != 0) {
 	    	if(game.getLoader().getScore() > game.getLoader().getHighScore()) {
 	    		game.getLoader().setHighScore(game.getLoader().getScore());
-	    		label1 = new Label("New highscore!: " + game.getLoader().getScore(), mySkin);
-	        	label1.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight() - Gdx.graphics.getWidth() /10);
-	            label1.setAlignment(Align.topRight);
-	            label1.setWidth(Gdx.graphics.getWidth()/4);
-	            stage.addActor(label1);
+	    		label1.setText("New highscore!: " + game.getLoader().getScore());
+	    		label2.setText("");
 	    	}else {
-	    		label1 = new Label("Highscore: " + game.getLoader().getHighScore(), mySkin);
-	        	label1.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight() - Gdx.graphics.getWidth() /10);
-	            label1.setAlignment(Align.topRight);
-	            label1.setWidth(Gdx.graphics.getWidth()/4);
-	            stage.addActor(label1);
-	            
-	            label2 = new Label("Your score: " + game.getLoader().getScore(), mySkin);
-	        	label2.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight() - Gdx.graphics.getWidth()/8);
-	            label2.setAlignment(Align.topRight);
-	            label2.setWidth(Gdx.graphics.getWidth()/4);
-	            stage.addActor(label2);
+	    		label1.setText("Highscore: " + game.getLoader().getHighScore());
+	            label2.setText("Your score: " + game.getLoader().getScore());
 	    	}
         }
 	}
