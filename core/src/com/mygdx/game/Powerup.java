@@ -21,7 +21,7 @@ public class Powerup extends SpriteCommons {
 		this.game = game;
 		spawnEffect = new ParticleEffect();
 		
-		spawnEffect.load(Gdx.files.internal("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/PowerupSpawn"), Gdx.files.internal("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/"));
+		spawnEffect.load(Gdx.files.internal("C:/CandyPile/CandyPileDefender/core/assets/PowerupSpawn"), Gdx.files.internal("C:/CandyPile/CandyPileDefender/core/assets/"));
 		spawnEffect.getEmitters().first().setPosition(super.getX(), super.getY());
 		spawnEffect.scaleEffect(20f);
 		spawnEffect.start();
@@ -49,23 +49,23 @@ public class Powerup extends SpriteCommons {
 		this.type = POWERUPTYPE.values()[MathUtils.random(0, POWERUPTYPE.values().length-1)];
 		//this.type = POWERUPTYPE.CLEARSCREEN;
 		if(type == POWERUPTYPE.CLEARSCREEN){
-			 graphic = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/screencleardummy.png",Texture.class);
+			 graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/screencleardummy.png",Texture.class);
 			 effectTime = (long) 1000;
 		}
 		if(type == POWERUPTYPE.HASTE){
-			graphic = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/fastwalkdummy.png",Texture.class);
+			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/fastwalkdummy.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.RAPIDFIRE){
-			graphic = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/rapidfiredummy.png",Texture.class);
+			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/rapidfiredummy.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.SLOWDOWN){
-			graphic = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarbarreldummy.png",Texture.class);
+			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/tarbarreldummy.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.TRIPLESHOT){
-			graphic = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tripleshotdummy.png",Texture.class);
+			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/tripleshotdummy.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.SHIELD){
-			graphic = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/shielddummy.png", Texture.class);
+			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/shielddummy.png", Texture.class);
 		}
 		
 		

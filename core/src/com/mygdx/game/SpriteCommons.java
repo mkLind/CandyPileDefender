@@ -15,8 +15,11 @@ private int height;
 private int HP;
 private Rectangle hitbox;
 
+// inactivity timer after attacking etc.
+private int timeoutTimer;
+
 public SpriteCommons(int width, int height, float x, float y,float xVel, float yVel, int HP){
-	this.x  = x;
+	this.x = x;
 	this.y = y;
 	this.width  = width;
 	this.height = height;
@@ -24,9 +27,10 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	this.yVel = yVel;
 	this.HP = HP;
 	hitbox = new Rectangle(x, y, width, height);
+	timeoutTimer = 0;
 }
 public SpriteCommons(int width, int height, float x, float y,float xVel, float yVel){
-	this.x  = x;
+	this.x = x;
 	this.y = y;
 	this.width  = width;
 	this.height = height;
@@ -106,6 +110,13 @@ public int getHP() {
 
 public void setHP(int HP) {
     this.HP = HP;
+}
+
+public int getTimeoutTimer() {
+	return timeoutTimer;
+}
+public void setTimeoutTimer(int timeoutTimer) {
+	this.timeoutTimer = timeoutTimer;
 }
 
 }
