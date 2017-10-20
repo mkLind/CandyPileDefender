@@ -448,7 +448,9 @@ public class Updater implements Screen {
 			}
 			
 			// one hitbox update should be enough (maybe)
-			enemies.get(i).updateHitbox();
+			if(enemies != null) {
+				enemies.get(i).updateHitbox();
+			}
 			
 		}
 
