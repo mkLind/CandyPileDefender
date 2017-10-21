@@ -448,16 +448,16 @@ public class Updater implements Screen {
 			}
 			
 			// one hitbox update should be enough (maybe)
+
 			if(!enemies.isEmpty()){
 			if(enemies.size()==1){	
 			enemies.get(0).updateHitbox();
 			}else{
 				enemies.get(i).updateHitbox();	
 			}
-			
 			}
-			
 		}
+
 
 		//PLAYER INPUT STUFF
 		statetime += delta;
@@ -514,13 +514,13 @@ public class Updater implements Screen {
 		}
 		// Remove tar pools when set time has passed
 		if (!mapObjects.isEmpty()) {
-			for (int i = 0; i < mapObjects.size(); i++) {
+			for (int i= 0; i < mapObjects.size(); i++) {
 				if (TimeUtils.timeSinceMillis(mapObjects.get(i).getSpawnTime()) > mapObjects.get(i).getTimeAlive()) {
 					mapObjects.remove(i);
 				}
 			}
 		}
-		
+			
 		// POWER-UP STUFF
 		for (int i = 0; i < powerups.size(); i++) {
 			if (Intersector.overlaps(powerups.get(i).getHitbox(), player.getHitbox())) {
@@ -865,6 +865,7 @@ public class Updater implements Screen {
 
 		stage.act(statetime);
 		stage.draw();
+			
 		// shape renderer for debugging
 		/*
 		 * r.setProjectionMatrix(camera.combined); r.begin(ShapeType.Line);
