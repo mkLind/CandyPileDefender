@@ -38,6 +38,11 @@ public class ResourceManager {
 		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/SHIELD.png",Texture.class);
 		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/ScreenClear.png",Texture.class);
 		
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Carrot.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Tomato.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Broccoli.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/EggPlant.png",Texture.class);
+		
 		
 		//manager.load("", Music.class);
 	}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -450,8 +451,8 @@ public class Updater implements Screen {
 			// one hitbox update should be enough (maybe)
 
 			if(!enemies.isEmpty()){
-			if(enemies.size()==1){	
-			enemies.get(0).updateHitbox();
+			if(enemies.size()== i ){	
+			enemies.get(enemies.size()-1).updateHitbox();
 			}else{
 				enemies.get(i).updateHitbox();	
 			}
@@ -611,13 +612,57 @@ public class Updater implements Screen {
 				float velY = (float)(bulletVel / hypot*(reaCoords.y - player.getMiddleY()));
 				
 				
-				Projectile p = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
-						player.getY() + player.getHeight() / 2, velX, velY,
-						game.getLoader().getManager().get("Pointer.png", Texture.class));
-				p.setTargetX(reaCoords.x);
-				p.setTargetY(reaCoords.y);
-				p.setCurrentTime(TimeUtils.millis());
-				proj.add(p);
+				
+				int tmp = 0;
+				tmp  = MathUtils.random(0, 3);
+				
+				if(tmp == 0){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Carrot.png", Texture.class));
+					p.setTargetX(reaCoords.x);
+					p.setTargetY(reaCoords.y);
+					p.setCurrentTime(TimeUtils.millis());
+					proj.add(p);
+				} 
+				if(tmp == 1){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Tomato.png", Texture.class));
+					p.setTargetX(reaCoords.x);
+					p.setTargetY(reaCoords.y);
+					p.setCurrentTime(TimeUtils.millis());
+					proj.add(p);
+				}
+				if(tmp == 2){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Broccoli.png", Texture.class));
+					p.setTargetX(reaCoords.x);
+					p.setTargetY(reaCoords.y);
+					p.setCurrentTime(TimeUtils.millis());
+					proj.add(p);
+				}
+				if(tmp == 3){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/EggPlant.png", Texture.class));
+					p.setTargetX(reaCoords.x);
+					p.setTargetY(reaCoords.y);
+					p.setCurrentTime(TimeUtils.millis());
+					proj.add(p);
+				}
+				
+			
+				
+				
+				
+				
+				
 				// triple shot
 			} else {
 				// Convert the cursor coordinates into game world coordinates.
@@ -643,25 +688,97 @@ public class Updater implements Screen {
 				float velXL = (float) (bulletVel/hypot*(reaCoords.x - (Projectile.getSideShots(player, reaCoords)[0].x)));
 				float velYL = (float) (bulletVel/hypot*(reaCoords.y - (Projectile.getSideShots(player, reaCoords)[0].y)));
 
-				Projectile p = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
-						player.getY() + player.getHeight() / 2, velX, velY,
-						game.getLoader().getManager().get("Pointer.png", Texture.class));
-
-				Projectile l = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
-						player.getY() + player.getHeight() / 2, velXR, velYR,
-						game.getLoader().getManager().get("Pointer.png", Texture.class));
-
-				Projectile r = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
-						player.getY() + player.getHeight() / 2, velXL, velYL,
-						game.getLoader().getManager().get("Pointer.png", Texture.class));
-
-				l.setCurrentTime(TimeUtils.millis());
-				p.setCurrentTime(TimeUtils.millis());
-				r.setCurrentTime(TimeUtils.millis());
+				// Randomly select the ammo for triple shot
+				int tmp = 0;
+				tmp  = MathUtils.random(0, 3);
 				
-				proj.add(p);
-				proj.add(l);
-				proj.add(r);
+				if(tmp == 0){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/EggPlant.png", Texture.class));
+
+					Projectile l = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXR, velYR,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/EggPlant.png", Texture.class));
+
+					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXL, velYL,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/EggPlant.png", Texture.class));
+
+					l.setCurrentTime(TimeUtils.millis());
+					p.setCurrentTime(TimeUtils.millis());
+					r.setCurrentTime(TimeUtils.millis());
+					
+					proj.add(p);
+					proj.add(l);
+					proj.add(r);
+				} 
+				if(tmp == 1){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Carrot.png", Texture.class));
+
+					Projectile l = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXR, velYR,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Carrot.png", Texture.class));
+
+					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXL, velYL,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Carrot.png", Texture.class));
+
+					l.setCurrentTime(TimeUtils.millis());
+					p.setCurrentTime(TimeUtils.millis());
+					r.setCurrentTime(TimeUtils.millis());
+					
+					proj.add(p);
+					proj.add(l);
+					proj.add(r);
+				}
+				if(tmp == 2){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Tomato.png", Texture.class));
+
+					Projectile l = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXR, velYR,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Tomato.png", Texture.class));
+
+					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXL, velYL,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Tomato.png", Texture.class));
+
+					l.setCurrentTime(TimeUtils.millis());
+					p.setCurrentTime(TimeUtils.millis());
+					r.setCurrentTime(TimeUtils.millis());
+					
+					proj.add(p);
+					proj.add(l);
+					proj.add(r);
+				}
+				if(tmp == 3){
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Broccoli.png", Texture.class));
+
+					Projectile l = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXR, velYR,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Broccoli.png", Texture.class));
+
+					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXL, velYL,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Broccoli.png", Texture.class));
+
+					l.setCurrentTime(TimeUtils.millis());
+					p.setCurrentTime(TimeUtils.millis());
+					r.setCurrentTime(TimeUtils.millis());
+					
+					proj.add(p);
+					proj.add(l);
+					proj.add(r);
+				}
 
 			}
 
