@@ -596,10 +596,21 @@ public class Updater implements Screen {
 				// Needs to be refined
 				Vector3 v = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 				Vector3 reaCoords = camera.unproject(v);
-				float bulletVel = 20f;
+				float bulletVel = 5f;
+				double hypot = Math.hypot((reaCoords.x - player.getMiddleX()), (reaCoords.y - player.getMiddleY()));
+				
+				
+				
+				/* original attempt
 				float velX = (float) (reaCoords.x - (player.getX() + (player.getWidth() / 2))) / bulletVel;
 				float velY = (float) (reaCoords.y - (player.getY() + (player.getHeight() / 2))) / bulletVel;
-
+*/
+				
+				
+				float velX = (float)(bulletVel / hypot*(reaCoords.x - player.getMiddleX()));
+				float velY = (float)(bulletVel / hypot*(reaCoords.y - player.getMiddleY()));
+				
+				
 				Projectile p = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
 						player.getY() + player.getHeight() / 2, velX, velY,
 						game.getLoader().getManager().get("Pointer.png", Texture.class));
@@ -616,16 +627,21 @@ public class Updater implements Screen {
 				Vector3 reaCoords = camera.unproject(v);
 
 				float bulletVel = 20f;
-
+				double hypot = Math.hypot((reaCoords.x - player.getMiddleX()), (reaCoords.y - player.getMiddleY()));
 				// Straight shot
+				/* original attempt
 				float velX = (float) (reaCoords.x - (player.getX() + (player.getWidth()) / 2)) / bulletVel;
 				float velY = (float) (reaCoords.y - (player.getY() + (player.getHeight() / 2))) / bulletVel;
+				*/
 
-				float velXR = (float) (reaCoords.x - (Projectile.getSideShots(player, reaCoords)[1].x)) / bulletVel;
-				float velYR = (float) (reaCoords.y - (Projectile.getSideShots(player, reaCoords)[1].y)) / bulletVel;
+				float velX = (float)(bulletVel / hypot*(reaCoords.x - player.getMiddleX()));
+				float velY = (float)(bulletVel / hypot*(reaCoords.y - player.getMiddleY()));
 
-				float velXL = (float) (reaCoords.x - (Projectile.getSideShots(player, reaCoords)[0].x)) / bulletVel;
-				float velYL = (float) (reaCoords.y - (Projectile.getSideShots(player, reaCoords)[0].y)) / bulletVel;
+				float velXR = (float) (bulletVel/hypot*(reaCoords.x - (Projectile.getSideShots(player, reaCoords)[1].x))) ;
+				float velYR = (float) (bulletVel/hypot*(reaCoords.y - (Projectile.getSideShots(player, reaCoords)[1].y))) ;
+
+				float velXL = (float) (bulletVel/hypot*(reaCoords.x - (Projectile.getSideShots(player, reaCoords)[0].x)));
+				float velYL = (float) (bulletVel/hypot*(reaCoords.y - (Projectile.getSideShots(player, reaCoords)[0].y)));
 
 				Projectile p = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
 						player.getY() + player.getHeight() / 2, velX, velY,
@@ -811,7 +827,7 @@ public class Updater implements Screen {
 				Powerup powerup = powerups.get(i);
 
 				if (TimeUtils.timeSinceMillis(powerup.getTimeAlive()) < 9000) {
-					game.batch.draw(powerup.getGraphic(), powerup.getX(), powerup.getY(), 16f, 16f);
+					game.batch.draw(powerup.getGraphic(), powerup.getX(), powerup.getY(), powerup.getWidth(), powerup.getHeight());
 
 				} else {
 
