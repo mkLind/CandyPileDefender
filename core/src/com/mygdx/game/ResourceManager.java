@@ -28,15 +28,15 @@ public class ResourceManager {
 		manager.load("stealTest.png", Texture.class);
 		manager.load("pileTest.png", Texture.class);
 		manager.load("pileTest2.png", Texture.class);
-		manager.load("C:/CandyPile/CandyPileDefender/core/assets/fastwalkdummy.png", Texture.class);
-		manager.load("C:/CandyPile/CandyPileDefender/core/assets/rapidfiredummy.png", Texture.class);
-		manager.load("C:/CandyPile/CandyPileDefender/core/assets/screencleardummy.png", Texture.class);
-		manager.load("C:/CandyPile/CandyPileDefender/core/assets/shielddummy.png", Texture.class);
-		manager.load("C:/CandyPile/CandyPileDefender/core/assets/tarbarreldummy.png", Texture.class);
-		manager.load("C:/CandyPile/CandyPileDefender/core/assets/tripleshotdummy.png", Texture.class);
-		manager.load("C:/CandyPile/CandyPileDefender/core/assets/tarstain.png",Texture.class);
-		manager.load("C:/CandyPile/CandyPileDefender/core/assets/SHIELD.png",Texture.class);
-		manager.load("C:/CandyPile/CandyPileDefender/core/assets/ScreenClear.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/WalkingSpeedUp.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/FireRateUp.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Explosion.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/ShieldCrate.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Tar.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Times3.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarstain.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/SHIELD.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/ScreenClear.png",Texture.class);
 		
 		
 		//manager.load("", Music.class);
