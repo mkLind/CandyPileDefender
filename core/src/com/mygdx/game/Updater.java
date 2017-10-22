@@ -153,7 +153,7 @@ public class Updater implements Screen {
 
 		// For score points
 		timeScore = TimeUtils.millis();
-		mySkin = new Skin(Gdx.files.internal("C:/CandyPile/CandyPileDefender/core/assets/skin/uiskin.json"));
+		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 		scores = new Label("Score: " + game.getLoader().getScore(), mySkin);
 		scores.setPosition(Gdx.graphics.getWidth() / 1.37f, Gdx.graphics.getHeight() - 20);
 		scores.setAlignment(Align.topRight);
@@ -260,7 +260,7 @@ public class Updater implements Screen {
 					&& TimeUtils.timeSinceMillis(mpObjLastSet) > mpObjCooldown) {
 				MapObject obj = new MapObject(32, 32, player.getX(), player.getY(), 0, 0, 10000,
 						game.getLoader().getManager().get(
-								"C:/CandyPile/CandyPileDefender/core/assets/tarstain.png", Texture.class),
+								"tarstain.png", Texture.class),
 						OBJECTTYPE.HAZARD);
 				obj.setSpawnTime(TimeUtils.millis());
 				mapObjects.add(obj);
@@ -430,7 +430,7 @@ public class Updater implements Screen {
 								
 					}
 
-					//enemies.get(i).updateHitbox();
+					enemies.get(i).updateHitbox();
 
 				} else {
 					
@@ -448,8 +448,9 @@ public class Updater implements Screen {
 			}
 			
 			// one hitbox update should be enough (maybe)
+			if(enemies != null) {
 			enemies.get(i).updateHitbox();
-			
+			}
 		}
 
 		//PLAYER INPUT STUFF
@@ -530,7 +531,7 @@ public class Updater implements Screen {
 					MapObject obj = new MapObject(40, 40, player.getX() - player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, 0, 0, 10000,
 							game.getLoader().getManager().get(
-									"C:/CandyPile/CandyPileDefender/core/assets/SHIELD.png", Texture.class),
+									"SHIELD.png", Texture.class),
 							OBJECTTYPE.FOLLOWER);
 					obj.setSpawnTime(TimeUtils.millis());
 					mapObjects.add(obj);
@@ -540,7 +541,7 @@ public class Updater implements Screen {
 					MapObject obj = new MapObject(32, 32, player.getX() - player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, 0, 0, 10000,
 							game.getLoader().getManager().get(
-									"C:/CandyPile/CandyPileDefender/core/assets/ScreenClear.png",
+									"ScreenClear.png",
 									Texture.class),
 							OBJECTTYPE.EXPANDER);
 					obj.setSpawnTime(TimeUtils.millis());
@@ -578,7 +579,7 @@ public class Updater implements Screen {
 
 		// This listens to mouse clicks
 		// Gdx.input.isTouched would be holding down to shoot
-		if (Gdx.input.justTouched() && TimeUtils.timeSinceMillis(player.getLastShot()) > player.getShootingCooldown()) {
+		if (Gdx.input.isTouched() && TimeUtils.timeSinceMillis(player.getLastShot()) > player.getShootingCooldown()) {
 
 			// Spawn a projectile with target coordinates and set the time it is
 			// visible
