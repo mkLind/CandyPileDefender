@@ -94,6 +94,9 @@ public class Updater implements Screen {
 	private Sound hit;
 	private Sound Explosion;
 	private Sound GameOver;
+	private Sound walk1;
+	private Sound walk2;
+	private long walkSet;
 
 	/**
 	 * Initializes the entire game
@@ -106,6 +109,7 @@ public class Updater implements Screen {
 		mpObjLastSet = 0;
 		mapObjects = new ArrayList<>();
 		statetime = 0f;
+		walkSet = TimeUtils.millis();
 		timesCalled = 0;
 		randomizer = new Random();
 		world = new GameWorld();
@@ -130,14 +134,16 @@ public class Updater implements Screen {
 
 		game.batch.setProjectionMatrix(camera.combined);
 		proj = new ArrayList<Projectile>();
-		//ambience = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Music/POL-horror-ambience-1-short.wav", Music.class);
-		//ambience.setLooping(true);
-		//ambience.play();
+		ambience = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
+		ambience.setLooping(true);
+		ambience.play();
 		
 		shot = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/shooting/NFF-gun-miss.wav",Sound.class);
 		hit = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/hit/NFF-slap-02.wav",Sound.class);
 		Explosion = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/hit/NFF-explode.wav",Sound.class);
 		GameOver = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/game_over/NFF-death-bell.wav",Sound.class);
+		walk1 = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/walking/grass1.wav",Sound.class);
+		walk2 = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/walking/gravel1.wav",Sound.class);
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
@@ -147,8 +153,8 @@ public class Updater implements Screen {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")) {
 				pile = new Pile(100, 100, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(),
-						game.getLoader().getManager().get("pileTest.png", Texture.class),
-						game.getLoader().getManager().get("pileTest2.png", Texture.class));
+						game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/pileTest.png", Texture.class),
+						game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/pileTest2.png", Texture.class));
 			}
 		}
 		for (int i = 0; i < spawnPoints.size; i++) {
@@ -220,11 +226,11 @@ public class Updater implements Screen {
 			tmp2 = MathUtils.random(0, monsterSpawns.size - 1);
 			enemies.add(new StealingEnemy(32, 32, monsterSpawns.get(tmp).getRectangle().getX(),
 					monsterSpawns.get(tmp).getRectangle().getY(), 1,
-					game.getLoader().getManager().get("stealTest.png", Texture.class)));
+					game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/stealTest.png", Texture.class)));
 
 			enemies.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
 					monsterSpawns.get(tmp2).getRectangle().getY(), 2,
-					game.getLoader().getManager().get("chaserTest.png", Texture.class)));
+					game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/chaserTest.png", Texture.class)));
 
 			timeSinceWave = TimeUtils.millis();
 		}
@@ -243,6 +249,19 @@ public class Updater implements Screen {
 
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		// walking sounds
+		
+		if(TimeUtils.timeSinceMillis(walkSet)>500 && player.getxVel()>0 && player.getyVel()>0){
+			int random = MathUtils.random(0, 1);
+			if(random == 0){
+				walk1.play(1);
+			}else{
+				walk2.play(1);
+			}
+			walkSet = TimeUtils.millis();
+		}
+		
 		
 		// Move the player
 		// moves hitbox first to check if collision
@@ -385,6 +404,7 @@ public class Updater implements Screen {
 					if (player.getHP() < 1) {
 						System.out.println("Player HP now zero");
 						GameOver.play();
+						ambience.stop();
 						game.setScreen(new LoadingScreen(game));
 						this.dispose();
 					}

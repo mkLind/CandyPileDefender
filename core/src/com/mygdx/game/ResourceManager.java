@@ -24,12 +24,12 @@ public class ResourceManager {
 		prefs.putInteger("score", 0);
 		prefs.flush();
 
-		manager.load("BatMonster.png", Texture.class);
-		manager.load("Pointer.png", Texture.class);
-		manager.load("chaserTest.png", Texture.class);
-		manager.load("stealTest.png", Texture.class);
-		manager.load("pileTest.png", Texture.class);
-		manager.load("pileTest2.png", Texture.class);
+		
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Pointer.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/chaserTest.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/stealTest.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/pileTest.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/pileTest2.png", Texture.class);
 		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/WalkingSpeedUp.png", Texture.class);
 		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/FireRateUp.png", Texture.class);
 		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Explosion.png", Texture.class);
@@ -47,8 +47,8 @@ public class ResourceManager {
 		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/EggPlant.png",Texture.class);
 		// Music and sounds
 		
-		//manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Music/POL-horror-ambience-1-short.wav", Music.class);
-	//	manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Music/POL-horror-ambience-2-short.wav", Music.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
 		
 		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/game_over/NFF-death-bell.wav", Sound.class);
 		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/game_over/NFF-zomboid.wav", Sound.class);
