@@ -9,6 +9,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
@@ -87,6 +89,11 @@ public class Updater implements Screen {
 	private Pixmap pixmap;
 	private ProgressBar healthBar;
 	private TextureRegionDrawable drawable;
+	private Music ambience;
+	private Sound shot;
+	private Sound hit;
+	private Sound Explosion;
+	private Sound GameOver;
 
 	/**
 	 * Initializes the entire game
@@ -123,11 +130,18 @@ public class Updater implements Screen {
 
 		game.batch.setProjectionMatrix(camera.combined);
 		proj = new ArrayList<Projectile>();
-
+		//ambience = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Music/POL-horror-ambience-1-short.wav", Music.class);
+		//ambience.setLooping(true);
+		//ambience.play();
+		
+		shot = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/shooting/NFF-gun-miss.wav",Sound.class);
+		hit = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/hit/NFF-slap-02.wav",Sound.class);
+		Explosion = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/hit/NFF-explode.wav",Sound.class);
+		GameOver = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/game_over/NFF-death-bell.wav",Sound.class);
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
-				player = new Player(32, 32, spawnPoints.get(i).getRectangle().getX(),
+				player = new Player(35, 40, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(), 10);
 			}
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")) {
@@ -143,7 +157,7 @@ public class Updater implements Screen {
 			}
 		}
 
-		player.setAnimations(9, 4, 0.10f, game.getLoader().getManager().get("BatMonster.png", Texture.class));
+		player.setAnimations(8, 3, 0.10f, game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/PirateTileset.png", Texture.class));
 		player.setDir(DIRECTION.DOWN);
 		camera.position.set(player.getX(), player.getY(), 0);
 		
@@ -239,12 +253,33 @@ public class Updater implements Screen {
 		for (int j = 0; j < enemies.size(); j++) {
 			
 			if (Intersector.overlaps(player.getHitbox(), enemies.get(j).getHitbox())) {
+				
 				noEnemies = false;				
 				break;
 			}
 			
 		}
-		
+		//Player Collisions with borders
+		for(int i = 0;i<borders.size;i++){
+			if(Intersector.overlaps(borders.get(i).getRectangle(), player.getHitbox())){
+				player.updateHitbox();
+				player.setxVel(0);
+				player.setyVel(0);
+			}
+		}
+		// Enemy collisions with borders
+		for(int i = 0; i<enemies.size();i++){
+			SpriteCommons e = enemies.get(i);
+			e.moveHitbox(e.getX() + e.getxVel(), e.getY() + e.getyVel());
+			for(int j = 0; j<borders.size;j++){
+				if(Intersector.overlaps(e.getHitbox(), borders.get(j).getRectangle())){
+					enemies.get(i).updateHitbox();
+					enemies.get(i).setxVel(0);
+					enemies.get(i).setyVel(0);
+				}
+			}
+			
+		}
 		if (Intersector.overlaps(player.getHitbox(), pile.getHitbox()) || noEnemies == false) {
 
 			// pulls the hitbox back
@@ -349,7 +384,7 @@ public class Updater implements Screen {
 					
 					if (player.getHP() < 1) {
 						System.out.println("Player HP now zero");
-	
+						GameOver.play();
 						game.setScreen(new LoadingScreen(game));
 						this.dispose();
 					}
@@ -553,6 +588,7 @@ public class Updater implements Screen {
 							OBJECTTYPE.EXPANDER);
 					obj.setSpawnTime(TimeUtils.millis());
 					mapObjects.add(obj);
+					Explosion.play();
 					enemies.clear();
 				}
 				if (player.getPowerupType() == POWERUPTYPE.RAPIDFIRE) {
@@ -587,7 +623,8 @@ public class Updater implements Screen {
 		// This listens to mouse clicks
 		// Gdx.input.isTouched would be holding down to shoot
 		if (Gdx.input.isTouched() && TimeUtils.timeSinceMillis(player.getLastShot()) > player.getShootingCooldown()) {
-
+			player.setAttacking(true);
+			
 			// Spawn a projectile with target coordinates and set the time it is
 			// visible
 
@@ -615,7 +652,7 @@ public class Updater implements Screen {
 				
 				int tmp = 0;
 				tmp  = MathUtils.random(0, 3);
-				
+				shot.play();
 				if(tmp == 0){
 					
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
@@ -671,7 +708,7 @@ public class Updater implements Screen {
 
 				Vector3 reaCoords = camera.unproject(v);
 
-				float bulletVel = 20f;
+				float bulletVel = 5f;
 				double hypot = Math.hypot((reaCoords.x - player.getMiddleX()), (reaCoords.y - player.getMiddleY()));
 				// Straight shot
 				/* original attempt
@@ -779,10 +816,16 @@ public class Updater implements Screen {
 					proj.add(l);
 					proj.add(r);
 				}
+				shot.play();
 
 			}
 
 			player.setLastShot(TimeUtils.millis());
+		}else{
+			// FUrther work required
+			if(player.hasAnimationFinished(statetime)){
+				player.setAttacking(false);
+			}
 		}
 		// Powerup spawns here
 
@@ -815,6 +858,7 @@ public class Updater implements Screen {
 
 				if (Intersector.overlaps(proj.get(j).getHitbox(), enemies.get(i).getHitbox())
 						&& TimeUtils.timeSinceMillis(proj.get(j).getCurrentTime()) < 4000) {
+					hit.play();
 					enemies.get(i).setHP(enemies.get(i).getHP() - 1);
 					proj.remove(j);
 					if (enemies.get(i).getHP() <= 0 && enemies.size() > 0) {
@@ -930,9 +974,13 @@ public class Updater implements Screen {
 			}
 
 		}
+		if(player.isAttacking()){
+			game.batch.draw(player.getCurrentAttackFrame(statetime), player.getX(), player.getY(), player.getWidth(),
+					player.getHeight());
+		}else{
 		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(),
 				player.getHeight());
-
+		}
 		for (int i = 0; i < proj.size(); i++) {
 			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(),
 					proj.get(i).getHeight());

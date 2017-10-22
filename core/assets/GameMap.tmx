@@ -18,13 +18,13 @@
    eJztzrENwCAUxNDLAiT7DwjMEFHADm4+kp/k3j3JKNo8/alrxT/CP8Y/xj/GP8Y/xj/GP+aGv/Ykb9G+0wYCOknl
   </data>
  </layer>
- <objectgroup name="Borders" visible="0">
+ <objectgroup name="Borders">
   <object x="1259" y="1" width="22" height="633"/>
   <object x="-1" y="0" width="1264" height="21"/>
   <object x="1" y="0" width="21" height="642"/>
   <object x="1" y="608" width="1268" height="23"/>
  </objectgroup>
- <objectgroup name="Coordinates" visible="0">
+ <objectgroup name="Coordinates">
   <properties>
    <property name="Spawnpoint" value="CandyPile"/>
   </properties>
