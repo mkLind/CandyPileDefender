@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -19,20 +20,26 @@ public class MainMenuScreen implements Screen {
 	private Stage stage;
 	private Label label1;
 	private Label label2;
+	private Music ambience;
 	
 	public MainMenuScreen(final Core game) {
 		this.game = game;
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
-		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
+		mySkin = new Skin(Gdx.files.internal("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/skin/uiskin.json"));
+
 		playButton = new TextButton("Play", mySkin);
 		playButton.setWidth(Gdx.graphics.getWidth()/3);
         playButton.setPosition(Gdx.graphics.getWidth()/3 - playButton.getWidth()/2,Gdx.graphics.getHeight()/2 - playButton.getHeight()/3);
-        
+        ambience = game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
+        ambience.setLooping(true);
+        ambience.play();
         playButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
             	dispose();
+            	ambience.stop();
         		game.getLoader().setScore(0);
                 game.setScreen(new Updater(game));
             }

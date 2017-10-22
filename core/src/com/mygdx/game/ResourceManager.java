@@ -3,6 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 //import com.badlogic.gdx.audio.Sound;
 //import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,24 +24,47 @@ public class ResourceManager {
 		prefs.putInteger("score", 0);
 		prefs.flush();
 
-		manager.load("BatMonster.png", Texture.class);
-		manager.load("Pointer.png", Texture.class);
-		manager.load("chaserTest.png", Texture.class);
-		manager.load("stealTest.png", Texture.class);
-		manager.load("pileTest.png", Texture.class);
-		manager.load("pileTest2.png", Texture.class);
-		manager.load("fastwalkdummy.png", Texture.class);
-		manager.load("rapidfiredummy.png", Texture.class);
-		manager.load("screencleardummy.png", Texture.class);
-		manager.load("shielddummy.png", Texture.class);
-		manager.load("tarbarreldummy.png", Texture.class);
-		manager.load("tripleshotdummy.png", Texture.class);
-		manager.load("tarstain.png",Texture.class);
-		manager.load("SHIELD.png",Texture.class);
-		manager.load("ScreenClear.png",Texture.class);
 		
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Pointer.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/chaserTest.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/stealTest.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/pileTest.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/pileTest2.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/WalkingSpeedUp.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/FireRateUp.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Explosion.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/ShieldCrate.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Tar.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Times3.png", Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/tarstain.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/SHIELD.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/ScreenClear.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/PirateTileset.png",Texture.class);
+		// Ammunition
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Carrot.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Tomato.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Broccoli.png",Texture.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/EggPlant.png",Texture.class);
+		// Music and sounds
 		
-		//manager.load("", Music.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
+		
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/game_over/NFF-death-bell.wav", Sound.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/game_over/NFF-zomboid.wav", Sound.class);
+		
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/hit/NFF-dusty-hit.wav", Sound.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/hit/NFF-explode.wav", Sound.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/hit/NFF-kid-hurt.wav", Sound.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/hit/NFF-slap-02.wav", Sound.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/hit/NFF-springy-hit.wav", Sound.class);
+		
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/shooting/NFF-gun-miss.wav",Sound.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/shooting/NFF-toy-gun.wav", Sound.class);
+		
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/walking/grass1.wav", Sound.class);
+		manager.load("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/Sounds/walking/gravel1.wav", Sound.class);
+		
 	}
 	
 	public AssetManager getManager() {
