@@ -643,8 +643,9 @@ public class Updater implements Screen {
 		// This listens to mouse clicks
 		// Gdx.input.isTouched would be holding down to shoot
 		if (Gdx.input.isTouched() && TimeUtils.timeSinceMillis(player.getLastShot()) > player.getShootingCooldown()) {
+		
 			player.setAttacking(true);
-			
+			player.setAttackAnimStart(TimeUtils.millis());
 			// Spawn a projectile with target coordinates and set the time it is
 			// visible
 
@@ -841,12 +842,14 @@ public class Updater implements Screen {
 			}
 
 			player.setLastShot(TimeUtils.millis());
-		}else{
-			// FUrther work required
-			if(player.hasAnimationFinished(statetime)){
-				player.setAttacking(false);
-			}
 		}
+		
+		if(TimeUtils.timeSinceMillis(player.getAttackAnimStart()) > player.AttackDuration(statetime)){
+			System.out.println("ATTACK TIME FINISHED");
+			player.setAttacking(false);
+		}
+		
+		
 		// Powerup spawns here
 
 		if (TimeUtils.timeSinceMillis(timeToNextPowerup) > 10000) {
@@ -995,8 +998,10 @@ public class Updater implements Screen {
 
 		}
 		if(player.isAttacking()){
+			System.out.println("DRAWING PLAYER ATTACK");
 			game.batch.draw(player.getCurrentAttackFrame(statetime), player.getX(), player.getY(), player.getWidth(),
 					player.getHeight());
+			System.out.println("PLAYER ATTACK FINISHED: " + player.hasAnimationFinished(statetime));
 		}else{
 		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(),
 				player.getHeight());
@@ -1021,24 +1026,9 @@ public class Updater implements Screen {
 
 			}
 		}
-		// Update particles in the list
+		
 
-		if (!effects.isEmpty()) {
-			System.out.println("Powerup List not empty: " + effects.size());
-			for (int i = 0; i < effects.size(); i++) {
-
-				
-				System.out.println("Effect Fetched is COMPLETE:" + effects.get(i).isComplete());
-				if (!effects.get(i).isComplete()) {
-					effects.get(i).update(statetime);
-					effects.get(i).draw(game.batch);
-				} else {
-
-					effects.remove(i);
-				}
-			}
-
-		}
+	
 
 		// Wait 10 sec between waves.
 		/*
@@ -1049,11 +1039,26 @@ public class Updater implements Screen {
 		*/
 		
 		// Test 1 sec
-		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10 && enemies.isEmpty() && mapObjects.isEmpty()) {
+		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10000 && enemies.isEmpty()) {
 
 			spawnEnemies();
 		}
-		
+		// Update particles in the list
+	if (!effects.isEmpty()) {
+			
+			for (int i = 0; i < effects.size(); i++) {
+
+				
+				if (!effects.get(i).isComplete()) {
+					effects.get(i).update(statetime);
+					effects.get(i).draw(game.batch);
+				} else {
+
+					effects.remove(i);
+				}
+			}
+
+		}
 
 		game.batch.end();
 
@@ -1086,7 +1091,7 @@ public class Updater implements Screen {
 	}
 
 	public Powerup spawnPowerUp(GameWorld world, Core game) {
-		System.out.println("Spawning powerup");
+		
 		float x = MathUtils.random(world.getMinimumX(), world.getmaximumX());
 		float y = MathUtils.random(world.getMinimumY(), world.getMaximumY());
 		for (int i = 0; i < borders.size; i++) {
