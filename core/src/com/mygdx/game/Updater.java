@@ -246,7 +246,7 @@ public class Updater implements Screen {
 				}
 			}
 			
-			//Check if spawn in same coordinates, if yes then timeout. Test with bigger camera
+			//Check if spawn in same coordinates, if yes then timeout
 			for (int j = 0; j < enemyAdd.size(); j++) {
 			    for (int k = j + 1; k < enemyAdd.size(); k++) {
 			    	if((enemyAdd.get(j).getX() == enemyAdd.get(k).getX()) && (enemyAdd.get(j).getY() == enemyAdd.get(k).getY())) {
