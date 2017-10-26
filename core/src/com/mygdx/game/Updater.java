@@ -256,7 +256,7 @@ public class Updater implements Screen {
 				    		while(((enemyAdd.get(j).getTimeoutTimer() - enemyAdd.get(k).getTimeoutTimer()) >= -20) 
 				    				&& ((enemyAdd.get(j).getTimeoutTimer() - enemyAdd.get(k).getTimeoutTimer()) <= 20)) {
 					    		tmp = MathUtils.random(30, 100);
-					    		enemyAdd.get(j).setTimeoutTimer(tmp);
+					    		enemyAdd.get(k).setTimeoutTimer(tmp);
 				    		}
 			    		}
 			    	}
