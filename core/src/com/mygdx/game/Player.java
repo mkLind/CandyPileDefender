@@ -40,7 +40,7 @@ public class Player extends SpriteCommons {
 		powerupSetTime = 0;
 		powerupType = null;
 		hasteVel = 0f;
-		ShootingCooldown =  500;
+		ShootingCooldown =  100;
 		isAttacking = false;
 	}
 	public enum DIRECTION{

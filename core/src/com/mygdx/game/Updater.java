@@ -61,6 +61,8 @@ public class Updater implements Screen {
 	// Teppo test
 	private Pile pile;
 	private ArrayList<SpriteCommons> enemies;
+	private ArrayList<SpriteCommons> enemyAdd;
+	private Iterator<SpriteCommons> iterator;
 	boolean pileHealth;
 	boolean noEnemies;
 
@@ -71,6 +73,7 @@ public class Updater implements Screen {
 	private long timeSinceWave;
 	private long timeToNextPowerup;
 	private long timeScore;
+	private long timeSinceSpawn;
 	private GameWorld world;
 	private Random randomizer;
 	private OrthogonalTiledMapRenderer mapRender;
@@ -97,6 +100,7 @@ public class Updater implements Screen {
 	private Sound walk1;
 	private Sound walk2;
 	private long walkSet;
+	
 
 	/**
 	 * Initializes the entire game
@@ -116,13 +120,14 @@ public class Updater implements Screen {
 		powerups = new ArrayList<>();
 		monsterSpawns = new Array<RectangleMapObject>();
 		enemies = new ArrayList<SpriteCommons>();
+		enemyAdd = new ArrayList<SpriteCommons>();
 		// When loading textures to project, the entire path to the file should
 		// be included
 		// be careful with that
 		camera = new OrthographicCamera();
 		effects = new ArrayList<>();
 		aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
-		camera.setToOrtho(false, 250f * aspectRatio, 250f);
+		camera.setToOrtho(false, 650f * aspectRatio, 650f);
 		// camera.setToOrtho(false, 700f,700f);
 
 		mapRender = world.getMapRenderer(camera);
@@ -148,7 +153,7 @@ public class Updater implements Screen {
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
 				player = new Player(35, 40, spawnPoints.get(i).getRectangle().getX(),
-						spawnPoints.get(i).getRectangle().getY(), 10);
+						spawnPoints.get(i).getRectangle().getY(), 1000);
 			}
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")) {
 				pile = new Pile(100, 100, spawnPoints.get(i).getRectangle().getX(),
@@ -168,7 +173,7 @@ public class Updater implements Screen {
 		camera.position.set(player.getX(), player.getY(), 0);
 		
 		enemies = new ArrayList<SpriteCommons>();
-		spawnEnemies();
+		//spawnEnemies();
 		camera.update();
 		timeToNextPowerup = TimeUtils.millis();
 
@@ -209,33 +214,99 @@ public class Updater implements Screen {
 		// healthBar.setAnimateDuration(0.0f);
 		healthBar.setValue(1f);
 		// healthBar.setAnimateDuration(0.25f);
-		healthBar.setPosition(10, Gdx.graphics.getHeight() - 20);
+		healthBar.setPosition(Gdx.graphics.getWidth() / 100f, Gdx.graphics.getHeight() - 20);
 		stage.addActor(healthBar);
 		
 		// No enemies overlap player hitbox
 		noEnemies = true;
+		timeSinceWave = TimeUtils.millis() - 8000;
+		
 	}
 
 	// Spawn enemies. Enemy count increases by one every time to make the wave
 	// stronger.
 	private void spawnEnemies() {
-		// System.out.println("SPAWNING ENEMIES");
+//		System.out.println("SPAWNING ENEMIES");
 		timesCalled++;
-		int tmp;
-		int tmp2;
-		for (int i = 0; i < timesCalled; i++) {
-			tmp = MathUtils.random(0, monsterSpawns.size - 1);
-			tmp2 = MathUtils.random(0, monsterSpawns.size - 1);
-			enemies.add(new StealingEnemy(32, 32, monsterSpawns.get(tmp).getRectangle().getX(),
-					monsterSpawns.get(tmp).getRectangle().getY(), 1,
-					game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/stealTest.png", Texture.class)));
+			int tmp;
+			int tmp2;
+			int tmp3;
+			if(enemies.size() == 0) {
+				for (int i = 0; i < timesCalled; i++) {
+					tmp = MathUtils.random(0, monsterSpawns.size - 1);
+					tmp2 = MathUtils.random(0, monsterSpawns.size - 1);
+					tmp3 = MathUtils.random(0, 1);
+//					if(tmp3 == 1) {
+//					enemyAdd.add(new StealingEnemy(32, 32, monsterSpawns.get(tmp).getRectangle().getX(),
+//							monsterSpawns.get(tmp).getRectangle().getY(), 1,
+//							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/stealTest.png", Texture.class)));
+//					}else {
+					enemyAdd.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
+							monsterSpawns.get(tmp2).getRectangle().getY(), 2,
+							game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/chaserTest.png", Texture.class)));
+//					}
+				}
+			}
+			
+			//Check if spawn in same coordinates, if yes then timeout
+			for (int j = 0; j < enemyAdd.size(); j++) {
+			    for (int k = j + 1; k < enemyAdd.size(); k++) {
+			    	if((enemyAdd.get(j).getX() == enemyAdd.get(k).getX()) && (enemyAdd.get(j).getY() == enemyAdd.get(k).getY())) {
+			    		tmp = MathUtils.random(30, 100);
+			    		enemyAdd.get(j).setTimeoutTimer(tmp);
+			    		System.out.println("normaltimer: " + enemyAdd.get(j).getTimeoutTimer());
+			    		if(j >= 1) {
+				    		while(((enemyAdd.get(j).getTimeoutTimer() - enemyAdd.get(k).getTimeoutTimer()) >= -20) 
+				    				&& ((enemyAdd.get(j).getTimeoutTimer() - enemyAdd.get(k).getTimeoutTimer()) <= 20)) {
+					    		tmp = MathUtils.random(30, 100);
+					    		enemyAdd.get(j).setTimeoutTimer(tmp);
+				    		}
+			    		}
+			    	}
+			    }
+			}
+			for (int j = 0; j < enemyAdd.size(); j++) {
+				for (int i = 0; i < spawnPoints.size; i++) {
+					if (spawnPoints.get(i).getRectangle().contains(enemyAdd.get(j).getHitbox())) {
+						
+					}
+			}
+			}
+				
+//			ArrayList<SpriteCommons> temp = new ArrayList<>();
+//			for (int j = 0; j < enemyAdd.size(); j++) {
+//			    for (int k = j + 1; k < enemyAdd.size(); k++) {
+//			    	if((enemyAdd.get(j).getX() == enemyAdd.get(k).getX()) && (enemyAdd.get(j).getY() == enemyAdd.get(k).getY())) {
+//			    		
+//			    		temp.add;
+//			    	}
+//			    }
+//			}
+			    
+	    	//If timeout same or close to the other enemy in same coordinates, pick a new timeout
+			for (int j = 0; j < enemyAdd.size(); j++) {
+			    for (int k = 0; k < enemyAdd.size(); k++) {
+			    	if( j != k && (enemyAdd.get(j).getX() == enemyAdd.get(k).getX()) && (enemyAdd.get(j).getY() == enemyAdd.get(k).getY())) {
+			    		while(((enemyAdd.get(j).getTimeoutTimer() - enemyAdd.get(k).getTimeoutTimer()) >= -20) 
+			    				&& ((enemyAdd.get(j).getTimeoutTimer() - enemyAdd.get(k).getTimeoutTimer()) <= 20)) {
+			    			System.out.println("Too close. (jTimer) - (kTimer): " + (enemyAdd.get(j).getTimeoutTimer() - enemyAdd.get(k).getTimeoutTimer()));
+				    		tmp = MathUtils.random(30, 100);
+				    		enemyAdd.get(j).setTimeoutTimer(tmp);
+				    		System.out.println("New timer. (jTimer) - (kTimer): " + (enemyAdd.get(j).getTimeoutTimer() - enemyAdd.get(k).getTimeoutTimer()));
+			    		}
+			    	}
+	    		}
+    		}
+			
+		
+			for (int i = 0; i < enemyAdd.size(); i++) {
+				enemies.add(enemyAdd.get(i));
+			}
+			enemyAdd.clear();
 
-			enemies.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
-					monsterSpawns.get(tmp2).getRectangle().getY(), 2,
-					game.getLoader().getManager().get("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/chaserTest.png", Texture.class)));
+			System.out.println(enemies.size());
 
-			timeSinceWave = TimeUtils.millis();
-		}
+
 		// Set The direction of stealers to pile
 		for (int i = 0; i < enemies.size(); i++) {
 			if (enemies.get(i) instanceof StealingEnemy) {
@@ -301,6 +372,7 @@ public class Updater implements Screen {
 			}
 			
 		}
+	
 		if (Intersector.overlaps(player.getHitbox(), pile.getHitbox()) || noEnemies == false) {
 
 			// pulls the hitbox back
@@ -488,7 +560,7 @@ public class Updater implements Screen {
 								
 					}
 
-					enemies.get(i).updateHitbox();
+//					enemies.get(i).updateHitbox();
 
 				} else {
 					
@@ -931,7 +1003,8 @@ public class Updater implements Screen {
 			}
 		}
 		*/
-
+		
+		
 		camera.position.set(
 				MathUtils.clamp(player.getX(), camera.viewportWidth * .5f,
 						world.mapWidth() - camera.viewportWidth * .5f),
@@ -1043,22 +1116,17 @@ public class Updater implements Screen {
 
 		}
 
-		// Wait 10 sec between waves.
-		/*
-		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10000 && enemies.isEmpty() && mapObjects.isEmpty()) {
-
-			spawnEnemies();
-		}
-		*/
-		
-		// Test 1 sec
-		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10 && enemies.isEmpty() && mapObjects.isEmpty()) {
-
-			spawnEnemies();
-		}
-		
-
 		game.batch.end();
+
+		// Wait 10 sec between waves.
+		
+		if (TimeUtils.timeSinceMillis(timeSinceWave) > 1000 && enemies.isEmpty() && mapObjects.isEmpty()) {
+			
+			spawnEnemies();
+			timeSinceWave = TimeUtils.millis();
+		}
+		
+
 
 		// Get points for alive time
 		if (TimeUtils.timeSinceMillis(timeScore) > 1000) {

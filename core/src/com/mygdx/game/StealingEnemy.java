@@ -53,6 +53,7 @@ public class StealingEnemy extends SpriteCommons {
 	public void setDir(DIRECTION dir) {
 		this.dir = dir;
 	}
+
 	
 	
 	/*

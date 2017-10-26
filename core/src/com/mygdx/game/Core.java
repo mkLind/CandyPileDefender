@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Core extends Game{
 public SpriteBatch batch;
 public BitmapFont font;
-public ResourceManager assetLoader;
+private ResourceManager assetLoader;
 
 	@Override
 	public void create() {

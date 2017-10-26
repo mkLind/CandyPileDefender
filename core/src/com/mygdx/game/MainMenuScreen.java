@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenuScreen implements Screen {
 
@@ -24,11 +25,11 @@ public class MainMenuScreen implements Screen {
 	
 	public MainMenuScreen(final Core game) {
 		this.game = game;
-		stage = new Stage();
+		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
 
 		mySkin = new Skin(Gdx.files.internal("C:/Users/Markus/Desktop/CandyPileDefender/core/assets/skin/uiskin.json"));
-
+//		mySkin.getFont("font-label").getData().setScale(1.5f);
 		playButton = new TextButton("Play", mySkin);
 		playButton.setWidth(Gdx.graphics.getWidth()/3);
         playButton.setPosition(Gdx.graphics.getWidth()/3 - playButton.getWidth()/2,Gdx.graphics.getHeight()/2 - playButton.getHeight()/3);
@@ -66,7 +67,7 @@ public class MainMenuScreen implements Screen {
         if(game.getLoader().getScore() == 0) {
         	label1.setText("Highscore: " + game.getLoader().getHighScore());
             
-            label2.setText("Your score: " + game.getLoader().getScore());
+            label2.setText("");
         }
         if(game.getLoader().getScore() != 0) {
 	    	if(game.getLoader().getScore() > game.getLoader().getHighScore()) {
@@ -96,7 +97,7 @@ public class MainMenuScreen implements Screen {
 	}
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		stage.getViewport().update(width, height);
 
 	}
 
