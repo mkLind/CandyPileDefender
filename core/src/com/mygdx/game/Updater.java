@@ -579,8 +579,8 @@ public class Updater implements Screen {
 		}
 
 		// This listens to mouse clicks
-		// Gdx.input.isTouched would be holding down to shoot
-		if (Gdx.input.justTouched() && TimeUtils.timeSinceMillis(player.getLastShot()) > player.getShootingCooldown()) {
+		// Gdx.input.justTouched would be clicking down to shoot
+		if (Gdx.input.isTouched() && TimeUtils.timeSinceMillis(player.getLastShot()) > player.getShootingCooldown()) {
 
 			// Spawn a projectile with target coordinates and set the time it is
 			// visible

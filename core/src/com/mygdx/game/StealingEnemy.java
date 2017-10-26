@@ -2,47 +2,26 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 public class StealingEnemy extends SpriteCommons {
 	
 	private DIRECTION dir; 
-	// private Animator animations;
-	private Texture stealerTexture;
+	private Animator animations;
+	// private Texture stealerTexture;
 	
-	public StealingEnemy(int width, int height, float x, float y, int HP, Texture stealerTexture) {
+	public StealingEnemy(int width, int height, float x, float y, int HP) {
 		super(width, height, x, y, 0f, 0f, HP);
-		this.stealerTexture = stealerTexture;
-
-		// Looks the side of the spawn 
-		//
 	
-		/*
-		if(x == 0 ) {
-			
-			dir = DIRECTION.RIGHT;			
-			
-		}else if(y == 0 ) {
-			
-			dir = DIRECTION.UP;
-			
-		}else if(y == (Gdx.graphics.getWidth() - width)) {
-			
-			dir = DIRECTION.LEFT;
-			
-		}else if(y == (Gdx.graphics.getHeight() - height)) {
-			
-			dir = DIRECTION.DOWN;		
-		}
-		*/
-		
-		
 	}
 	
+	/*
 	public Texture getTexture() {
 		return stealerTexture;
 	}
-
+	*/
+	
 	public enum DIRECTION{
 		UP,DOWN,LEFT,RIGHT
 	}
@@ -55,17 +34,16 @@ public class StealingEnemy extends SpriteCommons {
 	}
 	
 	
-	/*
 	// Sets all the animations
 	public void setAnimations(int row, int column, float frametime, Texture spritesheet){
 		animations = new Animator(row, column, frametime, spritesheet);
 		
 	}
-
+	/*
 	 * Method for changing the frame of current animation. 
 	 * @param row = which row from the spritesheet is used
 	 * @param time = used to determine which frame of the animation to use
-
+	*/
 	public TextureRegion getCurrentFrame( float time){
 		
 				
@@ -100,5 +78,5 @@ public class StealingEnemy extends SpriteCommons {
 		return null;
 		
 		
-	} */
+	} 
 }
