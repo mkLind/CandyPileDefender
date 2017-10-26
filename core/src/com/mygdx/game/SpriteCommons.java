@@ -14,7 +14,6 @@ private int width;
 private int height;
 private int HP;
 private Rectangle hitbox;
-private long spawnTime;
 
 // inactivity timer after attacking etc.
 private int timeoutTimer;
@@ -29,8 +28,8 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	this.HP = HP;
 	hitbox = new Rectangle(x, y, width, height);
 	timeoutTimer = 0;
-	spawnTime = 0;
 }
+
 public SpriteCommons(int width, int height, float x, float y,float xVel, float yVel){
 	this.x = x;
 	this.y = y;
@@ -119,12 +118,6 @@ public int getTimeoutTimer() {
 }
 public void setTimeoutTimer(int timeoutTimer) {
 	this.timeoutTimer = timeoutTimer;
-}
-public long getSpawnTime() {
-	return spawnTime;
-}
-public void setSpawnTime(long spawnTime) {
-	this.spawnTime = spawnTime;
 }
 
 }
