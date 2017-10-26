@@ -21,8 +21,10 @@ public class Player extends SpriteCommons {
 	private long powerupSetTime;
 	private long ShootingCooldown;
 	private long LastShot;
+	private long attackAnimStart;
 	private float hasteVel;
 	private boolean isAttacking;
+	
 	
 	
 /**
@@ -40,8 +42,13 @@ public class Player extends SpriteCommons {
 		powerupSetTime = 0;
 		powerupType = null;
 		hasteVel = 0f;
-		ShootingCooldown =  100;
+		ShootingCooldown =  500;
 		isAttacking = false;
+		attackAnimStart = 0;
+		
+		
+		
+		
 	}
 	public enum DIRECTION{
 		UP,DOWN,LEFT,RIGHT
@@ -56,6 +63,8 @@ public class Player extends SpriteCommons {
 	 * @param row = which row from the spritesheet is used
 	 * @param time = used to determine which frame of the animation to use
 	 */
+	
+	
 	public TextureRegion getCurrentFrame( float time){
 		
 				
@@ -96,27 +105,28 @@ public class Player extends SpriteCommons {
 		
 		if(this.dir == DIRECTION.UP){
 			
-				return (TextureRegion)animations.getAnimation(3,0.40f).getKeyFrame(time,false);	
+				return (TextureRegion)animations.getAnimation(3,0.40f).getKeyFrame(time,true);	
 			  
 		}
 		if(this.dir == DIRECTION.DOWN){
 			
-				return (TextureRegion)animations.getAnimation(1,0.40f).getKeyFrame(time,false);	
+				return (TextureRegion)animations.getAnimation(1,0.40f).getKeyFrame(time,true);	
 			
 				}
 		if(this.dir == DIRECTION.LEFT){
 	
-				return (TextureRegion)animations.getAnimation(7,0.40f).getKeyFrame(time,false);	
+				return (TextureRegion)animations.getAnimation(7,0.40f).getKeyFrame(time,true);	
 			
 		}
 		if(this.dir == DIRECTION.RIGHT){
 			
-				return (TextureRegion)animations.getAnimation(5,0.40f).getKeyFrame(time,false);	
+				return (TextureRegion)animations.getAnimation(5,0.40f).getKeyFrame(time,true);	
 		
 		}
 		return null;
 		
 	}
+
 	
 public boolean hasAnimationFinished( float time){
 		
@@ -143,6 +153,43 @@ public boolean hasAnimationFinished( float time){
 		return false;
 		
 	}
+
+public float AttackDuration( float time){
+	
+	if(this.dir == DIRECTION.UP){
+		
+			return animations.getAnimation(3,0.40f).getAnimationDuration();	
+		  
+	}
+	if(this.dir == DIRECTION.DOWN){
+		
+			return animations.getAnimation(1,0.40f).getAnimationDuration();	
+		
+			}
+	if(this.dir == DIRECTION.LEFT){
+
+			return animations.getAnimation(7,0.40f).getAnimationDuration();	
+		
+	}
+	if(this.dir == DIRECTION.RIGHT){
+		
+			return animations.getAnimation(5,0.40f).getAnimationDuration();	
+	
+	}
+	return 0f;
+	
+}
+
+	public long getAttackAnimStart() {
+	return attackAnimStart;
+}
+
+
+public void setAttackAnimStart(long attackAnimStart) {
+	this.attackAnimStart = attackAnimStart;
+}
+
+
 	public boolean isAttacking() {
 		return isAttacking;
 	}

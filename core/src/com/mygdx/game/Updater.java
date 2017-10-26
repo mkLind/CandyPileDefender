@@ -354,25 +354,13 @@ public class Updater implements Screen {
 		//Player Collisions with borders
 		for(int i = 0;i<borders.size;i++){
 			if(Intersector.overlaps(borders.get(i).getRectangle(), player.getHitbox())){
-				player.updateHitbox();
+				
 				player.setxVel(0);
 				player.setyVel(0);
+				player.updateHitbox();
 			}
 		}
-		// Enemy collisions with borders
-		for(int i = 0; i<enemies.size();i++){
-			SpriteCommons e = enemies.get(i);
-			e.moveHitbox(e.getX() + e.getxVel(), e.getY() + e.getyVel());
-			for(int j = 0; j<borders.size;j++){
-				if(Intersector.overlaps(e.getHitbox(), borders.get(j).getRectangle())){
-					enemies.get(i).updateHitbox();
-					enemies.get(i).setxVel(0);
-					enemies.get(i).setyVel(0);
-				}
-			}
-			
-		}
-	
+
 		if (Intersector.overlaps(player.getHitbox(), pile.getHitbox()) || noEnemies == false) {
 
 			// pulls the hitbox back
@@ -414,8 +402,7 @@ public class Updater implements Screen {
 					enemies.get(i).setyVel(((float) (1.2f / hypot * (player.getY() - enemies.get(i).getY()))));
 				}
 	
-				if (enemies.get(i) instanceof StealingEnemy && enemies.get(i).getxVel() == 0
-						&& enemies.get(i).getyVel() == 0) {
+				if (enemies.get(i) instanceof StealingEnemy) {
 					
 					double hypot = Math.hypot(enemies.get(i).getX() - pile.getX() + (pile.getWidth() / 2), enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
 					//TEST SPEED 3! was 1.2
@@ -562,7 +549,31 @@ public class Updater implements Screen {
 
 //					enemies.get(i).updateHitbox();
 
-				} else {
+				}else {
+					// Enemy collisions with borders
+				
+					
+						for(int k = 0; k<borders.size;k++){
+							if(Intersector.overlaps(enemies.get(i).getHitbox(), borders.get(k).getRectangle())){
+					           if(enemies.get(i) instanceof StealingEnemy){
+					        	   
+									enemies.get(i).setxVel(0);
+								
+						
+									enemies.get(i).updateHitbox();
+					           }else{
+					        	   
+									enemies.get(i).setxVel(0);
+								
+								
+									enemies.get(i).updateHitbox(); 	   
+					           }	
+					          
+					        	   
+					       
+							}
+						}
+						
 					
 					// move enemies
 					enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
@@ -718,8 +729,9 @@ public class Updater implements Screen {
 		// This listens to mouse clicks
 		// Gdx.input.isTouched would be holding down to shoot
 		if (Gdx.input.isTouched() && TimeUtils.timeSinceMillis(player.getLastShot()) > player.getShootingCooldown()) {
+		
 			player.setAttacking(true);
-			
+			player.setAttackAnimStart(TimeUtils.millis());
 			// Spawn a projectile with target coordinates and set the time it is
 			// visible
 
@@ -916,12 +928,14 @@ public class Updater implements Screen {
 			}
 
 			player.setLastShot(TimeUtils.millis());
-		}else{
-			// FUrther work required
-			if(player.hasAnimationFinished(statetime)){
-				player.setAttacking(false);
-			}
 		}
+		
+		if(TimeUtils.timeSinceMillis(player.getAttackAnimStart()) > 500){
+	
+			player.setAttacking(false);
+		}
+		
+		
 		// Powerup spawns here
 
 		if (TimeUtils.timeSinceMillis(timeToNextPowerup) > 10000) {
@@ -1035,28 +1049,7 @@ public class Updater implements Screen {
 			
 		}
 				
-		if (!mapObjects.isEmpty()) {
-			for (int i = 0; i < mapObjects.size(); i++) {
-				// Draw Follower Object
-				if (mapObjects.get(i).getType() == OBJECTTYPE.FOLLOWER) {
-					game.batch.draw(mapObjects.get(i).getGraphic(), player.getX(), player.getY(),
-							mapObjects.get(i).getWidth(), mapObjects.get(i).getHeight());
 
-					// Draw expander
-				} else if (mapObjects.get(i).getType() == OBJECTTYPE.EXPANDER) {
-					mapObjects.get(i).setHeight(mapObjects.get(i).getHeight() + 20);
-					mapObjects.get(i).setWidth(mapObjects.get(i).getWidth() + 20);
-					mapObjects.get(i).setX(mapObjects.get(i).getX() - 10);
-					mapObjects.get(i).setY(mapObjects.get(i).getY() - 10);
-					game.batch.draw(mapObjects.get(i).getGraphic(), mapObjects.get(i).getX(), mapObjects.get(i).getY(),
-							mapObjects.get(i).getWidth(), mapObjects.get(i).getHeight());
-				} else {
-
-					// IF mapObject is not expanding object, draw it normally
-					game.batch.draw(mapObjects.get(i).getGraphic(), mapObjects.get(i).getX(), mapObjects.get(i).getY());
-				}
-			}
-		}
 		
 
 		for (int i = 0; i < enemies.size(); i++) {
@@ -1071,8 +1064,10 @@ public class Updater implements Screen {
 
 		}
 		if(player.isAttacking()){
+		
 			game.batch.draw(player.getCurrentAttackFrame(statetime), player.getX(), player.getY(), player.getWidth(),
 					player.getHeight());
+		
 		}else{
 		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(),
 				player.getHeight());
@@ -1097,19 +1092,57 @@ public class Updater implements Screen {
 
 			}
 		}
-		// Update particles in the list
+		if (!mapObjects.isEmpty()) {
+			for (int i = 0; i < mapObjects.size(); i++) {
+				// Draw Follower Object
+				if (mapObjects.get(i).getType() == OBJECTTYPE.FOLLOWER) {
+					game.batch.draw(mapObjects.get(i).getGraphic(), player.getX(), player.getY(),
+							mapObjects.get(i).getWidth(), mapObjects.get(i).getHeight());
 
-		if (!effects.isEmpty()) {
-			System.out.println("Powerup List not empty: " + effects.size());
+					// Draw expander
+				} else if (mapObjects.get(i).getType() == OBJECTTYPE.EXPANDER) {
+					mapObjects.get(i).setHeight(mapObjects.get(i).getHeight() + 20);
+					mapObjects.get(i).setWidth(mapObjects.get(i).getWidth() + 20);
+					mapObjects.get(i).setX(mapObjects.get(i).getX() - 10);
+					mapObjects.get(i).setY(mapObjects.get(i).getY() - 10);
+					game.batch.draw(mapObjects.get(i).getGraphic(), mapObjects.get(i).getX(), mapObjects.get(i).getY(),
+							mapObjects.get(i).getWidth(), mapObjects.get(i).getHeight());
+				} else {
+
+					// IF mapObject is not expanding object, draw it normally
+					game.batch.draw(mapObjects.get(i).getGraphic(), mapObjects.get(i).getX(), mapObjects.get(i).getY());
+				}
+			}
+		}
+
+	
+
+		// Wait 10 sec between waves.
+		/*
+		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10000 && enemies.isEmpty() && mapObjects.isEmpty()) {
+			
+			spawnEnemies();
+		}
+		*/
+		
+
+		// Test 1 sec
+		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10000 && enemies.isEmpty()) {
+
+			spawnEnemies();
+			timeSinceWave = TimeUtils.millis();
+		}
+		// Update particles in the list FURTHER WORK REQUIRED
+	if (!effects.isEmpty()) {
+			
 			for (int i = 0; i < effects.size(); i++) {
-
-				
-				System.out.println("Effect Fetched is COMPLETE:" + effects.get(i).isComplete());
+			
 				if (!effects.get(i).isComplete()) {
+				
 					effects.get(i).update(statetime);
 					effects.get(i).draw(game.batch);
 				} else {
-
+					effects.get(i).dispose();
 					effects.remove(i);
 				}
 			}
@@ -1117,16 +1150,6 @@ public class Updater implements Screen {
 		}
 
 		game.batch.end();
-
-		// Wait 10 sec between waves.
-		
-		if (TimeUtils.timeSinceMillis(timeSinceWave) > 1000 && enemies.isEmpty() && mapObjects.isEmpty()) {
-			
-			spawnEnemies();
-			timeSinceWave = TimeUtils.millis();
-		}
-		
-
 
 		// Get points for alive time
 		if (TimeUtils.timeSinceMillis(timeScore) > 1000) {
@@ -1157,7 +1180,7 @@ public class Updater implements Screen {
 	}
 
 	public Powerup spawnPowerUp(GameWorld world, Core game) {
-		System.out.println("Spawning powerup");
+		
 		float x = MathUtils.random(world.getMinimumX(), world.getmaximumX());
 		float y = MathUtils.random(world.getMinimumY(), world.getMaximumY());
 		for (int i = 0; i < borders.size; i++) {
@@ -1187,11 +1210,14 @@ public class Updater implements Screen {
 				}
 			}
 		}
+		// Instatiating powerup
+		
 		Powerup powerup = new Powerup(32, 32, x, y, 0f, 0f, game);
-
+  
 		powerup.setTypeAndGraphic(game);
 		powerup.setTimeAlive(TimeUtils.millis());
 		ParticleEffect effect = powerup.getSpawnEffect();
+		
 		effect.start();
 		effects.add(effect);
 		return powerup;

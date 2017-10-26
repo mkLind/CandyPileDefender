@@ -1,0 +1,199 @@
+Untitled
+- Delay -
+active: true
+lowMin: 0.0
+lowMax: 0.0
+- Duration - 
+lowMin: 2000.0
+lowMax: 2000.0
+- Count - 
+min: 24
+max: 200
+- Emission - 
+lowMin: 20.0
+lowMax: 20.0
+highMin: 200.0
+highMax: 200.0
+relative: true
+scalingCount: 3
+scaling0: 0.0
+scaling1: 0.9607843
+scaling2: 0.7254902
+timelineCount: 3
+timeline0: 0.0
+timeline1: 0.07534247
+timeline2: 0.60273975
+- Life - 
+lowMin: 0.0
+lowMax: 0.0
+highMin: 551.0
+highMax: 551.0
+relative: false
+scalingCount: 3
+scaling0: 1.0
+scaling1: 0.74509805
+scaling2: 1.0
+timelineCount: 3
+timeline0: 0.0
+timeline1: 0.25342464
+timeline2: 0.47260273
+- Life Offset - 
+active: true
+lowMin: 10.0
+lowMax: 10.0
+highMin: 253.0
+highMax: 253.0
+relative: false
+scalingCount: 1
+scaling0: 1.0
+timelineCount: 1
+timeline0: 0.0
+- X Offset - 
+active: true
+lowMin: 0.0
+lowMax: 0.0
+highMin: 0.0
+highMax: 0.0
+relative: false
+scalingCount: 1
+scaling0: 1.0
+timelineCount: 1
+timeline0: 0.0
+- Y Offset - 
+active: true
+lowMin: 0.0
+lowMax: 0.0
+highMin: 0.0
+highMax: 0.0
+relative: false
+scalingCount: 1
+scaling0: 1.0
+timelineCount: 1
+timeline0: 0.0
+- Spawn Shape - 
+shape: square
+- Spawn Width - 
+lowMin: 7.0
+lowMax: 7.0
+highMin: 100.0
+highMax: 100.0
+relative: false
+scalingCount: 2
+scaling0: 0.9411765
+scaling1: 0.15686275
+timelineCount: 2
+timeline0: 0.0
+timeline1: 0.3219178
+- Spawn Height - 
+lowMin: -11.0
+lowMax: -11.0
+highMin: 33.0
+highMax: 33.0
+relative: false
+scalingCount: 2
+scaling0: 0.98039216
+scaling1: 0.9607843
+timelineCount: 2
+timeline0: 0.0
+timeline1: 0.44520548
+- Scale - 
+lowMin: 6.0
+lowMax: 6.0
+highMin: 39.0
+highMax: 39.0
+relative: false
+scalingCount: 3
+scaling0: 1.0
+scaling1: 0.7058824
+scaling2: 0.0
+timelineCount: 3
+timeline0: 0.0
+timeline1: 0.8767123
+timeline2: 0.98630136
+- Velocity - 
+active: true
+lowMin: 0.0
+lowMax: 0.0
+highMin: 0.0
+highMax: 0.0
+relative: false
+scalingCount: 1
+scaling0: 1.0
+timelineCount: 1
+timeline0: 0.0
+- Angle - 
+active: true
+lowMin: 25.0
+lowMax: 25.0
+highMin: 348.0
+highMax: 348.0
+relative: false
+scalingCount: 1
+scaling0: 1.0
+timelineCount: 1
+timeline0: 0.0
+- Rotation - 
+active: true
+lowMin: 0.0
+lowMax: 0.0
+highMin: 193.0
+highMax: 193.0
+relative: false
+scalingCount: 1
+scaling0: 1.0
+timelineCount: 1
+timeline0: 0.0
+- Wind - 
+active: true
+lowMin: 0.0
+lowMax: 0.0
+highMin: 0.0
+highMax: 0.0
+relative: false
+scalingCount: 2
+scaling0: 0.0
+scaling1: 0.8235294
+timelineCount: 2
+timeline0: 0.0
+timeline1: 0.77397263
+- Gravity - 
+active: true
+lowMin: 0.0
+lowMax: 0.0
+highMin: 219.0
+highMax: 219.0
+relative: true
+scalingCount: 3
+scaling0: 0.627451
+scaling1: 0.8235294
+scaling2: 1.0
+timelineCount: 3
+timeline0: 0.0
+timeline1: 0.26712328
+timeline2: 0.6643836
+- Tint - 
+colorsCount: 3
+colors0: 1.0
+colors1: 0.12156863
+colors2: 0.047058824
+timelineCount: 1
+timeline0: 0.0
+- Transparency - 
+lowMin: 0.0
+lowMax: 0.0
+highMin: 1.0
+highMax: 1.0
+relative: false
+scalingCount: 1
+scaling0: 1.0
+timelineCount: 1
+timeline0: 0.0
+- Options - 
+attached: false
+continuous: false
+aligned: false
+additive: false
+behind: false
+premultipliedAlpha: false
+- Image Path -
+powerupappearparticle.png
