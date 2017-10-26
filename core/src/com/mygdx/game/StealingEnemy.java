@@ -13,6 +13,7 @@ public class StealingEnemy extends SpriteCommons {
 	
 	public StealingEnemy(int width, int height, float x, float y, int HP) {
 		super(width, height, x, y, 0f, 0f, HP);
+		dir = DIRECTION.DOWN;
 	
 	}
 	
@@ -64,16 +65,16 @@ public class StealingEnemy extends SpriteCommons {
 				}
 		if(this.dir == DIRECTION.LEFT){
 			if(super.getxVel()== 0 && super.getyVel() == 0){
-				return (TextureRegion)animations.getAnimation(3).getKeyFrame(0,true);	
+				return (TextureRegion)animations.getAnimation(2).getKeyFrame(0,true);	
 			}else{
-			return (TextureRegion)animations.getAnimation(3).getKeyFrame(time,true);
+			return (TextureRegion)animations.getAnimation(2).getKeyFrame(time,true);
 			}
 		}
 		if(this.dir == DIRECTION.RIGHT){
 			if(super.getxVel()== 0 && super.getyVel() == 0){
-				return (TextureRegion)animations.getAnimation(2).getKeyFrame(0,true);	
+				return (TextureRegion)animations.getAnimation(3).getKeyFrame(0,true);	
 			}else{
-			return (TextureRegion)animations.getAnimation(2).getKeyFrame(time,true);
+			return (TextureRegion)animations.getAnimation(3).getKeyFrame(time,true);
 			}	
 		}
 		return null;

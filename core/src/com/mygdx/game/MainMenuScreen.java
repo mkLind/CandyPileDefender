@@ -50,12 +50,12 @@ public class MainMenuScreen implements Screen {
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
 
-		mySkin = new Skin(Gdx.files.internal("C:/Users/Tommi/libGit/core/assets/skin/uiskin.json"));
+		mySkin = new Skin(Gdx.files.internal("C:/CandyPile/CandyPileDefender/core/assets/skin/uiskin.json"));
 //		mySkin.getFont("font-label").getData().setScale(1.5f);
 		playButton = new TextButton("Play", mySkin);
 		playButton.setWidth(Gdx.graphics.getWidth()/3);
         playButton.setPosition(Gdx.graphics.getWidth()/3 - playButton.getWidth()/2,Gdx.graphics.getHeight()/2 - playButton.getHeight()/3);
-        ambience = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
+        ambience = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
         ambience.setLooping(true);
         ambience.play();
         playButton.addListener(new InputListener(){
