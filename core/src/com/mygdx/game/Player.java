@@ -21,7 +21,9 @@ public class Player extends SpriteCommons {
 	private long powerupSetTime;
 	private long ShootingCooldown;
 	private long LastShot;
+	private long attackAnimStart;
 	private float hasteVel;
+	private boolean isAttacking;
 	
 	
 	
@@ -41,6 +43,12 @@ public class Player extends SpriteCommons {
 		powerupType = null;
 		hasteVel = 0f;
 		ShootingCooldown =  500;
+		isAttacking = false;
+		attackAnimStart = 0;
+		
+		
+		
+		
 	}
 	public enum DIRECTION{
 		UP,DOWN,LEFT,RIGHT
@@ -55,14 +63,16 @@ public class Player extends SpriteCommons {
 	 * @param row = which row from the spritesheet is used
 	 * @param time = used to determine which frame of the animation to use
 	 */
+	
+	
 	public TextureRegion getCurrentFrame( float time){
 		
 				
 		if(this.dir == DIRECTION.UP){
 			if(super.getxVel()== 0 && super.getyVel() == 0){
-				return (TextureRegion)animations.getAnimation(1).getKeyFrame(0,true);	
+				return (TextureRegion)animations.getAnimation(2).getKeyFrame(0,true);	
 			}else{
-			return (TextureRegion)animations.getAnimation(1).getKeyFrame(time,true);
+			return (TextureRegion)animations.getAnimation(2).getKeyFrame(time,true);
 			}
 		}
 		if(this.dir == DIRECTION.DOWN){
@@ -74,21 +84,117 @@ public class Player extends SpriteCommons {
 				}
 		if(this.dir == DIRECTION.LEFT){
 			if(super.getxVel()== 0 && super.getyVel() == 0){
-				return (TextureRegion)animations.getAnimation(3).getKeyFrame(0,true);	
+				return (TextureRegion)animations.getAnimation(6).getKeyFrame(0,true);	
 			}else{
-			return (TextureRegion)animations.getAnimation(3).getKeyFrame(time,true);
+			return (TextureRegion)animations.getAnimation(6).getKeyFrame(time,true);
 			}
 		}
 		if(this.dir == DIRECTION.RIGHT){
 			if(super.getxVel()== 0 && super.getyVel() == 0){
-				return (TextureRegion)animations.getAnimation(2).getKeyFrame(0,true);	
+				return (TextureRegion)animations.getAnimation(4).getKeyFrame(0,true);	
 			}else{
-			return (TextureRegion)animations.getAnimation(2).getKeyFrame(time,true);
+			return (TextureRegion)animations.getAnimation(4).getKeyFrame(time,true);
 			}	
 		}
 		return null;
 		
 		
+	}
+	
+	public TextureRegion getCurrentAttackFrame( float time){
+		
+		if(this.dir == DIRECTION.UP){
+			
+				return (TextureRegion)animations.getAnimation(3,0.40f).getKeyFrame(time,true);	
+			  
+		}
+		if(this.dir == DIRECTION.DOWN){
+			
+				return (TextureRegion)animations.getAnimation(1,0.40f).getKeyFrame(time,true);	
+			
+				}
+		if(this.dir == DIRECTION.LEFT){
+	
+				return (TextureRegion)animations.getAnimation(7,0.40f).getKeyFrame(time,true);	
+			
+		}
+		if(this.dir == DIRECTION.RIGHT){
+			
+				return (TextureRegion)animations.getAnimation(5,0.40f).getKeyFrame(time,true);	
+		
+		}
+		return null;
+		
+	}
+
+	
+public boolean hasAnimationFinished( float time){
+		
+		if(this.dir == DIRECTION.UP){
+			
+				return (boolean)animations.getAnimation(3,0.40f).isAnimationFinished(time);	
+			  
+		}
+		if(this.dir == DIRECTION.DOWN){
+			
+				return (boolean)animations.getAnimation(1,0.40f).isAnimationFinished(time);	
+			
+				}
+		if(this.dir == DIRECTION.LEFT){
+	
+				return (boolean)animations.getAnimation(7,0.40f).isAnimationFinished(time);	
+			
+		}
+		if(this.dir == DIRECTION.RIGHT){
+			
+				return (boolean)animations.getAnimation(5,0.40f).isAnimationFinished(time);	
+		
+		}
+		return false;
+		
+	}
+
+public float AttackDuration( float time){
+	
+	if(this.dir == DIRECTION.UP){
+		
+			return animations.getAnimation(3,0.40f).getAnimationDuration();	
+		  
+	}
+	if(this.dir == DIRECTION.DOWN){
+		
+			return animations.getAnimation(1,0.40f).getAnimationDuration();	
+		
+			}
+	if(this.dir == DIRECTION.LEFT){
+
+			return animations.getAnimation(7,0.40f).getAnimationDuration();	
+		
+	}
+	if(this.dir == DIRECTION.RIGHT){
+		
+			return animations.getAnimation(5,0.40f).getAnimationDuration();	
+	
+	}
+	return 0f;
+	
+}
+
+	public long getAttackAnimStart() {
+	return attackAnimStart;
+}
+
+
+public void setAttackAnimStart(long attackAnimStart) {
+	this.attackAnimStart = attackAnimStart;
+}
+
+
+	public boolean isAttacking() {
+		return isAttacking;
+	}
+	public void setAttacking(boolean isAttacking) {
+		this.isAttacking = isAttacking;
 	}
 	public DIRECTION getDir() {
 		return dir;

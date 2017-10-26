@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
@@ -58,6 +61,7 @@ public class Updater implements Screen {
 	// Teppo test
 	private Pile pile;
 	private ArrayList<SpriteCommons> enemies;
+	private ArrayList<SpriteCommons> enemyAdd;
 	boolean pileHealth;
 	boolean noEnemies;
 
@@ -86,6 +90,15 @@ public class Updater implements Screen {
 	private Pixmap pixmap;
 	private ProgressBar healthBar;
 	private TextureRegionDrawable drawable;
+	private Music ambience;
+	private Sound shot;
+	private Sound hit;
+	private Sound Explosion;
+	private Sound GameOver;
+	private Sound walk1;
+	private Sound walk2;
+	private long walkSet;
+	
 
 	/**
 	 * Initializes the entire game
@@ -98,12 +111,14 @@ public class Updater implements Screen {
 		mpObjLastSet = 0;
 		mapObjects = new ArrayList<>();
 		statetime = 0f;
+		walkSet = TimeUtils.millis();
 		timesCalled = 0;
 		randomizer = new Random();
 		world = new GameWorld();
 		powerups = new ArrayList<>();
 		monsterSpawns = new Array<RectangleMapObject>();
 		enemies = new ArrayList<SpriteCommons>();
+		enemyAdd = new ArrayList<SpriteCommons>();
 		// When loading textures to project, the entire path to the file should
 		// be included
 		// be careful with that
@@ -122,18 +137,29 @@ public class Updater implements Screen {
 
 		game.batch.setProjectionMatrix(camera.combined);
 		proj = new ArrayList<Projectile>();
-
+		ambience = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
+		ambience.setLooping(true);
+		ambience.play();
+		
+		shot = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/shooting/NFF-gun-miss.wav",Sound.class);
+		hit = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/hit/NFF-slap-02.wav",Sound.class);
+		Explosion = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/hit/NFF-explode.wav",Sound.class);
+		GameOver = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/game_over/NFF-death-bell.wav",Sound.class);
+		walk1 = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/walking/grass1.wav",Sound.class);
+		walk2 = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/walking/gravel1.wav",Sound.class);
+		
+		
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
-				player = new Player(32, 32, spawnPoints.get(i).getRectangle().getX(),
+				player = new Player(35, 40, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(), 10);
 			}
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")) {
 				pile = new Pile(100, 100, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(),
-						game.getLoader().getManager().get("pileTest.png", Texture.class),
-						game.getLoader().getManager().get("pileTest2.png", Texture.class));
+						game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/pileTest.png", Texture.class),
+						game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/pileTest2.png", Texture.class));
 			}
 		}
 		for (int i = 0; i < spawnPoints.size; i++) {
@@ -142,18 +168,20 @@ public class Updater implements Screen {
 			}
 		}
 
-		player.setAnimations(9, 4, 0.10f, game.getLoader().getManager().get("BatMonster.png", Texture.class));
+		player.setAnimations(8, 3, 0.10f, game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/PirateTileset.png", Texture.class));
 		player.setDir(DIRECTION.DOWN);
 		camera.position.set(player.getX(), player.getY(), 0);
 		
 		enemies = new ArrayList<SpriteCommons>();
-		spawnEnemies();
+		//spawnEnemies();
 		camera.update();
 		timeToNextPowerup = TimeUtils.millis();
 
 		// For score points
 		timeScore = TimeUtils.millis();
+
 		mySkin = new Skin(Gdx.files.internal("C:/CandyPile/CandyPileDefender/core/assets/skin/uiskin.json"));
+
 		scores = new Label("Score: " + game.getLoader().getScore(), mySkin);
 		scores.setPosition(Gdx.graphics.getWidth() / 1.37f, Gdx.graphics.getHeight() - 20);
 		scores.setAlignment(Align.topRight);
@@ -186,33 +214,90 @@ public class Updater implements Screen {
 		// healthBar.setAnimateDuration(0.0f);
 		healthBar.setValue(1f);
 		// healthBar.setAnimateDuration(0.25f);
-		healthBar.setPosition(10, Gdx.graphics.getHeight() - 20);
+		healthBar.setPosition(Gdx.graphics.getWidth() / 100f, Gdx.graphics.getHeight() - 20);
 		stage.addActor(healthBar);
 		
 		// No enemies overlap player hitbox
 		noEnemies = true;
+		timeSinceWave = TimeUtils.millis() - 8000;
+		
 	}
 
 	// Spawn enemies. Enemy count increases by one every time to make the wave
 	// stronger.
 	private void spawnEnemies() {
-		// System.out.println("SPAWNING ENEMIES");
+//		System.out.println("SPAWNING ENEMIES");
 		timesCalled++;
-		int tmp;
-		int tmp2;
-		for (int i = 0; i < timesCalled; i++) {
-			tmp = MathUtils.random(0, monsterSpawns.size - 1);
-			tmp2 = MathUtils.random(0, monsterSpawns.size - 1);
-			enemies.add(new StealingEnemy(32, 32, monsterSpawns.get(tmp).getRectangle().getX(),
-					monsterSpawns.get(tmp).getRectangle().getY(), 1,
-					game.getLoader().getManager().get("stealTest.png", Texture.class)));
+			int tmp;
+			int tmp2;
+			int tmp3;
+			if(enemies.size() == 0) {
+				for (int i = 0; i < timesCalled; i++) {
+					tmp = MathUtils.random(0, monsterSpawns.size - 1);
+					tmp2 = MathUtils.random(0, monsterSpawns.size - 1);
+					tmp3 = MathUtils.random(0, 1);
+//					if(tmp3 == 1) {
+					
+					/*
+ 					enemyAdd.add(new StealingEnemy(32, 32, monsterSpawns.get(tmp).getRectangle().getX(),
+							monsterSpawns.get(tmp).getRectangle().getY(), 1,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/stealTest.png", Texture.class)));
+					 */
+					
+					// new stealer 
+					enemyAdd.add(new StealingEnemy(20, 30, monsterSpawns.get(tmp).getRectangle().getX(), 
+							monsterSpawns.get(tmp).getRectangle().getY(), 1));
+					
+					
+					enemyAdd.get(i).setAnimations(4, 3, 0.10f, game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/SkeletonTileset.png", Texture.class));
+					enemyAdd.get(i).setDir(DIRECTION.DOWN);
+					
+//					}else {
+					enemyAdd.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
+							monsterSpawns.get(tmp2).getRectangle().getY(), 2,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/chaserTest.png", Texture.class)));
+//					}
+				}
+			}
+			
+			//Check if spawn in same coordinates, if yes then timeout
+			for (int j = 0; j < enemyAdd.size(); j++) {
+			    for (int k = j + 1; k < enemyAdd.size(); k++) {
+			    	if((enemyAdd.get(j).getX() == enemyAdd.get(k).getX()) && (enemyAdd.get(j).getY() == enemyAdd.get(k).getY())) {
+			    		tmp = MathUtils.random(30, 100);
+			    		enemyAdd.get(j).setTimeoutTimer(tmp);
+			    		if(j >= 1) {
+				    		while(((enemyAdd.get(j).getTimeoutTimer() - enemyAdd.get(k).getTimeoutTimer()) >= -20) 
+				    				&& ((enemyAdd.get(j).getTimeoutTimer() - enemyAdd.get(k).getTimeoutTimer()) <= 20)) {
+					    		tmp = MathUtils.random(30, 100);
+					    		enemyAdd.get(k).setTimeoutTimer(tmp);
+				    		}
+			    		}
+			    	}
+			    }
+			}
+				
+	    	//If timeout same or close to the other enemy in same coordinates, pick a new timeout
+//			for (int j = 0; j < enemyAdd.size(); j++) {
+//			    for (int k = j + 1; k < enemyAdd.size(); k++) {
+//			    	if((enemyAdd.get(j).getX() == enemyAdd.get(k).getX()) && (enemyAdd.get(j).getY() == enemyAdd.get(k).getY())) {
+//			    		while(((enemyAdd.get(j).getTimeoutTimer() - enemyAdd.get(k).getTimeoutTimer()) >= -20) 
+//			    				&& ((enemyAdd.get(j).getTimeoutTimer() - enemyAdd.get(k).getTimeoutTimer()) <= 20)) {
+//				    		tmp = MathUtils.random(30, 100);
+//				    		enemyAdd.get(k).setTimeoutTimer(tmp);
+//				    		
+//			    		}
+//			    	}
+//	    		}
+//    		}
+			
+		
+			for (int i = 0; i < enemyAdd.size(); i++) {
+				enemies.add(enemyAdd.get(i));
+			}
+			enemyAdd.clear();
+//			System.out.println(enemies.size());
 
-			enemies.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
-					monsterSpawns.get(tmp2).getRectangle().getY(), 2,
-					game.getLoader().getManager().get("chaserTest.png", Texture.class)));
-
-			timeSinceWave = TimeUtils.millis();
-		}
 		// Set The direction of stealers to pile
 		for (int i = 0; i < enemies.size(); i++) {
 			if (enemies.get(i) instanceof StealingEnemy) {
@@ -226,8 +311,21 @@ public class Updater implements Screen {
 
 	public void render(float delta) {
 
-		Gdx.gl.glClearColor(100, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		// walking sounds
+		
+		if(TimeUtils.timeSinceMillis(walkSet)>500 && player.getxVel()>0 && player.getyVel()>0){
+			int random = MathUtils.random(0, 1);
+			if(random == 0){
+				walk1.play(1);
+			}else{
+				walk2.play(1);
+			}
+			walkSet = TimeUtils.millis();
+		}
+		
 		
 		// Move the player
 		// moves hitbox first to check if collision
@@ -238,12 +336,23 @@ public class Updater implements Screen {
 		for (int j = 0; j < enemies.size(); j++) {
 			
 			if (Intersector.overlaps(player.getHitbox(), enemies.get(j).getHitbox())) {
+				
 				noEnemies = false;				
 				break;
 			}
 			
 		}
 		
+		//Player Collisions with borders
+		for(int i = 0;i<borders.size;i++){
+			if(Intersector.overlaps(borders.get(i).getRectangle(), player.getHitbox())){
+				
+				player.setxVel(0);
+				player.setyVel(0);
+				player.updateHitbox();
+			}
+		}
+
 		if (Intersector.overlaps(player.getHitbox(), pile.getHitbox()) || noEnemies == false) {
 
 			// pulls the hitbox back
@@ -285,8 +394,7 @@ public class Updater implements Screen {
 					enemies.get(i).setyVel(((float) (1.2f / hypot * (player.getY() - enemies.get(i).getY()))));
 				}
 	
-				if (enemies.get(i) instanceof StealingEnemy && enemies.get(i).getxVel() == 0
-						&& enemies.get(i).getyVel() == 0) {
+				if (enemies.get(i) instanceof StealingEnemy) {
 					
 					double hypot = Math.hypot(enemies.get(i).getX() - pile.getX() + (pile.getWidth() / 2), enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
 					//TEST SPEED 3! was 1.2
@@ -314,7 +422,16 @@ public class Updater implements Screen {
 				// move hitbox first to check if collisions
 				enemies.get(i).moveHitbox(enemies.get(i).getX() + enemies.get(i).getxVel(),
 						enemies.get(i).getY() + enemies.get(i).getyVel());
-	
+				
+				//Enemy collisions with each other
+				for (int k = i + 1; k < enemies.size(); k++) {
+			    	if(Intersector.overlaps(enemies.get(i).getHitbox(), enemies.get(k).getHitbox())) {
+			    		int tmp = MathUtils.random(30, 100);
+			    		enemies.get(i).setTimeoutTimer(tmp);
+			    		enemies.get(k).setTimeoutTimer(0);
+			    	}
+				}
+				
 				if (Intersector.overlaps(enemies.get(i).getHitbox(), player.getHitbox())) {
 	
 					// pulls the hitbox back
@@ -348,7 +465,8 @@ public class Updater implements Screen {
 					
 					if (player.getHP() < 1) {
 						System.out.println("Player HP now zero");
-	
+						GameOver.play();
+						ambience.stop();
 						game.setScreen(new LoadingScreen(game));
 						this.dispose();
 					}
@@ -430,9 +548,33 @@ public class Updater implements Screen {
 								
 					}
 
-					//enemies.get(i).updateHitbox();
+//					enemies.get(i).updateHitbox();
 
-				} else {
+				}else {
+					// Enemy collisions with borders
+				
+					
+						for(int k = 0; k<borders.size;k++){
+							if(Intersector.overlaps(enemies.get(i).getHitbox(), borders.get(k).getRectangle())){
+					           if(enemies.get(i) instanceof StealingEnemy){
+					        	   
+									enemies.get(i).setxVel(0);
+								
+						
+									enemies.get(i).updateHitbox();
+					           }else{
+					        	   
+									enemies.get(i).setxVel(0);
+								
+								
+									enemies.get(i).updateHitbox(); 	   
+					           }	
+					          
+					        	   
+					       
+							}
+						}
+						
 					
 					// move enemies
 					enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
@@ -448,11 +590,17 @@ public class Updater implements Screen {
 			}
 			
 			// one hitbox update should be enough (maybe)
-			if(enemies != null) {
-				enemies.get(i).updateHitbox();
+
+
+			if(!enemies.isEmpty()){
+			if(enemies.size()== i ){	
+			enemies.get(enemies.size()-1).updateHitbox();
+			}else{
+				enemies.get(i).updateHitbox();	
 			}
-			
+			}
 		}
+
 
 		//PLAYER INPUT STUFF
 		statetime += delta;
@@ -509,13 +657,13 @@ public class Updater implements Screen {
 		}
 		// Remove tar pools when set time has passed
 		if (!mapObjects.isEmpty()) {
-			for (int i = 0; i < mapObjects.size(); i++) {
+			for (int i= 0; i < mapObjects.size(); i++) {
 				if (TimeUtils.timeSinceMillis(mapObjects.get(i).getSpawnTime()) > mapObjects.get(i).getTimeAlive()) {
 					mapObjects.remove(i);
 				}
 			}
 		}
-		
+			
 		// POWER-UP STUFF
 		for (int i = 0; i < powerups.size(); i++) {
 			if (Intersector.overlaps(powerups.get(i).getHitbox(), player.getHitbox())) {
@@ -547,6 +695,7 @@ public class Updater implements Screen {
 							OBJECTTYPE.EXPANDER);
 					obj.setSpawnTime(TimeUtils.millis());
 					mapObjects.add(obj);
+					Explosion.play();
 					enemies.clear();
 				}
 				if (player.getPowerupType() == POWERUPTYPE.RAPIDFIRE) {
@@ -564,7 +713,7 @@ public class Updater implements Screen {
 			}
 
 			if (player.getPowerupType() == POWERUPTYPE.RAPIDFIRE) {
-				player.setShootingCooldown(900);
+				player.setShootingCooldown(500);
 			}
 			if (player.getPowerupType() == POWERUPTYPE.SHIELD) {
 				mapObjects.clear();
@@ -579,9 +728,11 @@ public class Updater implements Screen {
 		}
 
 		// This listens to mouse clicks
-		// Gdx.input.justTouched would be clicking down to shoot
+		// Gdx.input.isTouched would be holding down to shoot
 		if (Gdx.input.isTouched() && TimeUtils.timeSinceMillis(player.getLastShot()) > player.getShootingCooldown()) {
-
+		
+			player.setAttacking(true);
+			player.setAttackAnimStart(TimeUtils.millis());
 			// Spawn a projectile with target coordinates and set the time it is
 			// visible
 
@@ -591,17 +742,72 @@ public class Updater implements Screen {
 				// Needs to be refined
 				Vector3 v = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 				Vector3 reaCoords = camera.unproject(v);
-				float bulletVel = 20f;
+				float bulletVel = 5f;
+				double hypot = Math.hypot((reaCoords.x - player.getMiddleX()), (reaCoords.y - player.getMiddleY()));
+				
+				
+				
+				/* original attempt
 				float velX = (float) (reaCoords.x - (player.getX() + (player.getWidth() / 2))) / bulletVel;
 				float velY = (float) (reaCoords.y - (player.getY() + (player.getHeight() / 2))) / bulletVel;
-
-				Projectile p = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
-						player.getY() + player.getHeight() / 2, velX, velY,
-						game.getLoader().getManager().get("Pointer.png", Texture.class));
-				p.setTargetX(reaCoords.x);
-				p.setTargetY(reaCoords.y);
-				p.setCurrentTime(TimeUtils.millis());
-				proj.add(p);
+*/
+				
+				
+				float velX = (float)(bulletVel / hypot*(reaCoords.x - player.getMiddleX()));
+				float velY = (float)(bulletVel / hypot*(reaCoords.y - player.getMiddleY()));
+				
+				
+				
+				int tmp = 0;
+				tmp  = MathUtils.random(0, 3);
+				shot.play();
+				if(tmp == 0){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Carrot.png", Texture.class));
+					p.setTargetX(reaCoords.x);
+					p.setTargetY(reaCoords.y);
+					p.setCurrentTime(TimeUtils.millis());
+					proj.add(p);
+				} 
+				if(tmp == 1){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Tomato.png", Texture.class));
+					p.setTargetX(reaCoords.x);
+					p.setTargetY(reaCoords.y);
+					p.setCurrentTime(TimeUtils.millis());
+					proj.add(p);
+				}
+				if(tmp == 2){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Broccoli.png", Texture.class));
+					p.setTargetX(reaCoords.x);
+					p.setTargetY(reaCoords.y);
+					p.setCurrentTime(TimeUtils.millis());
+					proj.add(p);
+				}
+				if(tmp == 3){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/EggPlant.png", Texture.class));
+					p.setTargetX(reaCoords.x);
+					p.setTargetY(reaCoords.y);
+					p.setCurrentTime(TimeUtils.millis());
+					proj.add(p);
+				}
+				
+			
+				
+				
+				
+				
+				
 				// triple shot
 			} else {
 				// Convert the cursor coordinates into game world coordinates.
@@ -610,41 +816,127 @@ public class Updater implements Screen {
 
 				Vector3 reaCoords = camera.unproject(v);
 
-				float bulletVel = 20f;
-
+				float bulletVel = 5f;
+				double hypot = Math.hypot((reaCoords.x - player.getMiddleX()), (reaCoords.y - player.getMiddleY()));
 				// Straight shot
+				/* original attempt
 				float velX = (float) (reaCoords.x - (player.getX() + (player.getWidth()) / 2)) / bulletVel;
 				float velY = (float) (reaCoords.y - (player.getY() + (player.getHeight() / 2))) / bulletVel;
+				*/
 
-				float velXR = (float) (reaCoords.x - (Projectile.getSideShots(player, reaCoords)[1].x)) / bulletVel;
-				float velYR = (float) (reaCoords.y - (Projectile.getSideShots(player, reaCoords)[1].y)) / bulletVel;
+				float velX = (float)(bulletVel / hypot*(reaCoords.x - player.getMiddleX()));
+				float velY = (float)(bulletVel / hypot*(reaCoords.y - player.getMiddleY()));
 
-				float velXL = (float) (reaCoords.x - (Projectile.getSideShots(player, reaCoords)[0].x)) / bulletVel;
-				float velYL = (float) (reaCoords.y - (Projectile.getSideShots(player, reaCoords)[0].y)) / bulletVel;
+				float velXR = (float) (bulletVel/hypot*(reaCoords.x - (Projectile.getSideShots(player, reaCoords)[1].x))) ;
+				float velYR = (float) (bulletVel/hypot*(reaCoords.y - (Projectile.getSideShots(player, reaCoords)[1].y))) ;
 
-				Projectile p = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
-						player.getY() + player.getHeight() / 2, velX, velY,
-						game.getLoader().getManager().get("Pointer.png", Texture.class));
+				float velXL = (float) (bulletVel/hypot*(reaCoords.x - (Projectile.getSideShots(player, reaCoords)[0].x)));
+				float velYL = (float) (bulletVel/hypot*(reaCoords.y - (Projectile.getSideShots(player, reaCoords)[0].y)));
 
-				Projectile l = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
-						player.getY() + player.getHeight() / 2, velXR, velYR,
-						game.getLoader().getManager().get("Pointer.png", Texture.class));
+				// Randomly select the ammo for triple shot
+				int tmp = 0;
+				tmp  = MathUtils.random(0, 3);
+				
+				if(tmp == 0){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/EggPlant.png", Texture.class));
 
-				Projectile r = new Projectile(10, 10, player.getX() + player.getWidth() / 2,
-						player.getY() + player.getHeight() / 2, velXL, velYL,
-						game.getLoader().getManager().get("Pointer.png", Texture.class));
+					Projectile l = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXR, velYR,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/EggPlant.png", Texture.class));
 
-				l.setCurrentTime(TimeUtils.millis());
-				p.setCurrentTime(TimeUtils.millis());
-				r.setCurrentTime(TimeUtils.millis());
-				proj.add(p);
-				proj.add(l);
-				proj.add(r);
+					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXL, velYL,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/EggPlant.png", Texture.class));
+
+					l.setCurrentTime(TimeUtils.millis());
+					p.setCurrentTime(TimeUtils.millis());
+					r.setCurrentTime(TimeUtils.millis());
+					
+					proj.add(p);
+					proj.add(l);
+					proj.add(r);
+				} 
+				if(tmp == 1){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Carrot.png", Texture.class));
+
+					Projectile l = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXR, velYR,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Carrot.png", Texture.class));
+
+					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXL, velYL,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Carrot.png", Texture.class));
+
+					l.setCurrentTime(TimeUtils.millis());
+					p.setCurrentTime(TimeUtils.millis());
+					r.setCurrentTime(TimeUtils.millis());
+					
+					proj.add(p);
+					proj.add(l);
+					proj.add(r);
+				}
+				if(tmp == 2){
+					
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Tomato.png", Texture.class));
+
+					Projectile l = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXR, velYR,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Tomato.png", Texture.class));
+
+					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXL, velYL,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Tomato.png", Texture.class));
+
+					l.setCurrentTime(TimeUtils.millis());
+					p.setCurrentTime(TimeUtils.millis());
+					r.setCurrentTime(TimeUtils.millis());
+					
+					proj.add(p);
+					proj.add(l);
+					proj.add(r);
+				}
+				if(tmp == 3){
+					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velX, velY,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Broccoli.png", Texture.class));
+
+					Projectile l = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXR, velYR,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Broccoli.png", Texture.class));
+
+					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+							player.getY() + player.getHeight() / 2, velXL, velYL,
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Broccoli.png", Texture.class));
+
+					l.setCurrentTime(TimeUtils.millis());
+					p.setCurrentTime(TimeUtils.millis());
+					r.setCurrentTime(TimeUtils.millis());
+					
+					proj.add(p);
+					proj.add(l);
+					proj.add(r);
+				}
+				shot.play();
 
 			}
 
 			player.setLastShot(TimeUtils.millis());
 		}
+		
+		if(TimeUtils.timeSinceMillis(player.getAttackAnimStart()) > 500){
+	
+			player.setAttacking(false);
+		}
+		
+		
 		// Powerup spawns here
 
 		if (TimeUtils.timeSinceMillis(timeToNextPowerup) > 10000) {
@@ -676,6 +968,7 @@ public class Updater implements Screen {
 
 				if (Intersector.overlaps(proj.get(j).getHitbox(), enemies.get(i).getHitbox())
 						&& TimeUtils.timeSinceMillis(proj.get(j).getCurrentTime()) < 4000) {
+					hit.play();
 					enemies.get(i).setHP(enemies.get(i).getHP() - 1);
 					proj.remove(j);
 					if (enemies.get(i).getHP() <= 0 && enemies.size() > 0) {
@@ -725,7 +1018,8 @@ public class Updater implements Screen {
 			}
 		}
 		*/
-
+		
+		
 		camera.position.set(
 				MathUtils.clamp(player.getX(), camera.viewportWidth * .5f,
 						world.mapWidth() - camera.viewportWidth * .5f),
@@ -756,6 +1050,57 @@ public class Updater implements Screen {
 			
 		}
 				
+
+		
+		//DRAW ENEMIES
+		for (int i = 0; i < enemies.size(); i++) {
+			
+			// STEALER
+			if (enemies.get(i) instanceof StealingEnemy) {
+				
+				//game.batch.draw(((StealingEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),enemies.get(i).getY());
+				
+				game.batch.draw((StealingEnemy) enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
+						enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
+			
+				
+			// CHASER
+			} else if (enemies.get(i) instanceof ChaserEnemy) {
+				game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
+						enemies.get(i).getY());
+			}
+
+		}
+		
+		if(player.isAttacking()){
+		
+			game.batch.draw(player.getCurrentAttackFrame(statetime), player.getX(), player.getY(), player.getWidth(),
+					player.getHeight());
+		
+		}else{
+		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(),
+				player.getHeight());
+		}
+		for (int i = 0; i < proj.size(); i++) {
+			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(),
+					proj.get(i).getHeight());
+		}
+
+		if (!powerups.isEmpty()) {
+			for (int i = 0; i < powerups.size(); i++) {
+
+				Powerup powerup = powerups.get(i);
+
+				if (TimeUtils.timeSinceMillis(powerup.getTimeAlive()) < 9000) {
+					game.batch.draw(powerup.getGraphic(), powerup.getX(), powerup.getY(), powerup.getWidth(), powerup.getHeight());
+
+				} else {
+
+					powerups.remove(i);
+				}
+
+			}
+		}
 		if (!mapObjects.isEmpty()) {
 			for (int i = 0; i < mapObjects.size(); i++) {
 				// Draw Follower Object
@@ -778,75 +1123,40 @@ public class Updater implements Screen {
 				}
 			}
 		}
+
+	
+
+		// Wait 10 sec between waves.
+		/*
+		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10000 && enemies.isEmpty() && mapObjects.isEmpty()) {
+			
+			spawnEnemies();
+		}
+		*/
 		
 
-		for (int i = 0; i < enemies.size(); i++) {
-			if (enemies.get(i) instanceof StealingEnemy) {
-				game.batch.draw(((StealingEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
-						enemies.get(i).getY());
+		// Test 1 sec
+		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10000 && enemies.isEmpty()) {
 
-			} else if (enemies.get(i) instanceof ChaserEnemy) {
-				game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
-						enemies.get(i).getY());
-			}
-
+			spawnEnemies();
+			timeSinceWave = TimeUtils.millis();
 		}
-		game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(),
-				player.getHeight());
-
-		for (int i = 0; i < proj.size(); i++) {
-			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(),
-					proj.get(i).getHeight());
-		}
-
-		if (!powerups.isEmpty()) {
-			for (int i = 0; i < powerups.size(); i++) {
-
-				Powerup powerup = powerups.get(i);
-
-				if (TimeUtils.timeSinceMillis(powerup.getTimeAlive()) < 9000) {
-					game.batch.draw(powerup.getGraphic(), powerup.getX(), powerup.getY(), 16f, 16f);
-
-				} else {
-
-					powerups.remove(i);
-				}
-
-			}
-		}
-		// Update particles in the list
-
-		if (!effects.isEmpty()) {
-			System.out.println("Powerup List not empty: " + effects.size());
+		// Update particles in the list FURTHER WORK REQUIRED
+	if (!effects.isEmpty()) {
+			
 			for (int i = 0; i < effects.size(); i++) {
-
-				
-				System.out.println("Effect Fetched is COMPLETE:" + effects.get(i).isComplete());
+			
 				if (!effects.get(i).isComplete()) {
+				
 					effects.get(i).update(statetime);
 					effects.get(i).draw(game.batch);
 				} else {
-
+					effects.get(i).dispose();
 					effects.remove(i);
 				}
 			}
 
 		}
-
-		// Wait 10 sec between waves.
-		/*
-		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10000 && enemies.isEmpty() && mapObjects.isEmpty()) {
-
-			spawnEnemies();
-		}
-		*/
-		
-		// Test 1 sec
-		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10 && enemies.isEmpty() && mapObjects.isEmpty()) {
-
-			spawnEnemies();
-		}
-		
 
 		game.batch.end();
 
@@ -859,6 +1169,7 @@ public class Updater implements Screen {
 
 		stage.act(statetime);
 		stage.draw();
+			
 		// shape renderer for debugging
 		/*
 		 * r.setProjectionMatrix(camera.combined); r.begin(ShapeType.Line);
@@ -878,7 +1189,7 @@ public class Updater implements Screen {
 	}
 
 	public Powerup spawnPowerUp(GameWorld world, Core game) {
-		System.out.println("Spawning powerup");
+		
 		float x = MathUtils.random(world.getMinimumX(), world.getmaximumX());
 		float y = MathUtils.random(world.getMinimumY(), world.getMaximumY());
 		for (int i = 0; i < borders.size; i++) {
@@ -908,11 +1219,14 @@ public class Updater implements Screen {
 				}
 			}
 		}
-		Powerup powerup = new Powerup(16, 16, x, y, 0f, 0f, game);
-
+		// Instatiating powerup
+		
+		Powerup powerup = new Powerup(32, 32, x, y, 0f, 0f, game);
+  
 		powerup.setTypeAndGraphic(game);
 		powerup.setTimeAlive(TimeUtils.millis());
 		ParticleEffect effect = powerup.getSpawnEffect();
+		
 		effect.start();
 		effects.add(effect);
 		return powerup;
@@ -921,7 +1235,7 @@ public class Updater implements Screen {
 
 	public void dispose() {
 		// game.batch.dispose();
-		stage.dispose();
+		//stage.dispose();
 		// mapRender.dispose();
 
 	}

@@ -29,6 +29,7 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	hitbox = new Rectangle(x, y, width, height);
 	timeoutTimer = 0;
 }
+
 public SpriteCommons(int width, int height, float x, float y,float xVel, float yVel){
 	this.x = x;
 	this.y = y;

@@ -32,6 +32,7 @@ public class StealingEnemy extends SpriteCommons {
 	public void setDir(DIRECTION dir) {
 		this.dir = dir;
 	}
+
 	
 	
 	// Sets all the animations

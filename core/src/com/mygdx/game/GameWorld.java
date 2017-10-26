@@ -19,7 +19,7 @@ public class GameWorld {
 	private MapProperties prop;
 	
 	public GameWorld(){
-		map = new TmxMapLoader().load("GameMap.tmx");
+		map = new TmxMapLoader().load("C:/Users/Tommi/libGit/core/assets/CandyPileMap.tmx");
 		borders = map.getLayers().get("Borders").getObjects();
 		spawnPoints = map.getLayers().get("Coordinates").getObjects();
 		prop = map.getProperties();
