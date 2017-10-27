@@ -62,7 +62,7 @@ public class Updater implements Screen {
 	private Pile pile;
 	private ArrayList<SpriteCommons> enemies;
 	private ArrayList<SpriteCommons> enemyAdd;
-	boolean pileHealth;
+	
 	boolean noEnemies;
 
 	private BitmapFont f;
@@ -137,16 +137,17 @@ public class Updater implements Screen {
 
 		game.batch.setProjectionMatrix(camera.combined);
 		proj = new ArrayList<Projectile>();
-		ambience = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
+		ambience = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
 		ambience.setLooping(true);
 		ambience.play();
 		
-		shot = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Sounds/shooting/NFF-gun-miss.wav",Sound.class);
-		hit = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Sounds/hit/NFF-slap-02.wav",Sound.class);
-		Explosion = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Sounds/hit/NFF-explode.wav",Sound.class);
-		GameOver = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Sounds/game_over/NFF-death-bell.wav",Sound.class);
-		walk1 = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Sounds/walking/grass1.wav",Sound.class);
-		walk2 = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Sounds/walking/gravel1.wav",Sound.class);
+		shot = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/shooting/NFF-gun-miss.wav",Sound.class);
+		hit = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/hit/NFF-slap-02.wav",Sound.class);
+		Explosion = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/hit/NFF-explode.wav",Sound.class);
+		GameOver = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/game_over/NFF-death-bell.wav",Sound.class);
+		walk1 = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/walking/grass1.wav",Sound.class);
+		walk2 = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/walking/gravel1.wav",Sound.class);
+		
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
@@ -154,10 +155,12 @@ public class Updater implements Screen {
 						spawnPoints.get(i).getRectangle().getY(), 10);
 			}
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")) {
-				pile = new Pile(100, 100, spawnPoints.get(i).getRectangle().getX(),
+				pile = new Pile(87, 62, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(),
-						game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/pileTest.png", Texture.class),
-						game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/pileTest2.png", Texture.class));
+						game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/CPBigCrop.png", Texture.class),
+						game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/CPMedCrop.png", Texture.class),
+						game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/CPSmallCrop.png", Texture.class),
+						game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/CPTinyCrop.png", Texture.class));
 			}
 		}
 		for (int i = 0; i < spawnPoints.size; i++) {
@@ -166,7 +169,7 @@ public class Updater implements Screen {
 			}
 		}
 
-		player.setAnimations(8, 3, 0.10f, game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/PirateTileset.png", Texture.class));
+		player.setAnimations(8, 3, 0.10f, game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/PirateTileset.png", Texture.class));
 		player.setDir(DIRECTION.DOWN);
 		camera.position.set(player.getX(), player.getY(), 0);
 		
@@ -178,7 +181,7 @@ public class Updater implements Screen {
 		// For score points
 		timeScore = TimeUtils.millis();
 
-		mySkin = new Skin(Gdx.files.internal("C:/Users/Tommi/libGit/core/assets/skin/uiskin.json"));
+		mySkin = new Skin(Gdx.files.internal("C:/CandyPile/CandyPileDefender/core/assets/skin/uiskin.json"));
 
 		scores = new Label("Score: " + game.getLoader().getScore(), mySkin);
 		scores.setPosition(Gdx.graphics.getWidth() / 1.37f, Gdx.graphics.getHeight() - 20);
@@ -237,11 +240,11 @@ public class Updater implements Screen {
 //					if(tmp3 == 1) {
 					enemyAdd.add(new StealingEnemy(32, 32, monsterSpawns.get(tmp).getRectangle().getX(),
 							monsterSpawns.get(tmp).getRectangle().getY(), 1,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/stealTest.png", Texture.class)));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/stealTest.png", Texture.class)));
 //					}else {
 					enemyAdd.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
 							monsterSpawns.get(tmp2).getRectangle().getY(), 2,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/chaserTest.png", Texture.class)));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/chaserTest.png", Texture.class)));
 //					}
 				}
 			}
@@ -355,7 +358,7 @@ public class Updater implements Screen {
 					&& TimeUtils.timeSinceMillis(mpObjLastSet) > mpObjCooldown) {
 				MapObject obj = new MapObject(32, 32, player.getX(), player.getY(), 0, 0, 10000,
 						game.getLoader().getManager().get(
-								"C:/Users/Tommi/libGit/core/assets/tarstain.png", Texture.class),
+								"C:/CandyPile/CandyPileDefender/core/assets/tarstain.png", Texture.class),
 						OBJECTTYPE.HAZARD);
 				obj.setSpawnTime(TimeUtils.millis());
 				mapObjects.add(obj);
@@ -465,7 +468,7 @@ public class Updater implements Screen {
 	
 						if (Intersector.overlaps((enemies.get(i).getHitbox()), pile.getHitbox())) {
 							
-							pileHealth = pile.reduceHealth();
+							pile.reduceHealth();
 							enemies.remove(i);
 							
 						}
@@ -666,7 +669,7 @@ public class Updater implements Screen {
 					MapObject obj = new MapObject(40, 40, player.getX() - player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, 0, 0, 10000,
 							game.getLoader().getManager().get(
-									"C:/Users/Tommi/libGit/core/assets/SHIELD.png", Texture.class),
+									"C:/CandyPile/CandyPileDefender/core/assets/SHIELD.png", Texture.class),
 							OBJECTTYPE.FOLLOWER);
 					obj.setSpawnTime(TimeUtils.millis());
 					mapObjects.add(obj);
@@ -676,7 +679,7 @@ public class Updater implements Screen {
 					MapObject obj = new MapObject(32, 32, player.getX() - player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, 0, 0, 10000,
 							game.getLoader().getManager().get(
-									"C:/Users/Tommi/libGit/core/assets/ScreenClear.png",
+									"C:/CandyPile/CandyPileDefender/core/assets/ScreenClear.png",
 									Texture.class),
 							OBJECTTYPE.EXPANDER);
 					obj.setSpawnTime(TimeUtils.millis());
@@ -751,7 +754,7 @@ public class Updater implements Screen {
 					
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velX, velY,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Carrot.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Carrot.png", Texture.class));
 					p.setTargetX(reaCoords.x);
 					p.setTargetY(reaCoords.y);
 					p.setCurrentTime(TimeUtils.millis());
@@ -761,7 +764,7 @@ public class Updater implements Screen {
 					
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velX, velY,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Tomato.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Tomato.png", Texture.class));
 					p.setTargetX(reaCoords.x);
 					p.setTargetY(reaCoords.y);
 					p.setCurrentTime(TimeUtils.millis());
@@ -771,7 +774,7 @@ public class Updater implements Screen {
 					
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velX, velY,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Broccoli.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Broccoli.png", Texture.class));
 					p.setTargetX(reaCoords.x);
 					p.setTargetY(reaCoords.y);
 					p.setCurrentTime(TimeUtils.millis());
@@ -781,7 +784,7 @@ public class Updater implements Screen {
 					
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velX, velY,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/EggPlant.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/EggPlant.png", Texture.class));
 					p.setTargetX(reaCoords.x);
 					p.setTargetY(reaCoords.y);
 					p.setCurrentTime(TimeUtils.millis());
@@ -827,15 +830,15 @@ public class Updater implements Screen {
 					
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velX, velY,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/EggPlant.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/EggPlant.png", Texture.class));
 
 					Projectile l = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velXR, velYR,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/EggPlant.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/EggPlant.png", Texture.class));
 
 					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velXL, velYL,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/EggPlant.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/EggPlant.png", Texture.class));
 
 					l.setCurrentTime(TimeUtils.millis());
 					p.setCurrentTime(TimeUtils.millis());
@@ -849,15 +852,15 @@ public class Updater implements Screen {
 					
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velX, velY,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Carrot.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Carrot.png", Texture.class));
 
 					Projectile l = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velXR, velYR,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Carrot.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Carrot.png", Texture.class));
 
 					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velXL, velYL,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Carrot.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Carrot.png", Texture.class));
 
 					l.setCurrentTime(TimeUtils.millis());
 					p.setCurrentTime(TimeUtils.millis());
@@ -871,15 +874,15 @@ public class Updater implements Screen {
 					
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velX, velY,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Tomato.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Tomato.png", Texture.class));
 
 					Projectile l = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velXR, velYR,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Tomato.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Tomato.png", Texture.class));
 
 					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velXL, velYL,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Tomato.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Tomato.png", Texture.class));
 
 					l.setCurrentTime(TimeUtils.millis());
 					p.setCurrentTime(TimeUtils.millis());
@@ -892,15 +895,15 @@ public class Updater implements Screen {
 				if(tmp == 3){
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velX, velY,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Broccoli.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Broccoli.png", Texture.class));
 
 					Projectile l = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velXR, velYR,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Broccoli.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Broccoli.png", Texture.class));
 
 					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velXL, velYL,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Broccoli.png", Texture.class));
+							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Broccoli.png", Texture.class));
 
 					l.setCurrentTime(TimeUtils.millis());
 					p.setCurrentTime(TimeUtils.millis());
@@ -1025,14 +1028,34 @@ public class Updater implements Screen {
 		game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
 		
-		// Draw pile; two health states
-		if (!pileHealth) {
+		// Draw pile; four health states
+		if (pile.getHealth() > 6) {
 			
 			game.batch.draw(pile.getPileTexture(), pile.getX(), pile.getY());
+			pile.setHeight(49);
 			
-		} else {
+		} else if (pile.getHealth() > 4) {
 			
 			game.batch.draw(pile.getPileTexture2(), pile.getX(), pile.getY());
+			pile.setHeight(38);
+			
+		} else if (pile.getHealth() > 2) {
+			
+			game.batch.draw(pile.getPileTexture3(), pile.getX(), pile.getY());
+			pile.setHeight(27);
+			
+		} else if (pile.getHealth() > 0) {
+			
+			game.batch.draw(pile.getPileTexture3(), pile.getX(), pile.getY());
+			pile.setHeight(27);
+			
+		} else if (pile.getHealth() == 0) {
+			
+			System.out.println("The whole pile was stolen");
+			GameOver.play();
+			ambience.stop();
+			game.setScreen(new LoadingScreen(game));
+			this.dispose();
 			
 		}
 				

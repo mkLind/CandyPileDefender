@@ -22,7 +22,7 @@ public class Powerup extends SpriteCommons {
 		spawnEffect = new ParticleEffect();
 		
 
-		spawnEffect.load(Gdx.files.internal("C:/Users/Tommi/libGit/core/assets/spawnparticle2.p"), Gdx.files.internal("C:/Users/Tommi/libGit/core/assets/"));
+		spawnEffect.load(Gdx.files.internal("C:/CandyPile/CandyPileDefender/core/assets/spawnparticle2.p"), Gdx.files.internal("C:/CandyPile/CandyPileDefender/core/assets/"));
 
 		
 		spawnEffect.getEmitters().first().setPosition(super.getX(), super.getY());
@@ -52,23 +52,23 @@ public class Powerup extends SpriteCommons {
 		this.type = POWERUPTYPE.values()[MathUtils.random(0, POWERUPTYPE.values().length-1)];
 		//this.type = POWERUPTYPE.CLEARSCREEN;
 		if(type == POWERUPTYPE.CLEARSCREEN){
-			 graphic = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Explosion.png",Texture.class);
+			 graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Explosion.png",Texture.class);
 			 effectTime = (long) 1000;
 		}
 		if(type == POWERUPTYPE.HASTE){
-			graphic = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/WalkingSpeedUp.png",Texture.class);
+			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/WalkingSpeedUp.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.RAPIDFIRE){
-			graphic = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/FireRateUp.png",Texture.class);
+			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/FireRateUp.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.SLOWDOWN){
-			graphic = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Tar.png",Texture.class);
+			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Tar.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.TRIPLESHOT){
-			graphic = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Times3.png",Texture.class);
+			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Times3.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.SHIELD){
-			graphic = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/ShieldCrate.png", Texture.class);
+			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/ShieldCrate.png", Texture.class);
 		}
 		
 		
