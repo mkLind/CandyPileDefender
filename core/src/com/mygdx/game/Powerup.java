@@ -76,19 +76,19 @@ public class Powerup extends SpriteCommons {
 			 
 		}
 		if(type == POWERUPTYPE.HASTE){
-			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/WalkingSpeedUp.png",Texture.class);
+			graphic = game.getLoader().getManager().get("C:/Users/marku/Documents/CandyPileDefender/core/assets/WalkingSpeedUp.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.RAPIDFIRE){
-			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/FireRateUp.png",Texture.class);
+			graphic = game.getLoader().getManager().get("C:/Users/marku/Documents/CandyPileDefender/core/assets/FireRateUp.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.SLOWDOWN){
-			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Tar.png",Texture.class);
+			graphic = game.getLoader().getManager().get("C:/Users/marku/Documents/CandyPileDefender/core/assets/Tar.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.TRIPLESHOT){
-			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Times3.png",Texture.class);
+			graphic = game.getLoader().getManager().get("C:/Users/marku/Documents/CandyPileDefender/core/assets/Times3.png",Texture.class);
 		}
 		if(type == POWERUPTYPE.SHIELD){
-			graphic = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/ShieldCrate.png", Texture.class);
+			graphic = game.getLoader().getManager().get("C:/Users/marku/Documents/CandyPileDefender/core/assets/ShieldCrate.png", Texture.class);
 
 		}
 		
