@@ -52,6 +52,14 @@ public class ResourceManager {
 		manager.load("C:/CandyPile/CandyPileDefender/core/assets/SHIELD.png",Texture.class);
 		manager.load("C:/CandyPile/CandyPileDefender/core/assets/ScreenClear.png",Texture.class);
 		manager.load("C:/CandyPile/CandyPileDefender/core/assets/PirateTileset.png",Texture.class);
+		
+		// Each candy pile phase is a different .png
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/CPBigCrop.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/CPMedCrop.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/CPSmallCrop.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/CPTinyCrop.png", Texture.class);
+		
+		
 		// Ammunition
 		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Carrot.png",Texture.class);
 		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Tomato.png",Texture.class);
