@@ -151,7 +151,7 @@ public class Updater implements Screen {
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
-				player = new Player(35, 40, spawnPoints.get(i).getRectangle().getX(),
+				player = new Player(30, 42, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(), 10);
 			}
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")) {
@@ -227,51 +227,44 @@ public class Updater implements Screen {
 	// Spawn enemies. Enemy count increases by one every time to make the wave
 	// stronger.
 	private void spawnEnemies() {
-//		System.out.println("SPAWNING ENEMIES");
+		// System.out.println("SPAWNING ENEMIES");
 		timesCalled++;
-			int tmp;
-			int tmp2;
-			int tmp3;
-			if(enemies.size() == 0) {
-				for (int i = 0; i < timesCalled; i++) {
-					tmp = MathUtils.random(0, monsterSpawns.size - 1);
-					tmp2 = MathUtils.random(0, monsterSpawns.size - 1);
-					tmp3 = MathUtils.random(0, 1);
-//					if(tmp3 == 1) {
-					
-					/*
- 					enemyAdd.add(new StealingEnemy(32, 32, monsterSpawns.get(tmp).getRectangle().getX(),
-							monsterSpawns.get(tmp).getRectangle().getY(), 1,
+		int tmp;
+		int tmp2;
+		int tmp3;
+		if (enemies.size() == 0) {
+			for (int i = 0; i < timesCalled; i++) {
+				tmp = MathUtils.random(0, monsterSpawns.size - 1);
+				tmp2 = MathUtils.random(0, monsterSpawns.size - 1);
+				tmp3 = MathUtils.random(0, 1);
+				// if(tmp3 == 1) {
 
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/stealTest.png", Texture.class)));
-//					}else {
-					enemyAdd.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
-							monsterSpawns.get(tmp2).getRectangle().getY(), 2,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/chaserTest.png", Texture.class)));
-//					}
+				/*
+				 * enemyAdd.add(new StealingEnemy(32, 32,
+				 * monsterSpawns.get(tmp).getRectangle().getX(),
+				 * monsterSpawns.get(tmp).getRectangle().getY(), 1,
+				 * game.getLoader().getManager().get(
+				 * "C:/CandyPile/CandyPileDefender/core/assets/stealTest.png", Texture.class)));
+				 */
 
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/stealTest.png", Texture.class)));
-					 */
-					
-					// new stealer 
-					StealingEnemy tmpSE = new StealingEnemy(20, 30, monsterSpawns.get(tmp).getRectangle().getX(), 
-							monsterSpawns.get(tmp).getRectangle().getY(), 1);				
-					
-					enemyAdd.add(tmpSE);
-					
-					
-					tmpSE.setAnimations(4, 3, 0.10f, game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/SkeletonTileset.png", Texture.class));				
-					
-//					}else { 
-					
-					enemyAdd.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
-							monsterSpawns.get(tmp2).getRectangle().getY(), 2,
-							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/chaserTest.png", Texture.class)));
-//					} 
-					
+				// new stealer
+				StealingEnemy tmpSE = new StealingEnemy(30, 40, monsterSpawns.get(tmp).getRectangle().getX(),
+						monsterSpawns.get(tmp).getRectangle().getY(), 1);
 
-				}
+				enemyAdd.add(tmpSE);
+
+				tmpSE.setAnimations(4, 3, 0.10f, game.getLoader().getManager()
+						.get("C:/CandyPile/CandyPileDefender/core/assets/SkeletonTileset.png", Texture.class));
+
+				// }else {
+
+				enemyAdd.add(new ChaserEnemy(21, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
+						monsterSpawns.get(tmp2).getRectangle().getY(), 2, game.getLoader().getManager()
+								.get("C:/CandyPile/CandyPileDefender/core/assets/chaserTest.png", Texture.class)));
+				// }
+
 			}
+		}
 			
 			//Check if spawn in same coordinates, if yes then timeout
 			for (int j = 0; j < enemyAdd.size(); j++) {
