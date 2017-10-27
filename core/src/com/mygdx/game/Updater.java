@@ -250,7 +250,7 @@ public class Updater implements Screen {
 							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/chaserTest.png", Texture.class)));
 //					}
 
-							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/stealTest.png", Texture.class)));
+							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/stealTest.png", Texture.class)));
 					 */
 					
 					// new stealer 
@@ -260,13 +260,13 @@ public class Updater implements Screen {
 					enemyAdd.add(tmpSE);
 					
 					
-					tmpSE.setAnimations(4, 3, 0.10f, game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/SkeletonTileset.png", Texture.class));				
+					tmpSE.setAnimations(4, 3, 0.10f, game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/SkeletonTileset.png", Texture.class));				
 					
 //					}else { 
 					
 					enemyAdd.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
 							monsterSpawns.get(tmp2).getRectangle().getY(), 2,
-							game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/chaserTest.png", Texture.class)));
+							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/chaserTest.png", Texture.class)));
 //					} 
 					
 

@@ -51,9 +51,9 @@ public class MainMenuScreen implements Screen {
 		this.game = game;
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
-
+//		this.font = game.font;
 		mySkin = new Skin(Gdx.files.internal("C:/Users/Tommi/libGit/core/assets/skin/uiskin.json"));
-		mySkin.getFont("font-label").getData().setScale(1.5f);
+//		mySkin.getFont("font-label").getData().setScale(1.5f);
 		playButton = new TextButton("Play", mySkin);
 		playButton.setWidth(Gdx.graphics.getWidth()/3);
         playButton.setPosition(Gdx.graphics.getWidth()/3 - playButton.getWidth()/2,Gdx.graphics.getHeight()/2 - playButton.getHeight()/3);
