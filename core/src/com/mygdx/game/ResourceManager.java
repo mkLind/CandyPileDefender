@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -36,56 +37,60 @@ public class ResourceManager {
 		prefs.putString("score", "0");
 		prefs.flush();
 
-		
-		manager.load("C:/Users/Tommi/libGit/core/assets/Pointer.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/chaserTest.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/stealTest.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/pileTest.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/pileTest2.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/WalkingSpeedUp.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/FireRateUp.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Explosion.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/ShieldCrate.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Tar.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Times3.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/tarstain.png",Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/SHIELD.png",Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/ScreenClear.png",Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/PirateTileset.png",Texture.class);
-		
-		manager.load("C:/Users/Tommi/libGit/core/assets/SkeletonTileset.png", Texture.class);
-		// Each candy pile phase is a different .png
-		manager.load("C:/Users/Tommi/libGit/core/assets/CPBigCrop.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/CPMedCrop.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/CPSmallCrop.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/CPTinyCrop.png", Texture.class);
-		
-
-		
-		// Ammunition
-		manager.load("C:/Users/Tommi/libGit/core/assets/Carrot.png",Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Tomato.png",Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Broccoli.png",Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/EggPlant.png",Texture.class);
-		// Music and sounds
-		
-		manager.load("C:/Users/Tommi/libGit/core/assets/Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
-		
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/game_over/NFF-death-bell.wav", Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/game_over/NFF-zomboid.wav", Sound.class);
-		
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/hit/NFF-dusty-hit.wav", Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/hit/NFF-explode.wav", Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/hit/NFF-kid-hurt.wav", Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/hit/NFF-slap-02.wav", Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/hit/NFF-springy-hit.wav", Sound.class);
-		
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/shooting/NFF-gun-miss.wav",Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/shooting/NFF-toy-gun.wav", Sound.class);
-		
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/walking/grass1.wav", Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/walking/gravel1.wav", Sound.class);
+		try {
+			manager.load("Pointer.png", Texture.class);
+			manager.load("chaserTest.png", Texture.class);
+			manager.load("stealTest.png", Texture.class);
+			manager.load("pileTest.png", Texture.class);
+			manager.load("pileTest2.png", Texture.class);
+			
+			manager.load("WalkingSpeedUp.png", Texture.class);
+			manager.load("FireRateUp.png", Texture.class);
+			manager.load("Explosion.png", Texture.class);
+			manager.load("ShieldCrate.png", Texture.class);
+			manager.load("Tar.png", Texture.class);
+			
+			manager.load("Times3.png", Texture.class);
+			manager.load("tarstain.png",Texture.class);
+			manager.load("SHIELD.png",Texture.class);
+			manager.load("ScreenClear.png",Texture.class);
+			manager.load("PirateTileset.png",Texture.class);
+			
+			manager.load("SkeletonTileset.png", Texture.class);
+			// Each candy pile phase is a different .png
+			manager.load("CPBigCrop.png", Texture.class);
+			manager.load("CPMedCrop.png", Texture.class);
+			manager.load("CPSmallCrop.png", Texture.class);
+			manager.load("CPTinyCrop.png", Texture.class);
+			
+			// Ammunition
+			manager.load("Carrot.png",Texture.class);
+			manager.load("Tomato.png",Texture.class);
+			manager.load("Broccoli.png",Texture.class);
+			
+			//manager.load("EggPlant.png",Texture.class);  //Does not load on jar file
+			// Music and sounds
+			
+			manager.load("Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
+			manager.load("Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
+			
+			manager.load("Sounds/game_over/NFF-death-bell.wav", Sound.class);
+			manager.load("Sounds/game_over/NFF-zomboid.wav", Sound.class);
+			
+			manager.load("Sounds/hit/NFF-dusty-hit.wav", Sound.class);
+			manager.load("Sounds/hit/NFF-explode.wav", Sound.class);
+			manager.load("Sounds/hit/NFF-kid-hurt.wav", Sound.class);
+			manager.load("Sounds/hit/NFF-slap-02.wav", Sound.class);
+			manager.load("Sounds/hit/NFF-springy-hit.wav", Sound.class);
+			
+			manager.load("Sounds/shooting/NFF-gun-miss.wav",Sound.class);
+			manager.load("Sounds/shooting/NFF-toy-gun.wav", Sound.class);
+			
+			manager.load("Sounds/walking/grass1.wav", Sound.class);
+			manager.load("Sounds/walking/gravel1.wav", Sound.class);
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}
 		
 	}
 	

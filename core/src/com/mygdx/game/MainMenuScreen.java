@@ -52,12 +52,12 @@ public class MainMenuScreen implements Screen {
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
 		this.font = game.font;
-		mySkin = new Skin(Gdx.files.internal("C:/Users/Tommi/libGit/core/assets/skin/uiskin.json"));
+		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 //		mySkin.getFont("font-label").getData().setScale(1.5f);
 		playButton = new TextButton("Play", mySkin);
 		playButton.setWidth(Gdx.graphics.getWidth()/3);
         playButton.setPosition(Gdx.graphics.getWidth()/3 - playButton.getWidth()/2,Gdx.graphics.getHeight()/2 - playButton.getHeight()/3);
-        ambience = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
+        ambience = game.getLoader().getManager().get("Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
         ambience.setLooping(true);
         ambience.play();
         playButton.addListener(new InputListener(){
@@ -83,7 +83,7 @@ public class MainMenuScreen implements Screen {
         game.getLoader().setFourth("0     00/00/0000");
         game.getLoader().setFifth("0     00/00/0000");
         */
-     
+        
         date = new Date(TimeUtils.millis());
         format = new SimpleDateFormat("dd/MM/yyyy");
         DateToStr = format.format(date);
