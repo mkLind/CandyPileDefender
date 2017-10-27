@@ -9,31 +9,28 @@ public class Pile extends SpriteCommons {
 	
 	private Texture pileTexture;
 	private Texture pileTexture2;
+	private Texture pileTexture3;
+	private Texture pileTexture4;
 	
-	public Pile(int width, int height, float x, float y, Texture pileTexture, Texture pileTexture2) {
+	public Pile(int width, int height, float x, float y, Texture pileTexture, Texture pileTexture2, Texture pileTexture3, Texture pileTexture4) {
 		
 		super(width, height, x, y, 0f, 0f);
 		
 		this.pileTexture = pileTexture;
 		this.pileTexture2 = pileTexture2;
+		this.pileTexture3 = pileTexture3;
+		this.pileTexture4 = pileTexture4;
 
 		
-		health = 2;
+		health = 8;
 		
 		
 	}
 
 	
-	public boolean reduceHealth() {
+	public void reduceHealth() {
 		health--;
-		if(health < 2) {
-			return true;
-		}else { 
-			return false;		
-		}
 	}
-
-
 
 
 	public int getHealth() {
@@ -53,11 +50,13 @@ public class Pile extends SpriteCommons {
 	public Texture getPileTexture2() {
 		return pileTexture2;
 	}
+	
+	public Texture getPileTexture3() {
+		return pileTexture3;
+	}
 
-
-
-	public void setPileTexture(Texture pileTexture) {
-		this.pileTexture = pileTexture;
+	public Texture getPileTexture4() {
+		return pileTexture4;
 	}
 
 }

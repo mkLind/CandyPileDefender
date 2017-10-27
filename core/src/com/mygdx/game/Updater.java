@@ -62,7 +62,7 @@ public class Updater implements Screen {
 	private Pile pile;
 	private ArrayList<SpriteCommons> enemies;
 	private ArrayList<SpriteCommons> enemyAdd;
-	boolean pileHealth;
+	
 	boolean noEnemies;
 
 	private BitmapFont f;
@@ -148,7 +148,6 @@ public class Updater implements Screen {
 		walk1 = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/walking/grass1.wav",Sound.class);
 		walk2 = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Sounds/walking/gravel1.wav",Sound.class);
 		
-		
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
@@ -156,10 +155,12 @@ public class Updater implements Screen {
 						spawnPoints.get(i).getRectangle().getY(), 10);
 			}
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")) {
-				pile = new Pile(100, 100, spawnPoints.get(i).getRectangle().getX(),
+				pile = new Pile(87, 62, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(),
-						game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/pileTest.png", Texture.class),
-						game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/pileTest2.png", Texture.class));
+						game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/CPBigCrop.png", Texture.class),
+						game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/CPMedCrop.png", Texture.class),
+						game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/CPSmallCrop.png", Texture.class),
+						game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/CPTinyCrop.png", Texture.class));
 			}
 		}
 		for (int i = 0; i < spawnPoints.size; i++) {
@@ -483,7 +484,7 @@ public class Updater implements Screen {
 	
 						if (Intersector.overlaps((enemies.get(i).getHitbox()), pile.getHitbox())) {
 							
-							pileHealth = pile.reduceHealth();
+							pile.reduceHealth();
 							enemies.remove(i);
 							
 						}
@@ -1043,14 +1044,34 @@ public class Updater implements Screen {
 		game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
 		
-		// Draw pile; two health states
-		if (!pileHealth) {
+		// Draw pile; four health states
+		if (pile.getHealth() > 6) {
 			
 			game.batch.draw(pile.getPileTexture(), pile.getX(), pile.getY());
+			pile.setHeight(49);
 			
-		} else {
+		} else if (pile.getHealth() > 4) {
 			
 			game.batch.draw(pile.getPileTexture2(), pile.getX(), pile.getY());
+			pile.setHeight(38);
+			
+		} else if (pile.getHealth() > 2) {
+			
+			game.batch.draw(pile.getPileTexture3(), pile.getX(), pile.getY());
+			pile.setHeight(27);
+			
+		} else if (pile.getHealth() > 0) {
+			
+			game.batch.draw(pile.getPileTexture3(), pile.getX(), pile.getY());
+			pile.setHeight(27);
+			
+		} else if (pile.getHealth() == 0) {
+			
+			System.out.println("The whole pile was stolen");
+			GameOver.play();
+			ambience.stop();
+			game.setScreen(new LoadingScreen(game));
+			this.dispose();
 			
 		}
 				
