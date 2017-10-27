@@ -156,7 +156,7 @@ public class Updater implements Screen {
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
-				player = new Player(35, 40, spawnPoints.get(i).getRectangle().getX(),
+				player = new Player(30, 42, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(), 10);
 			}
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")) {
@@ -258,7 +258,7 @@ public class Updater implements Screen {
 				 */
 
 				// new stealer
-				StealingEnemy tmpSE = new StealingEnemy(20, 30, monsterSpawns.get(tmp).getRectangle().getX(),
+				StealingEnemy tmpSE = new StealingEnemy(30, 40, monsterSpawns.get(tmp).getRectangle().getX(),
 						monsterSpawns.get(tmp).getRectangle().getY(), 1);
 
 				enemyAdd.add(tmpSE);
@@ -268,7 +268,7 @@ public class Updater implements Screen {
 
 				// }else {
 
-				enemyAdd.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
+				enemyAdd.add(new ChaserEnemy(21, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
 						monsterSpawns.get(tmp2).getRectangle().getY(), 2, game.getLoader().getManager()
 								.get("C:/CandyPile/CandyPileDefender/core/assets/chaserTest.png", Texture.class)));
 				// }
