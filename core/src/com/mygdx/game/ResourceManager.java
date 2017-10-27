@@ -37,6 +37,7 @@ public class ResourceManager {
 		prefs.flush();
 
 		
+
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/Pointer.png", Texture.class);
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/chaserTest.png", Texture.class);
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/stealTest.png", Texture.class);
@@ -76,6 +77,8 @@ public class ResourceManager {
 		
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/Sounds/walking/grass1.wav", Sound.class);
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/Sounds/walking/gravel1.wav", Sound.class);
+
+	
 		
 	}
 	
