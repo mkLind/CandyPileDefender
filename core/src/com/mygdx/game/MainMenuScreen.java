@@ -11,6 +11,7 @@ import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.net.HttpRequestBuilder;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class MainMenuScreen implements Screen {
 
 	final Core game;
+	private BitmapFont font;
 	private Skin mySkin;
 	private TextButton playButton;
 	private Stage stage;
@@ -42,7 +44,7 @@ public class MainMenuScreen implements Screen {
 	private String DateToStr;
 	private String currentScore;
 	private String tmp;
-	private String name;
+//	private String name;
 	private Music ambience;
 	
 	public MainMenuScreen(final Core game) {
@@ -51,7 +53,7 @@ public class MainMenuScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 
 		mySkin = new Skin(Gdx.files.internal("C:/Users/Tommi/libGit/core/assets/skin/uiskin.json"));
-//		mySkin.getFont("font-label").getData().setScale(1.5f);
+		mySkin.getFont("font-label").getData().setScale(1.5f);
 		playButton = new TextButton("Play", mySkin);
 		playButton.setWidth(Gdx.graphics.getWidth()/3);
         playButton.setPosition(Gdx.graphics.getWidth()/3 - playButton.getWidth()/2,Gdx.graphics.getHeight()/2 - playButton.getHeight()/3);
@@ -72,8 +74,15 @@ public class MainMenuScreen implements Screen {
             }
         });
         stage.addActor(playButton);
+        
 //        game.getLoader().setScore(30);
-//        game.getLoader().setSecond("12340     26/10/2017");
+        /*
+        game.getLoader().setHighScore("0     00/00/0000");
+        game.getLoader().setSecond("0     00/00/0000");
+        game.getLoader().setThird("0     00/00/0000");
+        game.getLoader().setFourth("0     00/00/0000");
+        game.getLoader().setFifth("0     00/00/0000");
+        */
      
         date = new Date(TimeUtils.millis());
         format = new SimpleDateFormat("dd/MM/yyyy");
@@ -82,12 +91,13 @@ public class MainMenuScreen implements Screen {
         currentScore = Integer.toString(game.getLoader().getScore()) + "     " + DateToStr;
         tmp = checkScores();
         
+        /*
         name = Base64Coder.encodeString("Tommi");
-//        try {
-//        	sendScores();
-//        }catch(Exception e) {
-//        	System.out.println(e.getMessage());
-//        }
+        try {
+        	sendScores();
+        }catch(Exception e) {
+        	System.out.println(e.getMessage());
+        }*/
         
         int row_height = Gdx.graphics.getWidth() / 10;
         int col_width = Gdx.graphics.getWidth() / 12;
@@ -134,44 +144,67 @@ public class MainMenuScreen implements Screen {
         label7.setWidth(Gdx.graphics.getWidth()/4);
         stage.addActor(label7);
         
+        if(game.getLoader().getScore() == 0) {
+        	label2.setText("");
+        }
         if(Integer.parseInt(game.getLoader().getHighScore().split(" ")[0]) == 0) {
-            label3.setText("");
+            label3.setText("1. ");
         }
         if(Integer.parseInt(game.getLoader().getSecond().split(" ")[0]) == 0) {
-            label4.setText("");
+            label4.setText("2. ");
         }
         if(Integer.parseInt(game.getLoader().getThird().split(" ")[0]) == 0) {
-            label5.setText("");
+            label5.setText("3. ");
         }
         if(Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) == 0) {
-            label6.setText("");
+            label6.setText("4. ");
         }
         if(Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) == 0) {
-            label7.setText("");
+            label7.setText("5. ");
         }
         if(game.getLoader().getScore() != 0) {
 	    	if(tmp == "first") {
 	    		label2.setText("New highscore!: " + game.getLoader().getScore());
 	    		label3.setText("1. " + game.getLoader().getHighScore() + "  <-");
-	    		label4.setText("2. " + game.getLoader().getSecond());
-	    		label5.setText("3. " + game.getLoader().getThird());
-	    		label6.setText("4. " + game.getLoader().getFourth());
-	    		label7.setText("5. " + game.getLoader().getFifth());
+	    		if(Integer.parseInt(game.getLoader().getSecond().split(" ")[0]) != 0) {
+		    		label4.setText("2. " + game.getLoader().getSecond());
+	    		}
+	    		if(Integer.parseInt(game.getLoader().getThird().split(" ")[0]) != 0) {
+	    			label5.setText("3. " + game.getLoader().getThird());
+	    		}
+	    		if(Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) != 0) {
+	    			label6.setText("4. " + game.getLoader().getFourth());
+	    		}
+	    		if(Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) != 0) {
+		    		label7.setText("5. " + game.getLoader().getFifth());
+	    		}
 	    	}else if (tmp == "second"){
 	            label2.setText("Your score: " + game.getLoader().getScore());
 	            label4.setText("2. " + game.getLoader().getSecond() + "  <-");
-	            label5.setText("3. " + game.getLoader().getThird());
-	    		label6.setText("4. " + game.getLoader().getFourth());
-	    		label7.setText("5. " + game.getLoader().getFifth());
+	            if(Integer.parseInt(game.getLoader().getThird().split(" ")[0]) != 0) {
+	    			label5.setText("3. " + game.getLoader().getThird());
+	    		}
+	    		if(Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) != 0) {
+	    			label6.setText("4. " + game.getLoader().getFourth());
+	    		}
+	    		if(Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) != 0) {
+		    		label7.setText("5. " + game.getLoader().getFifth());
+	    		}
 	    	}else if (tmp == "third"){
 	            label2.setText("Your score: " + game.getLoader().getScore());
 	            label5.setText("3. " + game.getLoader().getThird() + "  <-");
-	    		label6.setText("4. " + game.getLoader().getFourth());
-	    		label7.setText("5. " + game.getLoader().getFifth());
+	            if(Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) != 0) {
+	    			label6.setText("4. " + game.getLoader().getFourth());
+	    		}
+	    		if(Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) != 0) {
+		    		label7.setText("5. " + game.getLoader().getFifth());
+	    		}
 	    	}else if (tmp == "fourth"){
 	            label2.setText("Your score: " + game.getLoader().getScore());
 	            label6.setText("4. " + game.getLoader().getFourth() + "  <-");
-	    		label7.setText("5. " + game.getLoader().getFifth());
+	            if(Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) != 0) {
+		    		label7.setText("5. " + game.getLoader().getFifth());
+	    		}
 	    	}else if (tmp == "fifth"){
 	            label2.setText("Your score: " + game.getLoader().getScore());
 	            label7.setText("5. " + game.getLoader().getFifth() + "  <-");
