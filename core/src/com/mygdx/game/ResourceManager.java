@@ -37,45 +37,45 @@ public class ResourceManager {
 		prefs.flush();
 
 		
-		manager.load("C:/Users/Tommi/libGit/core/assets/Pointer.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/chaserTest.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/stealTest.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/pileTest.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/pileTest2.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/WalkingSpeedUp.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/FireRateUp.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Explosion.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/ShieldCrate.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Tar.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Times3.png", Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/tarstain.png",Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/SHIELD.png",Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/ScreenClear.png",Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/PirateTileset.png",Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Pointer.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/chaserTest.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/stealTest.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/pileTest.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/pileTest2.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/WalkingSpeedUp.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/FireRateUp.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Explosion.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/ShieldCrate.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Tar.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Times3.png", Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/tarstain.png",Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/SHIELD.png",Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/ScreenClear.png",Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/PirateTileset.png",Texture.class);
 		// Ammunition
-		manager.load("C:/Users/Tommi/libGit/core/assets/Carrot.png",Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Tomato.png",Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Broccoli.png",Texture.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/EggPlant.png",Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Carrot.png",Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Tomato.png",Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Broccoli.png",Texture.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/EggPlant.png",Texture.class);
 		// Music and sounds
 		
-		manager.load("C:/Users/Tommi/libGit/core/assets/Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
 		
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/game_over/NFF-death-bell.wav", Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/game_over/NFF-zomboid.wav", Sound.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Sounds/game_over/NFF-death-bell.wav", Sound.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Sounds/game_over/NFF-zomboid.wav", Sound.class);
 		
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/hit/NFF-dusty-hit.wav", Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/hit/NFF-explode.wav", Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/hit/NFF-kid-hurt.wav", Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/hit/NFF-slap-02.wav", Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/hit/NFF-springy-hit.wav", Sound.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Sounds/hit/NFF-dusty-hit.wav", Sound.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Sounds/hit/NFF-explode.wav", Sound.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Sounds/hit/NFF-kid-hurt.wav", Sound.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Sounds/hit/NFF-slap-02.wav", Sound.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Sounds/hit/NFF-springy-hit.wav", Sound.class);
 		
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/shooting/NFF-gun-miss.wav",Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/shooting/NFF-toy-gun.wav", Sound.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Sounds/shooting/NFF-gun-miss.wav",Sound.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Sounds/shooting/NFF-toy-gun.wav", Sound.class);
 		
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/walking/grass1.wav", Sound.class);
-		manager.load("C:/Users/Tommi/libGit/core/assets/Sounds/walking/gravel1.wav", Sound.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Sounds/walking/grass1.wav", Sound.class);
+		manager.load("C:/CandyPile/CandyPileDefender/core/assets/Sounds/walking/gravel1.wav", Sound.class);
 		
 	}
 	
