@@ -44,6 +44,7 @@ public Animator(int row, int column, float frametime, Texture Spritesheet){
 public Animation getAnimation(int row){
 	return new Animation(frametime, animatedFrames.get(row));
 }
+
 public Animation getAnimation(int row, float frametime){
 	return new Animation(frametime, animatedFrames.get(row));
 }

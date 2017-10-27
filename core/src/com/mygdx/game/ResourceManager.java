@@ -36,7 +36,7 @@ public class ResourceManager {
 		prefs.putString("score", "0");
 		prefs.flush();
 
-		
+
 
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/Pointer.png", Texture.class);
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/chaserTest.png", Texture.class);
@@ -57,6 +57,7 @@ public class ResourceManager {
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/CPMedCrop.png",Texture.class);
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/CPSmallCrop.png",Texture.class);
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/CPTinyCrop.png",Texture.class);
+
 		// Ammunition
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/Carrot.png",Texture.class);
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/Tomato.png",Texture.class);
