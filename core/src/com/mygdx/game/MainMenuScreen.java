@@ -82,12 +82,12 @@ public class MainMenuScreen implements Screen {
         currentScore = Integer.toString(game.getLoader().getScore()) + "     " + DateToStr;
         tmp = checkScores();
         
-//        name = Base64Coder.encodeString("Tommi");
-//        try {
-//        sendScores();
-//        }catch(Exception e) {
-//        	System.out.println(e.toString());
-//        }
+        name = Base64Coder.encodeString("Tommi");
+        try {
+        sendScores();
+        }catch(Exception e) {
+        	System.out.println(e.getMessage());
+        }
         
         int row_height = Gdx.graphics.getWidth() / 10;
         int col_width = Gdx.graphics.getWidth() / 12;
@@ -205,7 +205,7 @@ public class MainMenuScreen implements Screen {
 			return "fifth";
         }else return "";
 	}
-/*	
+	
 	public void sendScores() {
 		HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
         HttpRequest httpRequest = requestBuilder.newRequest().method(HttpMethods.POST).url(
@@ -216,18 +216,19 @@ public class MainMenuScreen implements Screen {
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				System.out.println(httpResponse.getHeaders());
+				System.out.println("name="+name+"&score="+(Integer.toString(game.getLoader().getScore()))+"&hash=mkGZgaG0Gl");
 				
 			}
 			
 			@Override
 			public void failed(Throwable t) {
-				// TODO Auto-generated method stub
+				System.out.println(t.getLocalizedMessage());
 				
 			}
 			
 			@Override
 			public void cancelled() {
-				// TODO Auto-generated method stub
+				System.out.println("cancelled");
 				
 			}
 		};
@@ -237,7 +238,7 @@ public class MainMenuScreen implements Screen {
 		HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
         HttpRequest httpRequest = requestBuilder.newRequest().method(HttpMethods.GET).url(
         		"http://ftp.thilanne.altervista.org/CandyPileDefender/addscore.php").content(
-        				"name="+name+"&score="+(Integer.toString(game.getLoader().getScore()))+"&hash=mkGZgaG0Gl").build();
+        				"name="+name+"&no_lines="+(Integer.toString(5))+"&hash=mkGZgaG0Gl").build();
         HttpResponseListener httpResponseListener = new HttpResponseListener() {
 			
 			@Override
@@ -259,7 +260,7 @@ public class MainMenuScreen implements Screen {
 			}
 		};
 		Gdx.net.sendHttpRequest(httpRequest, httpResponseListener);
-	}*/
+	}
 	
 	@Override
 	public void render(float delta) {
