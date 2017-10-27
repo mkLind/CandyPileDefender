@@ -57,6 +57,7 @@ public class ResourceManager {
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/CPMedCrop.png",Texture.class);
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/CPSmallCrop.png",Texture.class);
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/CPTinyCrop.png",Texture.class);
+		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/SkeletonTileset.png",Texture.class);
 
 		// Ammunition
 		manager.load("C:/Users/marku/Documents/CandyPileDefender/core/assets/Carrot.png",Texture.class);
