@@ -593,9 +593,11 @@ public class Updater implements Screen {
 							if (enemies.get(i) instanceof StealingEnemy) {
 								enemies.get(i).setxVel(0);
 								if (pile.getY() - enemies.get(i).getY() < 0) {
-									enemies.get(i).setY(enemies.get(i).getY());
+									if(enemies.get(i).getyVel()<1) {enemies.get(i).setY(1);}else {enemies.get(i).setY(enemies.get(i).getY());}
+									
 								} else {
-									enemies.get(i).setY(-(enemies.get(i).getY()));
+									if(enemies.get(i).getyVel()<1) {enemies.get(i).setY(-1);}else {enemies.get(i).setY(-(enemies.get(i).getY()));}
+									
 								}
 
 								enemies.get(i).updateHitbox();
@@ -603,9 +605,11 @@ public class Updater implements Screen {
 
 								enemies.get(i).setxVel(0);
 								if (player.getY() - enemies.get(i).getY() < 0) {
-									enemies.get(i).setY(enemies.get(i).getY());
+									if(enemies.get(i).getyVel()<1) {enemies.get(i).setY(1);}else {enemies.get(i).setY(enemies.get(i).getY());}
+									
 								} else {
-									enemies.get(i).setY(-(enemies.get(i).getY()));
+									if(enemies.get(i).getyVel()<1) {enemies.get(i).setY(-1);}else {enemies.get(i).setY(-(enemies.get(i).getY()));}
+									
 								}
 								enemies.get(i).updateHitbox();
 							}
