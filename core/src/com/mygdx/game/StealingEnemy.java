@@ -13,8 +13,17 @@ public class StealingEnemy extends SpriteCommons {
 	
 	public StealingEnemy(int width, int height, float x, float y, int HP) {
 		super(width, height, x, y, 0f, 0f, HP);
-		dir = DIRECTION.DOWN;
-	
+		
+		if (y < 10) {
+			dir = DIRECTION.UP;
+		} else if (x < 10) {
+			dir = DIRECTION.RIGHT;			
+		} else if (x > 100) {
+			dir = DIRECTION.LEFT;	
+		}else {
+			dir = DIRECTION.DOWN;
+		}
+		
 	}
 	
 	/*

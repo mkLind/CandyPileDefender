@@ -1,6 +1,9 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.Player.DIRECTION;
 /*
  * Class that has all the common aspects of a sprite like coordinates, velocities, proportions and bounding rectangle (For collisions)
  */
@@ -38,6 +41,11 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	this.xVel = xVel;
 	this.yVel = yVel;
 	hitbox = new Rectangle(x, y, width, height);
+}
+
+public TextureRegion getCurrentFrame( float time){	
+	return null;
+	
 }
 
 public Rectangle getHitbox() {
