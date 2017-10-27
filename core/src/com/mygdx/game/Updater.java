@@ -159,7 +159,7 @@ public class Updater implements Screen {
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
-				player = new Player(35, 40, spawnPoints.get(i).getRectangle().getX(),
+				player = new Player(30, 40, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(), 10);
 			}
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")) {
@@ -590,29 +590,7 @@ public class Updater implements Screen {
 
 					for (int k = 0; k < borders.size; k++) {
 						if (Intersector.overlaps(enemies.get(i).getHitbox(), borders.get(k).getRectangle())) {
-							if (enemies.get(i) instanceof StealingEnemy) {
-								enemies.get(i).setxVel(0);
-								if (pile.getY() - enemies.get(i).getY() < 0) {
-									if(enemies.get(i).getyVel()<1) {enemies.get(i).setY(1);}else {enemies.get(i).setY(enemies.get(i).getY());}
-									
-								} else {
-									if(enemies.get(i).getyVel()<1) {enemies.get(i).setY(-1);}else {enemies.get(i).setY(-(enemies.get(i).getY()));}
-									
-								}
-
-								enemies.get(i).updateHitbox();
-							} else {
-
-								enemies.get(i).setxVel(0);
-								if (player.getY() - enemies.get(i).getY() < 0) {
-									if(enemies.get(i).getyVel()<1) {enemies.get(i).setY(1);}else {enemies.get(i).setY(enemies.get(i).getY());}
-									
-								} else {
-									if(enemies.get(i).getyVel()<1) {enemies.get(i).setY(-1);}else {enemies.get(i).setY(-(enemies.get(i).getY()));}
-									
-								}
-								enemies.get(i).updateHitbox();
-							}
+			
 
 						}
 					}
