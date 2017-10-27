@@ -50,12 +50,12 @@ public class MainMenuScreen implements Screen {
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
 
-		mySkin = new Skin(Gdx.files.internal("C:/CandyPile/CandyPileDefender/core/assets/skin/uiskin.json"));
+		mySkin = new Skin(Gdx.files.internal("C:/Users/Tommi/libGit/core/assets/skin/uiskin.json"));
 //		mySkin.getFont("font-label").getData().setScale(1.5f);
 		playButton = new TextButton("Play", mySkin);
 		playButton.setWidth(Gdx.graphics.getWidth()/3);
         playButton.setPosition(Gdx.graphics.getWidth()/3 - playButton.getWidth()/2,Gdx.graphics.getHeight()/2 - playButton.getHeight()/3);
-        ambience = game.getLoader().getManager().get("C:/CandyPile/CandyPileDefender/core/assets/Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
+        ambience = game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
         ambience.setLooping(true);
         ambience.play();
         playButton.addListener(new InputListener(){
@@ -83,11 +83,11 @@ public class MainMenuScreen implements Screen {
         tmp = checkScores();
         
         name = Base64Coder.encodeString("Tommi");
-        try {
-        sendScores();
-        }catch(Exception e) {
-        	System.out.println(e.getMessage());
-        }
+//        try {
+//        	sendScores();
+//        }catch(Exception e) {
+//        	System.out.println(e.getMessage());
+//        }
         
         int row_height = Gdx.graphics.getWidth() / 10;
         int col_width = Gdx.graphics.getWidth() / 12;
@@ -134,8 +134,20 @@ public class MainMenuScreen implements Screen {
         label7.setWidth(Gdx.graphics.getWidth()/4);
         stage.addActor(label7);
         
-        if(game.getLoader().getScore() == 0) {
-            label2.setText("");
+        if(Integer.parseInt(game.getLoader().getHighScore().split(" ")[0]) == 0) {
+            label3.setText("");
+        }
+        if(Integer.parseInt(game.getLoader().getSecond().split(" ")[0]) == 0) {
+            label4.setText("");
+        }
+        if(Integer.parseInt(game.getLoader().getThird().split(" ")[0]) == 0) {
+            label5.setText("");
+        }
+        if(Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) == 0) {
+            label6.setText("");
+        }
+        if(Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) == 0) {
+            label7.setText("");
         }
         if(game.getLoader().getScore() != 0) {
 	    	if(tmp == "first") {
@@ -206,6 +218,7 @@ public class MainMenuScreen implements Screen {
         }else return "";
 	}
 	
+	/*
 	public void sendScores() {
 		HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
         HttpRequest httpRequest = requestBuilder.newRequest().method(HttpMethods.POST).url(
@@ -260,7 +273,7 @@ public class MainMenuScreen implements Screen {
 			}
 		};
 		Gdx.net.sendHttpRequest(httpRequest, httpResponseListener);
-	}
+	}*/
 	
 	@Override
 	public void render(float delta) {
