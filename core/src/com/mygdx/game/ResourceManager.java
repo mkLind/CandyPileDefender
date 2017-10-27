@@ -53,12 +53,14 @@ public class ResourceManager {
 		manager.load("C:/Users/Tommi/libGit/core/assets/ScreenClear.png",Texture.class);
 		manager.load("C:/Users/Tommi/libGit/core/assets/PirateTileset.png",Texture.class);
 		
+		manager.load("C:/Users/Tommi/libGit/core/assets/SkeletonTileset.png", Texture.class);
 		// Each candy pile phase is a different .png
 		manager.load("C:/Users/Tommi/libGit/core/assets/CPBigCrop.png", Texture.class);
 		manager.load("C:/Users/Tommi/libGit/core/assets/CPMedCrop.png", Texture.class);
 		manager.load("C:/Users/Tommi/libGit/core/assets/CPSmallCrop.png", Texture.class);
 		manager.load("C:/Users/Tommi/libGit/core/assets/CPTinyCrop.png", Texture.class);
 		
+
 		
 		// Ammunition
 		manager.load("C:/Users/Tommi/libGit/core/assets/Carrot.png",Texture.class);

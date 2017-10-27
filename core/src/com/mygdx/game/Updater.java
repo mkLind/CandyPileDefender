@@ -238,14 +238,38 @@ public class Updater implements Screen {
 					tmp2 = MathUtils.random(0, monsterSpawns.size - 1);
 					tmp3 = MathUtils.random(0, 1);
 //					if(tmp3 == 1) {
-					enemyAdd.add(new StealingEnemy(32, 32, monsterSpawns.get(tmp).getRectangle().getX(),
+					
+					/*
+ 					enemyAdd.add(new StealingEnemy(32, 32, monsterSpawns.get(tmp).getRectangle().getX(),
 							monsterSpawns.get(tmp).getRectangle().getY(), 1,
+
 							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/stealTest.png", Texture.class)));
 //					}else {
 					enemyAdd.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
 							monsterSpawns.get(tmp2).getRectangle().getY(), 2,
 							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/chaserTest.png", Texture.class)));
 //					}
+
+							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/stealTest.png", Texture.class)));
+					 */
+					
+					// new stealer 
+					StealingEnemy tmpSE = new StealingEnemy(20, 30, monsterSpawns.get(tmp).getRectangle().getX(), 
+							monsterSpawns.get(tmp).getRectangle().getY(), 1);				
+					
+					enemyAdd.add(tmpSE);
+					
+					
+					tmpSE.setAnimations(4, 3, 0.10f, game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/SkeletonTileset.png", Texture.class));				
+					
+//					}else { 
+					
+					enemyAdd.add(new ChaserEnemy(32, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
+							monsterSpawns.get(tmp2).getRectangle().getY(), 2,
+							game.getLoader().getManager().get("C:/Users/Tommi/libGit/core/assets/chaserTest.png", Texture.class)));
+//					} 
+					
+
 				}
 			}
 			
@@ -389,6 +413,7 @@ public class Updater implements Screen {
 					//TEST SPEED 3! was 1.2
 					enemies.get(i).setxVel(((float) (3f / hypot * (pile.getX() + (pile.getWidth() / 2) - enemies.get(i).getX()))));
 					enemies.get(i).setyVel(((float) (3f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
+					
 				}
 				
 				// SLOW THE ENEMIES DOWN IF ONE OF THEM HITS A POOL OF TAR
@@ -582,11 +607,11 @@ public class Updater implements Screen {
 
 
 			if(!enemies.isEmpty()){
-			if(enemies.size()== i ){	
-			enemies.get(enemies.size()-1).updateHitbox();
-			}else{
-				enemies.get(i).updateHitbox();	
-			}
+				if(enemies.size()== i ){	
+					enemies.get(enemies.size()-1).updateHitbox();
+				}else{
+					enemies.get(i).updateHitbox();	
+				}
 			}
 		}
 
@@ -1061,18 +1086,30 @@ public class Updater implements Screen {
 				
 
 		
-
+		//DRAW ENEMIES
 		for (int i = 0; i < enemies.size(); i++) {
+			
+			
+			
+			// STEALER
+			
 			if (enemies.get(i) instanceof StealingEnemy) {
-				game.batch.draw(((StealingEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
-						enemies.get(i).getY());
-
+				
+				//game.batch.draw(((StealingEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),enemies.get(i).getY());
+				
+				game.batch.draw(enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
+						enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
+			
+				
+			// CHASER
 			} else if (enemies.get(i) instanceof ChaserEnemy) {
 				game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
 						enemies.get(i).getY());
 			}
+			
 
 		}
+		
 		if(player.isAttacking()){
 		
 			game.batch.draw(player.getCurrentAttackFrame(statetime), player.getX(), player.getY(), player.getWidth(),
