@@ -30,9 +30,9 @@ public class LoadingScreen implements Screen {
         	game.batch.begin();
         	game.font.draw(game.batch, "Loading: " + MathUtils.round(game.getLoader().getManager().getProgress()*100) + "%", 100, 100);
         	game.batch.end();
-        	if(MathUtils.round(game.getLoader().getManager().getProgress()*100) == 62){
-        		System.out.println(game.getLoader().getManager().getDiagnostics());
-        	}
+//        	if(MathUtils.round(game.getLoader().getManager().getProgress()*100) == 62){
+//        		System.out.println(game.getLoader().getManager().getDiagnostics());
+//        	}
 //       System.out.println("LOADED ASSETS: " + game.getLoader().getManager().getLoadedAssets() );
         }
 

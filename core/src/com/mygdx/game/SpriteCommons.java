@@ -3,7 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.Player.DIRECTION;
 /*
  * Class that has all the common aspects of a sprite like coordinates, velocities, proportions and bounding rectangle (For collisions)
  */
@@ -17,6 +16,7 @@ private int width;
 private int height;
 private int HP;
 private Rectangle hitbox;
+private Texture texture;
 
 // inactivity timer after attacking etc.
 private int timeoutTimer;
@@ -41,11 +41,16 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	this.xVel = xVel;
 	this.yVel = yVel;
 	hitbox = new Rectangle(x, y, width, height);
+	timeoutTimer = 0;
 }
 
 public TextureRegion getCurrentFrame( float time){	
 	return null;
 	
+}
+
+public Texture getTexture() {
+	return texture;
 }
 
 public Rectangle getHitbox() {
