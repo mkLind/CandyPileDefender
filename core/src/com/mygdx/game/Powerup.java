@@ -21,13 +21,14 @@ public class Powerup extends SpriteCommons {
 		this.game = game;
 		spawnEffect = new ParticleEffect();
 
-		spawnEffect.load(Gdx.files.internal("C:/Users/marku/Documents/CandyPileDefender/core/assets/spawnparticle2.p"),
-				Gdx.files.internal("C:/Users/marku/Documents/CandyPileDefender/core/assets/"));
 
-		spawnEffect.getEmitters().first().setPosition(super.getX(), super.getY());
-		spawnEffect.scaleEffect(1000f);
-		spawnEffect.start();
-
+//		spawnEffect.load(Gdx.files.internal("spawnparticle2.p"), Gdx.files.internal(""));
+//
+//		
+//		spawnEffect.getEmitters().first().setPosition(super.getX(), super.getY());
+//		spawnEffect.scaleEffect(1000f);
+//		spawnEffect.start();
+	
 		effectTime = (long) 10000;
 
 	}
@@ -40,80 +41,71 @@ public class Powerup extends SpriteCommons {
 		this.effectTime = effectTime;
 	}
 
-	public void setTypeAndGraphic(Core game) {
 
-		this.type = POWERUPTYPE.values()[MathUtils.random(0, POWERUPTYPE.values().length - 1)];
-		// this.type = POWERUPTYPE.CLEARSCREEN;
-		if (type == POWERUPTYPE.CLEARSCREEN) {
 
-			graphic = game.getLoader().getManager()
-					.get("C:/Users/marku/Documents/CandyPileDefender/core/assets/Explosion.png", Texture.class);
-			effectTime = (long) 1000;
-		}
-		if (type == POWERUPTYPE.HASTE) {
-			graphic = game.getLoader().getManager()
-					.get("C:/Users/marku/Documents/CandyPileDefender/core/assets/WalkingSpeedUp.png", Texture.class);
-		}
-		if (type == POWERUPTYPE.RAPIDFIRE) {
-			graphic = game.getLoader().getManager()
-					.get("C:/Users/marku/Documents/CandyPileDefender/core/assets/FireRateUp.png", Texture.class);
-		}
-		if (type == POWERUPTYPE.SLOWDOWN) {
-			graphic = game.getLoader().getManager()
-					.get("C:/Users/marku/Documents/CandyPileDefender/core/assets/Tar.png", Texture.class);
-		}
-		if (type == POWERUPTYPE.TRIPLESHOT) {
-			graphic = game.getLoader().getManager()
-					.get("C:/Users/marku/Documents/CandyPileDefender/core/assets/Times3.png", Texture.class);
-		}
-		if (type == POWERUPTYPE.SHIELD) {
-			graphic = game.getLoader().getManager()
-					.get("C:/Users/marku/Documents/CandyPileDefender/core/assets/ShieldCrate.png", Texture.class);
 
+	public void setTypeAndGraphic(Core game){
+		
+		this.type = POWERUPTYPE.values()[MathUtils.random(0, POWERUPTYPE.values().length-1)];
+		//this.type = POWERUPTYPE.CLEARSCREEN;
+		if(type == POWERUPTYPE.CLEARSCREEN){
+			 graphic = game.getLoader().getManager().get("Explosion.png",Texture.class);
+			 effectTime = (long) 1000;
 		}
-		if (type == POWERUPTYPE.HASTE) {
-			graphic = game.getLoader().getManager()
-					.get("C:/Users/marku/Documents/CandyPileDefender/core/assets/WalkingSpeedUp.png", Texture.class);
+		if(type == POWERUPTYPE.HASTE){
+			graphic = game.getLoader().getManager().get("WalkingSpeedUp.png",Texture.class);
 		}
-		if (type == POWERUPTYPE.RAPIDFIRE) {
-			graphic = game.getLoader().getManager()
-					.get("C:/Users/marku/Documents/CandyPileDefender/core/assets/FireRateUp.png", Texture.class);
+		if(type == POWERUPTYPE.RAPIDFIRE){
+			graphic = game.getLoader().getManager().get("FireRateUp.png",Texture.class);
 		}
-		if (type == POWERUPTYPE.SLOWDOWN) {
-			graphic = game.getLoader().getManager()
-					.get("C:/Users/marku/Documents/CandyPileDefender/core/assets/Tar.png", Texture.class);
+		if(type == POWERUPTYPE.SLOWDOWN){
+			graphic = game.getLoader().getManager().get("Tar.png",Texture.class);
 		}
-		if (type == POWERUPTYPE.TRIPLESHOT) {
-			graphic = game.getLoader().getManager()
-					.get("C:/Users/marku/Documents/CandyPileDefender/core/assets/Times3.png", Texture.class);
+		if(type == POWERUPTYPE.TRIPLESHOT){
+			graphic = game.getLoader().getManager().get("Times3.png",Texture.class);
 		}
-		if (type == POWERUPTYPE.SHIELD) {
-			graphic = game.getLoader().getManager()
-					.get("C:/Users/marku/Documents/CandyPileDefender/core/assets/ShieldCrate.png", Texture.class);
-
+		if(type == POWERUPTYPE.SHIELD){
+			graphic = game.getLoader().getManager().get("ShieldCrate.png", Texture.class);
 		}
-
+		
+		
+		
+	}
+	
+public enum POWERUPTYPE{
+		SHIELD,TRIPLESHOT,HASTE,RAPIDFIRE,CLEARSCREEN,SLOWDOWN
 	}
 
-	public enum POWERUPTYPE {
-		SHIELD, TRIPLESHOT, HASTE, RAPIDFIRE, CLEARSCREEN, SLOWDOWN
-	}
+public Texture getGraphic() {
+	return graphic;
+}
 
-	public Texture getGraphic() {
-		return graphic;
-	}
 
-	public void setGraphic(Texture graphic) {
-		this.graphic = graphic;
-	}
 
-	public POWERUPTYPE getType() {
-		return type;
-	}
+public void setGraphic(Texture graphic) {
+	this.graphic = graphic;
+}
 
-	public void setType(POWERUPTYPE type) {
-		this.type = type;
-	}
+
+
+
+
+
+
+public POWERUPTYPE getType() {
+	return type;
+}
+
+
+
+public void setType(POWERUPTYPE type) {
+	this.type = type;
+}
+
+	
+
+
+	
 
 	public ParticleEffect getSpawnEffect() {
 		return spawnEffect;

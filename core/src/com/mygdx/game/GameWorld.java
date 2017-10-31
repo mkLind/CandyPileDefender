@@ -18,9 +18,9 @@ public class GameWorld {
 	private MapObjects spawnPoints;
 	private MapProperties prop;
 
-	public GameWorld() {
-
-		map = new TmxMapLoader().load("C:/Users/marku/Documents/CandyPileDefender/core/assets/CandyPileMap.tmx");
+	
+	public GameWorld(){
+		map = new TmxMapLoader().load("CandyPileMap.tmx");
 
 		borders = map.getLayers().get("Borders").getObjects();
 		spawnPoints = map.getLayers().get("Coordinates").getObjects();
