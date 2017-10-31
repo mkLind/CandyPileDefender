@@ -4,12 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 //import com.badlogic.gdx.audio.Sound;
 //import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 
 public class ResourceManager {
 	private AssetManager manager;
@@ -88,6 +95,26 @@ public class ResourceManager {
 			
 			manager.load("Sounds/walking/grass1.wav", Sound.class);
 			manager.load("Sounds/walking/gravel1.wav", Sound.class);
+			
+			manager.load("HealthBar.png", Texture.class);
+			manager.load("HealthBarBackGround.png", Texture.class);
+			manager.load("HealthBarKnob.png", Texture.class);
+			manager.load("warning2.png", Texture.class);
+			
+			FileHandleResolver resolver = new InternalFileHandleResolver();
+			manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+			manager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
+			
+			FreeTypeFontLoaderParameter smallFont = new FreeTypeFontLoaderParameter();
+			smallFont.fontFileName = "arial1.ttf";
+			smallFont.fontParameters.size = 16;
+			manager.load("arial1.ttf", BitmapFont.class, smallFont);
+			/*
+			FreeTypeFontLoaderParameter bigFont = new FreeTypeFontLoaderParameter();
+			bigFont.fontFileName = "arial2.ttf";
+			bigFont.fontParameters.size = 28;
+			manager.load("arial2.ttf", BitmapFont.class, bigFont);*/
+
 		} catch (Exception e){
 			System.out.println(e.getMessage());
 		}

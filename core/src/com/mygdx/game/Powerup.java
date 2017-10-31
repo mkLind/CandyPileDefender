@@ -22,12 +22,12 @@ public class Powerup extends SpriteCommons {
 		spawnEffect = new ParticleEffect();
 		
 
-//		spawnEffect.load(Gdx.files.internal("spawnparticle2.p"), Gdx.files.internal(""));
-//
-//		
-//		spawnEffect.getEmitters().first().setPosition(super.getX(), super.getY());
-//		spawnEffect.scaleEffect(1000f);
-//		spawnEffect.start();
+		spawnEffect.load(Gdx.files.internal("spawnparticle2.p"), Gdx.files.internal(""));
+
+		
+		spawnEffect.getEmitters().first().setPosition(super.getX(), super.getY());
+		spawnEffect.scaleEffect(1000f);
+		spawnEffect.start();
 	
 		effectTime = (long) 10000;
 		
