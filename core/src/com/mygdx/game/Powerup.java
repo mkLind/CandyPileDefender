@@ -27,7 +27,7 @@ public class Powerup extends SpriteCommons {
 		
 		spawnEffect.getEmitters().first().setPosition(super.getX(), super.getY());
 		spawnEffect.scaleEffect(1000f);
-		spawnEffect.start();
+		
 	
 		effectTime = (long) 10000;
 

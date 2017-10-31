@@ -12,11 +12,12 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+/*
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
-
+*/
 public class ResourceManager {
 	private AssetManager manager;
 	private static Preferences prefs;
@@ -103,7 +104,7 @@ public class ResourceManager {
 			manager.load("HealthBarBackGround.png", Texture.class);
 			manager.load("HealthBarKnob.png", Texture.class);
 			manager.load("warning2.png", Texture.class);
-			
+			/*
 			FileHandleResolver resolver = new InternalFileHandleResolver();
 			manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
 			manager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
@@ -112,7 +113,7 @@ public class ResourceManager {
 			smallFont.fontFileName = "arial1.ttf";
 			smallFont.fontParameters.size = 16;
 			manager.load("arial1.ttf", BitmapFont.class, smallFont);
-			/*
+			
 			FreeTypeFontLoaderParameter bigFont = new FreeTypeFontLoaderParameter();
 			bigFont.fontFileName = "arial2.ttf";
 			bigFont.fontParameters.size = 28;
