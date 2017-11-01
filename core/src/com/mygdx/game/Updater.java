@@ -714,14 +714,15 @@ public class Updater implements Screen {
 							
 							if(Intersector.overlaps(enemies.get(i).getHitbox(), borders.get(k).getRectangle())){
 								//PRevent the enemy from completely entering the obstacle
-								float xdiff = borders.get(k).getRectangle().getX() - enemies.get(i).getX();
+								
+								
+					    	if(enemies.get(i) instanceof StealingEnemy ) {
+					    		float xdiff = borders.get(k).getRectangle().getX() - enemies.get(i).getX();
 								float ydiff = borders.get(k).getRectangle().getY() - enemies.get(i).getY();
 								
 								enemies.get(i).setX(enemies.get(i).getX() - (enemies.get(i).getWidth() - xdiff));
 								enemies.get(i).setY(enemies.get(i).getY() - (enemies.get(i).getHeight() - ydiff));
 								
-								
-					    	if(enemies.get(i) instanceof StealingEnemy ) {
 					    		
 					     		if(pile.getX()<enemies.get(i).getX() && pile.getY()<enemies.get(i).getY()) {
 					    			enemies.get(i).setyVel(-1);
@@ -761,36 +762,54 @@ public class Updater implements Screen {
 					    		
 					    	}else if(enemies.get(i) instanceof ChaserEnemy) {
 					    		
-					    		
+					    		float xdiff = Math.abs(borders.get(k).getRectangle().getX() - enemies.get(i).getX());
+								float ydiff = Math.abs(borders.get(k).getRectangle().getY() - enemies.get(i).getY());
+								
+								if(borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() <= enemies.get(i).getX()) {
+									
+									enemies.get(i).setX(enemies.get(i).getX() + ( enemies.get(i).getWidth() - xdiff));
+									
+								}
+								if(borders.get(k).getRectangle().getX()>=enemies.get(i).getX() + enemies.get(i).getWidth()) {
+									enemies.get(i).setX(enemies.get(i).getX() - ( enemies.get(i).getWidth() - xdiff));
+								}
+								if(borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight() <= enemies.get(i).getY()) {
+									
+									enemies.get(i).setY(enemies.get(i).getY() + ( enemies.get(i).getHeight() - ydiff));
+									
+								}
+								if(borders.get(k).getRectangle().getY()>=enemies.get(i).getY() + enemies.get(i).getHeight()) {
+									enemies.get(i).setY(enemies.get(i).getY() - ( enemies.get(i).getHeight() - ydiff));
+								}
 					    		
 
-					    		if(player.getX()<enemies.get(i).getX() && player.getY()<enemies.get(i).getY()) {
+					    		if(player.getX()<=enemies.get(i).getX() && player.getY()<=enemies.get(i).getY()) {
 					    			enemies.get(i).setyVel(-1);
 					    			enemies.get(i).setxVel(0);
 					    			
-					    		}else if(player.getX()<enemies.get(i).getX()&& player.getY()>enemies.get(i).getY()){
+					    		}else if(player.getX()<=enemies.get(i).getX()&& player.getY()>=enemies.get(i).getY()){
 					    			enemies.get(i).setyVel(1);
 					    			enemies.get(i).setxVel(0);
-						    	}else if(player.getX()>enemies.get(i).getX() && player.getY()<enemies.get(i).getY()) {
+						    	}else if(player.getX()>=enemies.get(i).getX() && player.getY()<=enemies.get(i).getY()) {
 						    		
 						    		enemies.get(i).setyVel(-1);
 					    			enemies.get(i).setxVel(0);	
-						    	}else if(player.getX()>enemies.get(i).getX() && player.getY()>enemies.get(i).getY()) {
+						    	}else if(player.getX()>=enemies.get(i).getX() && player.getY()>=enemies.get(i).getY()) {
 						    		enemies.get(i).setyVel(1);
 					    			enemies.get(i).setxVel(0);
-						    	}else if((player.getX()- enemies.get(i).getX())<enemies.get(i).getWidth()  && player.getY()<enemies.get(i).getY()) {
+						    	}else if((player.getX()- enemies.get(i).getX())<=enemies.get(i).getWidth()  && player.getY()<=enemies.get(i).getY()) {
 						    		enemies.get(i).setyVel(-1);
 						    		enemies.get(i).setxVel(0);
 						    	}
-						    	else if((player.getX()- enemies.get(i).getX())<enemies.get(i).getWidth() && player.getY()>enemies.get(i).getY()) {
+						    	else if((player.getX()- enemies.get(i).getX())<=enemies.get(i).getWidth() && player.getY()>=enemies.get(i).getY()) {
 						    		enemies.get(i).setyVel(1);
 						    		enemies.get(i).setxVel(0);
 						    	}
-						    	else if((player.getY()- enemies.get(i).getY())<enemies.get(i).getHeight() && player.getX()<enemies.get(i).getX()) {
+						    	else if((player.getY()- enemies.get(i).getY())<=enemies.get(i).getHeight() && player.getX()<=enemies.get(i).getX()) {
 						    		enemies.get(i).setyVel(0);
 						    		enemies.get(i).setxVel(-1);
 						    	}
-						    	else if((player.getY()- enemies.get(i).getY())<enemies.get(i).getHeight() && player.getX()<enemies.get(i).getX()) {
+						    	else if((player.getY()- enemies.get(i).getY())<=enemies.get(i).getHeight() && player.getX()<=enemies.get(i).getX()) {
 						    		enemies.get(i).setyVel(0);
 						    		enemies.get(i).setxVel(1);
 						    	}
