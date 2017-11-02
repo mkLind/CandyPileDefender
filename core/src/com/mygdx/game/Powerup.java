@@ -8,42 +8,39 @@ import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer.Rando
 import com.badlogic.gdx.math.MathUtils;
 
 public class Powerup extends SpriteCommons {
-	
+
 	private Texture graphic;
 	private Core game;
 	private POWERUPTYPE type;
 	private ParticleEffect spawnEffect;
 	private Long timeAlive;
 	private Long effectTime;
-	
+
 	public Powerup(int width, int height, float x, float y, float xVel, float yVel, Core game) {
 		super(width, height, x, y, xVel, yVel);
 		this.game = game;
 		spawnEffect = new ParticleEffect();
-		
+
 
 		spawnEffect.load(Gdx.files.internal("spawnparticle2.p"), Gdx.files.internal(""));
 
 		
 		spawnEffect.getEmitters().first().setPosition(super.getX(), super.getY());
 		spawnEffect.scaleEffect(1000f);
-		spawnEffect.start();
+		
 	
 		effectTime = (long) 10000;
-		
+
 	}
 
-	
-	
 	public Long getEffectTime() {
 		return effectTime;
 	}
 
-
-
 	public void setEffectTime(Long effectTime) {
 		this.effectTime = effectTime;
 	}
+
 
 
 
@@ -105,30 +102,25 @@ public void setType(POWERUPTYPE type) {
 	this.type = type;
 }
 
-
-
-public ParticleEffect getSpawnEffect() {
-	return spawnEffect;
-}
-
-
-
-public void setSpawnEffect(ParticleEffect spawnEffect) {
-	this.spawnEffect = spawnEffect;
-}
-
-
-
-public Long getTimeAlive() {
-	return timeAlive;
-}
-
-
-
-public void setTimeAlive(Long timeAlive) {
-	this.timeAlive = timeAlive;
-}
 	
+
+
 	
+
+	public ParticleEffect getSpawnEffect() {
+		return spawnEffect;
+	}
+
+	public void setSpawnEffect(ParticleEffect spawnEffect) {
+		this.spawnEffect = spawnEffect;
+	}
+
+	public Long getTimeAlive() {
+		return timeAlive;
+	}
+
+	public void setTimeAlive(Long timeAlive) {
+		this.timeAlive = timeAlive;
+	}
 
 }

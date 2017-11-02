@@ -8,41 +8,45 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-//import com.badlogic.gdx.audio.Sound;
-//import com.badlogic.gdx.audio.Music;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+/*
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
-
+*/
 public class ResourceManager {
 	private AssetManager manager;
 	private static Preferences prefs;
-	
+
 	public ResourceManager() {
-//		System.out.println("Internal storage path: " + Gdx.files.getLocalStoragePath());
+		// System.out.println("Internal storage path: " +
+		// Gdx.files.getLocalStoragePath());
 		manager = new AssetManager();
 		prefs = Gdx.app.getPreferences("Scores");
 		if (!prefs.contains("highScore")) {
-		    prefs.putString("highScore", "0 00/00/0000");
-		} 
+			prefs.putString("highScore", "0 00/00/0000");
+		}
 		if (!prefs.contains("2")) {
-		    prefs.putString("2", "0 00/00/0000");
-		} 
+			prefs.putString("2", "0 00/00/0000");
+		}
 		if (!prefs.contains("3")) {
-		    prefs.putString("3", "0 00/00/0000");
-		} 
+			prefs.putString("3", "0 00/00/0000");
+		}
 		if (!prefs.contains("4")) {
-		    prefs.putString("4", "0 00/00/0000");
-		} 
+			prefs.putString("4", "0 00/00/0000");
+		}
 		if (!prefs.contains("5")) {
-		    prefs.putString("5", "0 00/00/0000");
-		} 
+			prefs.putString("5", "0 00/00/0000");
+		}
 		prefs.putString("score", "0");
 		prefs.flush();
+
+
+
 
 		try {
 			manager.load("Pointer.png", Texture.class);
@@ -100,7 +104,7 @@ public class ResourceManager {
 			manager.load("HealthBarBackGround.png", Texture.class);
 			manager.load("HealthBarKnob.png", Texture.class);
 			manager.load("warning2.png", Texture.class);
-			
+			/*
 			FileHandleResolver resolver = new InternalFileHandleResolver();
 			manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
 			manager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
@@ -109,7 +113,7 @@ public class ResourceManager {
 			smallFont.fontFileName = "arial1.ttf";
 			smallFont.fontParameters.size = 16;
 			manager.load("arial1.ttf", BitmapFont.class, smallFont);
-			/*
+			
 			FreeTypeFontLoaderParameter bigFont = new FreeTypeFontLoaderParameter();
 			bigFont.fontFileName = "arial2.ttf";
 			bigFont.fontParameters.size = 28;
@@ -119,59 +123,66 @@ public class ResourceManager {
 			System.out.println(e.getMessage());
 		}
 		
+
 	}
-	
+
 	public AssetManager getManager() {
 		return manager;
 	}
 
 	public void setHighScore(String value) {
-		
-	    prefs.putString("highScore", value);
-	    prefs.flush();
+
+		prefs.putString("highScore", value);
+		prefs.flush();
 	}
+
 	public String getHighScore() {
-	    return prefs.getString("highScore");
+		return prefs.getString("highScore");
 	}
-	
+
 	public void setScore(int value) {
-	    prefs.putString("score",Integer.toString(value));
-	    prefs.flush();
+		prefs.putString("score", Integer.toString(value));
+		prefs.flush();
 	}
+
 	public int getScore() {
-	    int value = Integer.parseInt(prefs.getString("score"));
-	    return value;
+		int value = Integer.parseInt(prefs.getString("score"));
+		return value;
 	}
-	
+
 	public void setSecond(String value) {
-	    prefs.putString("2", value);
-	    prefs.flush();
+		prefs.putString("2", value);
+		prefs.flush();
 	}
+
 	public String getSecond() {
-	    return prefs.getString("2");
+		return prefs.getString("2");
 	}
-	
+
 	public void setThird(String value) {
-	    prefs.putString("3", value);
-	    prefs.flush();
+		prefs.putString("3", value);
+		prefs.flush();
 	}
+
 	public String getThird() {
-	    return prefs.getString("3");
+		return prefs.getString("3");
 	}
-	
+
 	public void setFourth(String value) {
-	    prefs.putString("4", value);
-	    prefs.flush();
+		prefs.putString("4", value);
+		prefs.flush();
 	}
+
 	public String getFourth() {
-	    return prefs.getString("4");
+		return prefs.getString("4");
 	}
-	
+
 	public void setFifth(String value) {
-	    prefs.putString("5", value);
-	    prefs.flush();
+		prefs.putString("5", value);
+		prefs.flush();
 	}
+
 	public String getFifth() {
-	    return prefs.getString("5");
+		return prefs.getString("5");
 	}
 }

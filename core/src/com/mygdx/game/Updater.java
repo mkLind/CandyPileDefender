@@ -124,13 +124,13 @@ public class Updater implements Screen {
 		this.game = game;
 		mpObjCooldown = 200;
 		mpObjLastSet = 0;
-		mapObjects = new ArrayList<>();
+		mapObjects = new ArrayList<MapObject>();
 		statetime = 0f;
 		walkSet = TimeUtils.millis();
 		timesCalled = 0;
 		randomizer = new Random();
 		world = new GameWorld();
-		powerups = new ArrayList<>();
+		powerups = new ArrayList<Powerup>();
 		monsterSpawns = new Array<RectangleMapObject>();
 		enemies = new ArrayList<SpriteCommons>();
 		enemyAdd = new ArrayList<SpriteCommons>();
@@ -138,7 +138,7 @@ public class Updater implements Screen {
 		// be included
 		// be careful with that
 		camera = new OrthographicCamera();
-		effects = new ArrayList<>();
+		effects = new ArrayList<ParticleEffect>();
 		aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
 		camera.setToOrtho(false, 250f * aspectRatio, 250f);
 		// camera.setToOrtho(false, 700f,700f);
@@ -153,30 +153,38 @@ public class Updater implements Screen {
 
 		game.batch.setProjectionMatrix(camera.combined);
 		proj = new ArrayList<Projectile>();
+
 		ambience = game.getLoader().getManager().get("Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
 		ambience.setLooping(true);
 		ambience.play();
 
-		shot = game.getLoader().getManager().get("Sounds/shooting/NFF-gun-miss.wav", Sound.class);
-		hit = game.getLoader().getManager().get("Sounds/hit/NFF-slap-02.wav", Sound.class);
-		Explosion = game.getLoader().getManager().get("Sounds/hit/NFF-explode.wav", Sound.class);
-		GameOver = game.getLoader().getManager().get("Sounds/game_over/NFF-death-bell.wav", Sound.class);
-		walk1 = game.getLoader().getManager().get("Sounds/walking/grass1.wav", Sound.class);
-		walk2 = game.getLoader().getManager().get("Sounds/walking/gravel1.wav", Sound.class);
+		
+		shot = game.getLoader().getManager().get("Sounds/shooting/NFF-gun-miss.wav",Sound.class);
+		hit = game.getLoader().getManager().get("Sounds/hit/NFF-slap-02.wav",Sound.class);
+		Explosion = game.getLoader().getManager().get("Sounds/hit/NFF-explode.wav",Sound.class);
+		GameOver = game.getLoader().getManager().get("Sounds/game_over/NFF-death-bell.wav",Sound.class);
+		walk1 = game.getLoader().getManager().get("Sounds/walking/grass1.wav",Sound.class);
+		walk2 = game.getLoader().getManager().get("Sounds/walking/gravel1.wav",Sound.class);
+		
+
 
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
-				player = new Player(30, 42, spawnPoints.get(i).getRectangle().getX(),
+
+				player = new Player(30, 40, spawnPoints.get(i).getRectangle().getX(),
+
 						spawnPoints.get(i).getRectangle().getY(), 10);
 			}
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Pile")) {
 				pile = new Pile(87, 62, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(),
+
 						game.getLoader().getManager().get("CPBigCrop.png", Texture.class),
 						game.getLoader().getManager().get("CPMedCrop.png", Texture.class),
 						game.getLoader().getManager().get("CPSmallCrop.png", Texture.class),
 						game.getLoader().getManager().get("CPTinyCrop.png", Texture.class));
+
 			}
 		}
 		for (int i = 0; i < spawnPoints.size; i++) {
@@ -185,7 +193,9 @@ public class Updater implements Screen {
 			}
 		}
 
+
 		player.setAnimations(8, 3, 0.10f, game.getLoader().getManager().get("PirateTileset.png", Texture.class));
+
 		player.setDir(DIRECTION.DOWN);
 		camera.position.set(player.getX(), player.getY(), 0);
 
@@ -197,14 +207,13 @@ public class Updater implements Screen {
 		// For score points
 		timeScore = TimeUtils.millis();
 
+
 		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
-		BitmapFont myFont = game.getLoader().getManager().get("arial1.ttf", BitmapFont.class);
 
-		labelStyle = new Label.LabelStyle();
-		labelStyle.font = myFont;
-		scores = new Label("Score: " + game.getLoader().getScore(), labelStyle);
-		scores.setPosition(Gdx.graphics.getWidth() / 1.37f, Gdx.graphics.getHeight() - 25);
+		scores = new Label("Score: " + game.getLoader().getScore(), mySkin);
+		scores.setPosition(Gdx.graphics.getWidth() / 1.37f, Gdx.graphics.getHeight() - 20);
+
 		scores.setAlignment(Align.topRight);
 		scores.setWidth(Gdx.graphics.getWidth() / 4);
 		stage.addActor(scores);
@@ -291,6 +300,7 @@ public class Updater implements Screen {
 	private void spawnEnemies() {
 		// System.out.println("SPAWNING ENEMIES");
 		timesCalled++;
+
 		int tmp;
 		int tmp2;
 		if (enemies.size() == 0) {
@@ -312,14 +322,18 @@ public class Updater implements Screen {
 
 				enemyAdd.add(tmpSE);
 
-				tmpSE.setAnimations(4, 3, 0.10f,
-						game.getLoader().getManager().get("SkeletonTileset.png", Texture.class));
+
+				tmpSE.setAnimations(4, 3, 0.10f, game.getLoader().getManager()
+						.get("SkeletonTileset.png", Texture.class));
+
 
 				// }else {
 
 				enemyAdd.add(new ChaserEnemy(21, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
-						monsterSpawns.get(tmp2).getRectangle().getY(), 2,
-						game.getLoader().getManager().get("chaserTest.png", Texture.class)));
+	monsterSpawns.get(tmp2).getRectangle().getY(), 2, game.getLoader().getManager()
+								.get("chaserTest.png", Texture.class)));
+
+
 				// }
 
 			}
@@ -371,7 +385,7 @@ public class Updater implements Screen {
 		for (int i = 0; i < enemies.size(); i++) {
 			if (enemies.get(i) instanceof StealingEnemy) {
 				double hypot = Math.hypot(enemies.get(i).getX() - pile.getX() + (pile.getWidth() / 2),
-						enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
+						enemies.get(i).getY() - pile.getY() + (pile.getHeight() / 2));
 				// TEST SPEED 3! was 1.2
 				enemies.get(i).setxVel(
 						((float) (3f / hypot * (pile.getX() + (pile.getWidth() / 2) - enemies.get(i).getX()))));
@@ -437,8 +451,14 @@ public class Updater implements Screen {
 			// Tar trail behind the player
 			if (player.getPowerupType() == POWERUPTYPE.SLOWDOWN
 					&& TimeUtils.timeSinceMillis(mpObjLastSet) > mpObjCooldown) {
+
 				MapObject obj = new MapObject(32, 32, player.getX(), player.getY(), 0, 0, 10000,
-						game.getLoader().getManager().get("tarstain.png", Texture.class), OBJECTTYPE.HAZARD);
+
+						game.getLoader().getManager().get(
+								"tarstain.png", Texture.class),
+
+						OBJECTTYPE.HAZARD);
+
 				obj.setSpawnTime(TimeUtils.millis());
 				mapObjects.add(obj);
 				mpObjLastSet = TimeUtils.millis();
@@ -535,9 +555,10 @@ public class Updater implements Screen {
 							enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
 					// TEST SPEED 3! was 1.2
 					enemies.get(i).setxVel(
-							((float) (3f / hypot * (pile.getX() + (pile.getWidth() / 2) - enemies.get(i).getX()))));
+							((float) (1.2f / hypot * (pile.getX() + (pile.getWidth() / 2) - enemies.get(i).getX()))));
 					enemies.get(i).setyVel(
-							((float) (3f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
+							((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
+					// Maby correct direction to stealer?
 
 				}
 
@@ -686,29 +707,149 @@ public class Updater implements Screen {
 				} else {
 					// Enemy collisions with borders
 
-					for (int k = 0; k < borders.size; k++) {
-						if (Intersector.overlaps(enemies.get(i).getHitbox(), borders.get(k).getRectangle())) {
-							if (enemies.get(i) instanceof StealingEnemy) {
 
-								enemies.get(i).setxVel(0);
+				
+					
+						for(int k = 0; k<borders.size;k++){
+							
+							if(Intersector.overlaps(enemies.get(i).getHitbox(), borders.get(k).getRectangle())){
+							
+								
+								
+					    	if(enemies.get(i) instanceof StealingEnemy ) {
+					    		
 
-								enemies.get(i).updateHitbox();
-							} else {
-
-								enemies.get(i).setxVel(0);
-
-								enemies.get(i).updateHitbox();
+					    		
+					    		
+					    		
+					    	}else if(enemies.get(i) instanceof ChaserEnemy) {
+					    		
+					    	
+					    		
+					    		
+					    		
+					    		float xdiff = Math.abs(borders.get(k).getRectangle().getX() - enemies.get(i).getX());
+								float ydiff = Math.abs(borders.get(k).getRectangle().getY() - enemies.get(i).getY());
+								// The enemy is right
+								
+								if(borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() < enemies.get(i).getX()) {
+									System.out.println("ENEMY COLLIDING RIGHT");
+									
+									enemies.get(i).setX(enemies.get(i).getX() + ( borders.get(k).getRectangle().getWidth() - xdiff));
+									
+									
+									
+									
+								}
+								if(borders.get(k).getRectangle().getX()>enemies.get(i).getX() + enemies.get(i).getWidth()) { // The enemy is left
+									System.out.println("ENEMY COLLIDING LEFT");
+									enemies.get(i).setX(enemies.get(i).getX() - ( borders.get(k).getRectangle().getWidth()  - xdiff));
+									
+									
+									
+								}
+								if(borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight() < enemies.get(i).getY()) {	// The enemy is up
+									System.out.println("ENEMY COLLIDING UP");
+									
+									enemies.get(i).setY(enemies.get(i).getY() + (borders.get(k).getRectangle().getHeight()  - ydiff));
+									
+									
+									
+								}
+								if(borders.get(k).getRectangle().getY()>enemies.get(i).getY() + enemies.get(i).getHeight()) {// The enemy is down
+									System.out.println("ENEMY COLLIDING DOWN");
+									enemies.get(i).setY(enemies.get(i).getY() - ( borders.get(k).getRectangle().getHeight() - ydiff));
+									
+								
+									
+								}
+								
+							
+								if(player.getY()>enemies.get(i).getY() + enemies.get(i).getHeight()) {
+									
+									enemies.get(i).setxVel(1);
+								} 
+							
+								if(player.getY() + player.getHeight()<enemies.get(i).getY()) {
+									enemies.get(i).setxVel(-1);
+							
+								}if(player.getX()< enemies.get(i).getX()+ enemies.get(i).getWidth()) {
+									enemies.get(i).setyVel(-1);
+								}
+								if(player.getX() + player.getWidth()> enemies.get(i).getX()) {
+									enemies.get(i).setyVel(1);
+								}
+								
+								
+								
+								
+								if(player.getY()>=enemies.get(i).getY() + enemies.get(i).getHeight()  && player.getX() + player.getWidth()<=enemies.get(i).getX()) {
+									enemies.get(i).setxVel(-1);
+									
+								} 
+							
+								if(player.getY()>=enemies.get(i).getY() + enemies.get(i).getHeight() &&player.getX()>=enemies.get(i).getX() + enemies.get(i).getWidth()) {
+									enemies.get(i).setxVel(1);
+							
+								}if(player.getY() + player.getHeight()<=enemies.get(i).getY()&&player.getX() + player.getWidth()<= enemies.get(i).getX()) {
+									enemies.get(i).setxVel(-1);
+									
+								}
+								if(player.getY() + player.getHeight()<=enemies.get(i).getY()&&player.getX()>=enemies.get(i).getX() + enemies.get(i).getWidth()) {
+									enemies.get(i).setxVel(1);
+									
+								}
+								/*
+								// Northeast
+								if(enemies.get(i).getX()>borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() && enemies.get(i).getY()>borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()  ) {
+									enemies.get(i).setY(enemies.get(i).getY() + (borders.get(k).getRectangle().getHeight()  - ydiff));
+									enemies.get(i).setX(enemies.get(i).getX() + ( borders.get(k).getRectangle().getWidth() - xdiff));
+									
+									enemies.get(i).setxVel(-1);
+									enemies.get(i).setyVel(0);
+									
+								}else if(enemies.get(i).getX()>borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() && enemies.get(i).getY() + enemies.get(i).getHeight() <borders.get(k).getRectangle().getY()) { // Southeast
+									enemies.get(i).setY(enemies.get(i).getY() - ( borders.get(k).getRectangle().getHeight() - ydiff));
+									enemies.get(i).setX(enemies.get(i).getX() + ( borders.get(k).getRectangle().getWidth() - xdiff));
+									
+									enemies.get(i).setxVel(-1);
+									enemies.get(i).setyVel(0);
+									
+								}else if(enemies.get(i).getX() + enemies.get(i).getWidth()<borders.get(k).getRectangle().getX() && enemies.get(i).getY() + enemies.get(i).getHeight() < borders.get(k).getRectangle().getY()) { // Southwest
+									enemies.get(i).setY(enemies.get(i).getY() - ( borders.get(k).getRectangle().getHeight() - ydiff));
+									enemies.get(i).setX(enemies.get(i).getX() - ( borders.get(k).getRectangle().getWidth()  - xdiff));
+									
+									enemies.get(i).setxVel(1);
+									enemies.get(i).setyVel(0);
+									
+								}else if(enemies.get(i).getX() + enemies.get(i).getWidth()<borders.get(k).getRectangle().getX() && enemies.get(i).getY() > borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()) { // NorthWest
+									enemies.get(i).setY(enemies.get(i).getY() + (borders.get(k).getRectangle().getHeight()  - ydiff));
+									enemies.get(i).setX(enemies.get(i).getX() - ( borders.get(k).getRectangle().getWidth()  - xdiff));
+									
+									enemies.get(i).setxVel(1);
+									enemies.get(i).setyVel(0);
+								}
+*/
+					    		
+					    		
+					    	}
+								
+								
+								
+								
+					          
+					        	   
+					       
 							}
 
-						}
-					}
 
-					// move enemies
-					enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
-					enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
+			
 
 				}
-				//
+						// move enemies
+						enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
+						enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
+				}
 			} else {
 
 				// reduce the enemy timeoutTimer
@@ -803,8 +944,14 @@ public class Updater implements Screen {
 				}
 				if (player.getPowerupType() == POWERUPTYPE.SHIELD) {
 					MapObject obj = new MapObject(40, 40, player.getX() - player.getWidth() / 2,
+
 							player.getY() + player.getHeight() / 2, 0, 0, 10000,
-							game.getLoader().getManager().get("SHIELD.png", Texture.class), OBJECTTYPE.FOLLOWER);
+
+							game.getLoader().getManager().get(
+									"SHIELD.png", Texture.class),
+
+							OBJECTTYPE.FOLLOWER);
+
 					obj.setSpawnTime(TimeUtils.millis());
 					mapObjects.add(obj);
 				}
@@ -812,7 +959,14 @@ public class Updater implements Screen {
 				if (player.getPowerupType() == POWERUPTYPE.CLEARSCREEN) {
 					MapObject obj = new MapObject(32, 32, player.getX() - player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, 0, 0, 10000,
-							game.getLoader().getManager().get("ScreenClear.png", Texture.class), OBJECTTYPE.EXPANDER);
+
+
+							game.getLoader().getManager().get(
+									"ScreenClear.png",
+									Texture.class),
+
+							OBJECTTYPE.EXPANDER);
+
 					obj.setSpawnTime(TimeUtils.millis());
 					mapObjects.add(obj);
 					Explosion.play();
@@ -876,12 +1030,14 @@ public class Updater implements Screen {
 
 				int tmp = 0;
 				tmp = MathUtils.random(0, 3);
-				shot.play();
+				shot.play(0.5f);
 				if (tmp == 0) {
 
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+
 							player.getY() + player.getHeight() / 2, velX, velY,
 							game.getLoader().getManager().get("Carrot.png", Texture.class));
+
 					p.setTargetX(reaCoords.x);
 					p.setTargetY(reaCoords.y);
 					p.setCurrentTime(TimeUtils.millis());
@@ -890,8 +1046,10 @@ public class Updater implements Screen {
 				if (tmp == 1) {
 
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+
 							player.getY() + player.getHeight() / 2, velX, velY,
 							game.getLoader().getManager().get("Tomato.png", Texture.class));
+
 					p.setTargetX(reaCoords.x);
 					p.setTargetY(reaCoords.y);
 					p.setCurrentTime(TimeUtils.millis());
@@ -900,8 +1058,10 @@ public class Updater implements Screen {
 				if (tmp == 2) {
 
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+
 							player.getY() + player.getHeight() / 2, velX, velY,
 							game.getLoader().getManager().get("Broccoli.png", Texture.class));
+
 					p.setTargetX(reaCoords.x);
 					p.setTargetY(reaCoords.y);
 					p.setCurrentTime(TimeUtils.millis());
@@ -910,8 +1070,13 @@ public class Updater implements Screen {
 				if (tmp == 3) {
 
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+
 							player.getY() + player.getHeight() / 2, velX, velY,
-							game.getLoader().getManager().get("Carrot.png", Texture.class)); // Eggplant replacement
+
+							game.getLoader().getManager().get("Carrot.png", Texture.class)); //Eggplant replacement
+
+
+
 					p.setTargetX(reaCoords.x);
 					p.setTargetY(reaCoords.y);
 					p.setCurrentTime(TimeUtils.millis());
@@ -955,6 +1120,7 @@ public class Updater implements Screen {
 				if (tmp == 0) {
 
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+
 							player.getY() + player.getHeight() / 2, velX, velY,
 							game.getLoader().getManager().get("Carrot.png", Texture.class)); // Eggplant replacement
 
@@ -965,6 +1131,7 @@ public class Updater implements Screen {
 					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velXL, velYL,
 							game.getLoader().getManager().get("Carrot.png", Texture.class)); // Eggplant replacement
+
 
 					l.setCurrentTime(TimeUtils.millis());
 					p.setCurrentTime(TimeUtils.millis());
@@ -977,6 +1144,7 @@ public class Updater implements Screen {
 				if (tmp == 1) {
 
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+
 							player.getY() + player.getHeight() / 2, velX, velY,
 							game.getLoader().getManager().get("Carrot.png", Texture.class));
 
@@ -987,6 +1155,7 @@ public class Updater implements Screen {
 					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velXL, velYL,
 							game.getLoader().getManager().get("Carrot.png", Texture.class));
+
 
 					l.setCurrentTime(TimeUtils.millis());
 					p.setCurrentTime(TimeUtils.millis());
@@ -999,6 +1168,7 @@ public class Updater implements Screen {
 				if (tmp == 2) {
 
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+
 							player.getY() + player.getHeight() / 2, velX, velY,
 							game.getLoader().getManager().get("Tomato.png", Texture.class));
 
@@ -1009,6 +1179,7 @@ public class Updater implements Screen {
 					Projectile r = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
 							player.getY() + player.getHeight() / 2, velXL, velYL,
 							game.getLoader().getManager().get("Tomato.png", Texture.class));
+
 
 					l.setCurrentTime(TimeUtils.millis());
 					p.setCurrentTime(TimeUtils.millis());
@@ -1020,6 +1191,7 @@ public class Updater implements Screen {
 				}
 				if (tmp == 3) {
 					Projectile p = new Projectile(15, 15, player.getX() + player.getWidth() / 2,
+
 							player.getY() + player.getHeight() / 2, velX, velY,
 							game.getLoader().getManager().get("Broccoli.png", Texture.class));
 
@@ -1039,7 +1211,7 @@ public class Updater implements Screen {
 					proj.add(l);
 					proj.add(r);
 				}
-				shot.play();
+				shot.play(0.5f);
 
 			}
 
@@ -1140,7 +1312,24 @@ public class Updater implements Screen {
 
 		game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
+		
+		//Draw powerups
+		if (!powerups.isEmpty()) {
+			for (int i = 0; i < powerups.size(); i++) {
 
+				Powerup powerup = powerups.get(i);
+
+				if (TimeUtils.timeSinceMillis(powerup.getTimeAlive()) < 9000) {
+					game.batch.draw(powerup.getGraphic(), powerup.getX(), powerup.getY(), powerup.getWidth(),
+							powerup.getHeight());
+
+				} else {
+
+					powerups.remove(i);
+				}
+
+			}
+		}
 		// Draw pile; four health states
 		if (pile.getHealth() > 6) {
 
@@ -1188,7 +1377,7 @@ public class Updater implements Screen {
 				// CHASER
 			} else if (enemies.get(i) instanceof ChaserEnemy) {
 				game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
-						enemies.get(i).getY());
+						enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 			}
 
 		}
@@ -1207,22 +1396,7 @@ public class Updater implements Screen {
 					proj.get(i).getHeight());
 		}
 		
-		if (!powerups.isEmpty()) {
-			for (int i = 0; i < powerups.size(); i++) {
-
-				Powerup powerup = powerups.get(i);
-
-				if (TimeUtils.timeSinceMillis(powerup.getTimeAlive()) < 9000) {
-					game.batch.draw(powerup.getGraphic(), powerup.getX(), powerup.getY(), powerup.getWidth(),
-							powerup.getHeight());
-
-				} else {
-
-					powerups.remove(i);
-				}
-
-			}
-		}
+	
 		if (!mapObjects.isEmpty()) {
 			for (int i = 0; i < mapObjects.size(); i++) {
 				// Draw Follower Object
@@ -1260,6 +1434,9 @@ public class Updater implements Screen {
 			spawnEnemies();
 			timeSinceWave = TimeUtils.millis();
 		}
+		
+		
+		
 		// Update particles in the list FURTHER WORK REQUIRED
 		if (!effects.isEmpty()) {
 
@@ -1291,19 +1468,18 @@ public class Updater implements Screen {
 
 		// shape renderer for debugging
 		/*
-		 * r.setProjectionMatrix(camera.combined); r.begin(ShapeType.Line);
-		 * r.setColor(Color.GREEN); Vector3 vector = new Vector3(Gdx.input.getX(),
-		 * Gdx.input.getY(), 0); Vector3 reaCoordn = camera.unproject(vector);
-		 * r.line(player.getX() + player.getWidth() / 2, player.getY() +
-		 * player.getHeight() / 2, reaCoordn.x, reaCoordn.y);
-		 * 
-		 * for (int i = 0; i < proj.size(); i++) { r.setColor(Color.RED);
-		 * r.line(proj.get(i).getTargetX(), proj.get(i).getTargetY(),
-		 * proj.get(i).getX(), proj.get(i).getY()); r.setColor(Color.BLUE);
-		 * r.line(player.getX() + player.getWidth() / 2, player.getY() +
-		 * player.getHeight() / 2, proj.get(i).getX(), proj.get(i).getY()); }
-		 * 
-		 * r.end();
+		  r.setProjectionMatrix(camera.combined); r.begin(ShapeType.Line);
+		  r.setColor(Color.GREEN); 
+		
+		  
+		  for(int i = 0; i<enemies.size();i++) {
+			  r.rect(enemies.get(i).getX(), enemies.get(i).getY(), enemies.get(i).getWidth(),  enemies.get(i).getHeight());
+		  }
+		  for(int i = 0; i<borders.size;i++) {
+			  r.rect(borders.get(i).getRectangle().getX(), borders.get(i).getRectangle().getY(), borders.get(i).getRectangle().getWidth(),  borders.get(i).getRectangle().getHeight());
+		  }
+		  
+		  r.end();
 		 */
 	}
 

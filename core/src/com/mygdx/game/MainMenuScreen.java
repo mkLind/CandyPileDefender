@@ -38,7 +38,7 @@ public class MainMenuScreen implements Screen {
 	private Label label5;
 	private Label label6;
 	private Label label7;
-	
+
 	private SimpleDateFormat format;
 	private Date date;
 	private String DateToStr;
@@ -46,11 +46,12 @@ public class MainMenuScreen implements Screen {
 	private String tmp;
 //	private String name;
 	private Music ambience;
-	
+
 	public MainMenuScreen(final Core game) {
 		this.game = game;
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
+
 		this.font = game.font;
 		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 //		mySkin.getFont("font-label").getData().setScale(1.5f);
@@ -212,45 +213,96 @@ public class MainMenuScreen implements Screen {
 	    		label2.setText("Your score: " + game.getLoader().getScore());
 	    	}
         }
+
 	}
-	
+
 	public String checkScores() {
-		
-		if(game.getLoader().getScore() > Integer.parseInt(game.getLoader().getHighScore().split(" ")[0])) {
+
+		if (game.getLoader().getScore() > Integer.parseInt(game.getLoader().getHighScore().split(" ")[0])) {
 			game.getLoader().setFifth(game.getLoader().getFourth());
 			game.getLoader().setFourth(game.getLoader().getThird());
 			game.getLoader().setThird(game.getLoader().getSecond());
 			game.getLoader().setSecond(game.getLoader().getHighScore());
 			game.getLoader().setHighScore(currentScore);
-        	return "first";
-		}else if (game.getLoader().getScore() <= Integer.parseInt(game.getLoader().getHighScore().split(" ")[0]) &&
-				game.getLoader().getScore() > Integer.parseInt(game.getLoader().getSecond().split(" ")[0])) {
+			return "first";
+		} else if (game.getLoader().getScore() <= Integer.parseInt(game.getLoader().getHighScore().split(" ")[0])
+				&& game.getLoader().getScore() > Integer.parseInt(game.getLoader().getSecond().split(" ")[0])) {
 			game.getLoader().setFifth(game.getLoader().getFourth());
 			game.getLoader().setFourth(game.getLoader().getThird());
 			game.getLoader().setThird(game.getLoader().getSecond());
 			game.getLoader().setSecond(currentScore);
 			return "second";
-			
-        }else if (game.getLoader().getScore() <= Integer.parseInt(game.getLoader().getSecond().split(" ")[0]) &&
-				game.getLoader().getScore() > Integer.parseInt(game.getLoader().getThird().split(" ")[0])) {
+
+		} else if (game.getLoader().getScore() <= Integer.parseInt(game.getLoader().getSecond().split(" ")[0])
+				&& game.getLoader().getScore() > Integer.parseInt(game.getLoader().getThird().split(" ")[0])) {
 			game.getLoader().setFifth(game.getLoader().getFourth());
 			game.getLoader().setFourth(game.getLoader().getThird());
 			game.getLoader().setThird(currentScore);
 			return "third";
-			
-        }else if (game.getLoader().getScore() <= Integer.parseInt(game.getLoader().getThird().split(" ")[0]) &&
-				game.getLoader().getScore() > Integer.parseInt(game.getLoader().getFourth().split(" ")[0])) {
+
+		} else if (game.getLoader().getScore() <= Integer.parseInt(game.getLoader().getThird().split(" ")[0])
+				&& game.getLoader().getScore() > Integer.parseInt(game.getLoader().getFourth().split(" ")[0])) {
 			game.getLoader().setFifth(game.getLoader().getFourth());
 			game.getLoader().setFourth(currentScore);
 			return "fourth";
-			
-        }else if (game.getLoader().getScore() <= Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) &&
-				game.getLoader().getScore() > Integer.parseInt(game.getLoader().getFifth().split(" ")[0])) {
+
+		} else if (game.getLoader().getScore() <= Integer.parseInt(game.getLoader().getFourth().split(" ")[0])
+				&& game.getLoader().getScore() > Integer.parseInt(game.getLoader().getFifth().split(" ")[0])) {
 			game.getLoader().setFifth(currentScore);
 			return "fifth";
-        }else return "";
+
+		} else
+			return "";
 	}
-	
+	/*
+	 * public void sendScores() { HttpRequestBuilder requestBuilder = new
+	 * HttpRequestBuilder(); HttpRequest httpRequest =
+	 * requestBuilder.newRequest().method(HttpMethods.POST).url(
+	 * "http://ftp.thilanne.altervista.org/CandyPileDefender/addscore.php").content(
+	 * "name="+name+"&score="+(Integer.toString(game.getLoader().getScore()))+
+	 * "&hash=mkGZgaG0Gl").build(); HttpResponseListener httpResponseListener = new
+	 * HttpResponseListener() {
+	 * 
+	 * @Override public void handleHttpResponse(HttpResponse httpResponse) {
+	 * System.out.println(httpResponse.getHeaders());
+	 * 
+	 * }
+	 * 
+	 * @Override public void failed(Throwable t) { // TODO Auto-generated method
+	 * stub
+	 * 
+	 * }
+	 * 
+	 * @Override public void cancelled() { // TODO Auto-generated method stub
+	 * 
+	 * } }; Gdx.net.sendHttpRequest(httpRequest, httpResponseListener); } public
+	 * void getScores() { HttpRequestBuilder requestBuilder = new
+	 * HttpRequestBuilder(); HttpRequest httpRequest =
+	 * requestBuilder.newRequest().method(HttpMethods.GET).url(
+	 * "http://ftp.thilanne.altervista.org/CandyPileDefender/addscore.php").content(
+	 * "name="+name+"&score="+(Integer.toString(game.getLoader().getScore()))+
+	 * "&hash=mkGZgaG0Gl").build(); HttpResponseListener httpResponseListener = new
+	 * HttpResponseListener() {
+	 * 
+	 * @Override public void handleHttpResponse(HttpResponse httpResponse) { String
+	 * answer = httpResponse.getResultAsString();
+	 * 
+	 * }
+	 * 
+	 * @Override public void failed(Throwable t) { // TODO Auto-generated method
+	 * stub
+	 * 
+	 * }
+	 * 
+	 * @Override public void cancelled() { // TODO Auto-generated method stub
+	 * 
+	 * } }; Gdx.net.sendHttpRequest(httpRequest, httpResponseListener); }
+	 *
+
+
+        }else return "";
+	    }
+	*/
 	/*
 	public void sendScores() {
 		HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
@@ -308,20 +360,22 @@ public class MainMenuScreen implements Screen {
 		Gdx.net.sendHttpRequest(httpRequest, httpResponseListener);
 	}*/
 	
+
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act();
-        stage.draw();
-        
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		stage.act();
+		stage.draw();
+
 	}
-	
+
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
 
 	}
+
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height);
