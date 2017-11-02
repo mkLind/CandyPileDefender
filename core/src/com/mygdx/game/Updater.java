@@ -736,7 +736,11 @@ public class Updater implements Screen {
 									System.out.println("ENEMY COLLIDING RIGHT");
 									
 									enemies.get(i).setX(enemies.get(i).getX() + ( borders.get(k).getRectangle().getWidth() - xdiff));
-									
+									if(enemies.get(i).getY() + enemies.get(i).getHeight()< borders.get(k).getRectangle().getY() ) { // Down and Right
+										
+									}else if(enemies.get(i).getY()> borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()) { // up and right 
+										
+									}
 									
 									
 									
@@ -745,7 +749,11 @@ public class Updater implements Screen {
 									System.out.println("ENEMY COLLIDING LEFT");
 									enemies.get(i).setX(enemies.get(i).getX() - ( borders.get(k).getRectangle().getWidth()  - xdiff));
 									
-									
+									if(enemies.get(i).getY() + enemies.get(i).getHeight()< borders.get(k).getRectangle().getY() ) { //Down and left
+										
+									}else if(enemies.get(i).getY()> borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()) { // up and right 
+										
+									}
 									
 								}
 								if(borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight() < enemies.get(i).getY()) {	// The enemy is up
@@ -753,12 +761,22 @@ public class Updater implements Screen {
 									
 									enemies.get(i).setY(enemies.get(i).getY() + (borders.get(k).getRectangle().getHeight()  - ydiff));
 									
-									
+									if(enemies.get(i).getX() + enemies.get(i).getWidth()< borders.get(k).getRectangle().getX() ) { // up and left
+										
+									}else if(enemies.get(i).getX()> borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth()) { // up and right 
+										
+									}
 									
 								}
 								if(borders.get(k).getRectangle().getY()>enemies.get(i).getY() + enemies.get(i).getHeight()) {// The enemy is down
 									System.out.println("ENEMY COLLIDING DOWN");
 									enemies.get(i).setY(enemies.get(i).getY() - ( borders.get(k).getRectangle().getHeight() - ydiff));
+									
+									if(enemies.get(i).getX() + enemies.get(i).getWidth()< borders.get(k).getRectangle().getX() ) { // Down and left
+										
+									}else if(enemies.get(i).getX()> borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth()) { // Down and right 
+										
+									}
 									
 								
 									
