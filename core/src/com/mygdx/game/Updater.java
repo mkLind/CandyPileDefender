@@ -457,7 +457,7 @@ public class Updater implements Screen {
 				topLeftCorner.setVisible(true);
 				if(enemies.get(i).getY()-player.getY() < Gdx.graphics.getWidth()/6) {
 					topLeftCorner.setVisible(false);
-					
+	
 					leftCenter.setVisible(true);
 				}
 				if(player.getX() - enemies.get(i).getX() < Gdx.graphics.getWidth()/6) {
