@@ -717,8 +717,115 @@ public class Updater implements Screen {
 								
 								
 					    	if(enemies.get(i) instanceof StealingEnemy ) {
-					    		
-
+	// The enemy is right
+								
+								if(borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() < enemies.get(i).getX()) {
+								
+									
+									enemies.get(i).setX(borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() + 0.2f);
+									
+									
+									if(enemies.get(i).getY() + enemies.get(i).getHeight()< borders.get(k).getRectangle().getY() ) { // Down and Right
+										enemies.get(i).setY(borders.get(k).getRectangle().getY() - enemies.get(k).getHeight() - 0.2f);
+										
+										
+									}else if(enemies.get(i).getY()> borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()) { // up and right 
+										enemies.get(i).setY(borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight() +  0.2f);
+										
+										
+									}
+									
+									
+									
+								}
+								if(borders.get(k).getRectangle().getX()>enemies.get(i).getX() + enemies.get(i).getWidth()) { // The enemy is left
+								
+									enemies.get(i).setX(borders.get(k).getRectangle().getX() - enemies.get(i).getWidth() - 0.2f);
+									
+									if(enemies.get(i).getY() + enemies.get(i).getHeight()< borders.get(k).getRectangle().getY() ) { //Down and left
+										enemies.get(i).setY(borders.get(k).getRectangle().getY() - enemies.get(i).getHeight() -  0.2f);
+										
+										
+									}else if(enemies.get(i).getY()> borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()) { // up and left
+										
+										enemies.get(i).setY(borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight() +  0.2f);
+										
+									}
+									
+								}
+								if(borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight() < enemies.get(i).getY()) {	// The enemy is up
+									System.out.println("ENEMY COLLIDING UP");
+									
+									enemies.get(i).setY(borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight() +  0.2f);
+									
+									if(enemies.get(i).getX() + enemies.get(i).getWidth()< borders.get(k).getRectangle().getX() ) { // up and left
+										enemies.get(i).setX(borders.get(k).getRectangle().getX() - enemies.get(i).getWidth() - 0.2f);
+									}else if(enemies.get(i).getX()> borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth()) { // up and right 
+										enemies.get(i).setX(borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() + 0.2f);
+									}
+									
+								}
+								if(borders.get(k).getRectangle().getY()>enemies.get(i).getY() + enemies.get(i).getHeight()) {// The enemy is down
+									System.out.println("ENEMY COLLIDING DOWN");
+									enemies.get(i).setY(borders.get(k).getRectangle().getY() - enemies.get(i).getHeight() -  0.2f);
+									
+									if(enemies.get(i).getX() + enemies.get(i).getWidth()< borders.get(k).getRectangle().getX() ) { // Down and left
+										enemies.get(i).setX(borders.get(k).getRectangle().getX() - enemies.get(i).getWidth() - 0.2f);
+									}else if(enemies.get(i).getX()> borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth()) { // Down and right 
+										enemies.get(i).setX(borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() + 0.2f);
+									}
+									
+								
+									
+								}
+	// VELOCITIES FOR AVOIDING OBSTACLE
+								
+								if(enemies.get(i).getY()>borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()) { //Enemy going down 
+								enemies.get(i).setxVel(-1);
+								enemies.get(i).setyVel(0);
+									if(enemies.get(i).getX() > borders.get(k).getRectangle().getX()) { // Going left
+										enemies.get(i).setxVel(-1);
+										enemies.get(i).setyVel(0);
+									}else if(enemies.get(i).getX()<borders.get(k).getRectangle().getX()) { // Going right
+										enemies.get(i).setxVel(1);
+										enemies.get(i).setyVel(0);
+									}
+								}
+								else if(enemies.get(i).getY() + enemies.get(i).getHeight()<borders.get(k).getRectangle().getY()) { //Enemy going up
+									enemies.get(i).setxVel(1);
+									enemies.get(i).setyVel(0);
+									if(enemies.get(i).getX() > borders.get(k).getRectangle().getX()) { // Going left
+										enemies.get(i).setxVel(-1);
+										enemies.get(i).setyVel(0);
+									}else if(enemies.get(i).getX() < borders.get(k).getRectangle().getX()) { // going right
+										enemies.get(i).setxVel(1);
+										enemies.get(i).setyVel(0);
+									}
+								}
+								else if(enemies.get(i).getX() > borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth()) { // going left
+									enemies.get(i).setyVel(1);
+									enemies.get(i).setxVel(0);
+									if(enemies.get(i).getY()<borders.get(k).getRectangle().getY()) { // going up
+										enemies.get(i).setyVel(1);
+										enemies.get(i).setxVel(0);
+									}else if(enemies.get(i).getY()>borders.get(k).getRectangle().getY()){ // going down
+										enemies.get(i).setyVel(-1);
+										enemies.get(i).setxVel(0);
+									}
+								}
+								else if(enemies.get(i).getX() + enemies.get(i).getWidth()<borders.get(k).getRectangle().getX()) { //going right
+									enemies.get(i).setyVel(1);
+									enemies.get(i).setxVel(0);
+									if(enemies.get(i).getY()<borders.get(k).getRectangle().getY()) { // going up
+										enemies.get(i).setyVel(1);
+										enemies.get(i).setxVel(0);
+										
+									}else if(enemies.get(i).getY()>borders.get(k).getRectangle().getY()){ // going down
+										enemies.get(i).setyVel(-1);
+										enemies.get(i).setxVel(0);
+										
+									}
+								}
 					    		
 					    		
 					    		
@@ -728,18 +835,20 @@ public class Updater implements Screen {
 					    		
 					    		
 					    		
-					    		float xdiff = Math.abs(borders.get(k).getRectangle().getX() - enemies.get(i).getX());
-								float ydiff = Math.abs(borders.get(k).getRectangle().getY() - enemies.get(i).getY());
+			
+						
 								// The enemy is right
 								
 								if(borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() < enemies.get(i).getX()) {
 									System.out.println("ENEMY COLLIDING RIGHT");
 									
-									enemies.get(i).setX(enemies.get(i).getX() + ( borders.get(k).getRectangle().getWidth() - xdiff));
+									enemies.get(i).setX(borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() + 0.2f);
+									
 									if(enemies.get(i).getY() + enemies.get(i).getHeight()< borders.get(k).getRectangle().getY() ) { // Down and Right
+										enemies.get(i).setY(borders.get(k).getRectangle().getY() - enemies.get(k).getHeight() - 0.2f);
 										
 									}else if(enemies.get(i).getY()> borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()) { // up and right 
-										
+										enemies.get(i).setY(borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight() +  0.2f);
 									}
 									
 									
@@ -747,11 +856,15 @@ public class Updater implements Screen {
 								}
 								if(borders.get(k).getRectangle().getX()>enemies.get(i).getX() + enemies.get(i).getWidth()) { // The enemy is left
 									System.out.println("ENEMY COLLIDING LEFT");
-									enemies.get(i).setX(enemies.get(i).getX() - ( borders.get(k).getRectangle().getWidth()  - xdiff));
+									enemies.get(i).setX(borders.get(k).getRectangle().getX() - enemies.get(i).getWidth() - 0.2f);
 									
 									if(enemies.get(i).getY() + enemies.get(i).getHeight()< borders.get(k).getRectangle().getY() ) { //Down and left
+										enemies.get(i).setY(borders.get(k).getRectangle().getY() - enemies.get(i).getHeight() -  0.2f);
 										
-									}else if(enemies.get(i).getY()> borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()) { // up and right 
+										
+									}else if(enemies.get(i).getY()> borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()) { // up and left
+										
+										enemies.get(i).setY(borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight() +  0.2f);
 										
 									}
 									
@@ -759,96 +872,75 @@ public class Updater implements Screen {
 								if(borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight() < enemies.get(i).getY()) {	// The enemy is up
 									System.out.println("ENEMY COLLIDING UP");
 									
-									enemies.get(i).setY(enemies.get(i).getY() + (borders.get(k).getRectangle().getHeight()  - ydiff));
+									enemies.get(i).setY(borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight() +  0.2f);
 									
 									if(enemies.get(i).getX() + enemies.get(i).getWidth()< borders.get(k).getRectangle().getX() ) { // up and left
-										
+										enemies.get(i).setX(borders.get(k).getRectangle().getX() - enemies.get(i).getWidth() - 0.2f);
 									}else if(enemies.get(i).getX()> borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth()) { // up and right 
-										
+										enemies.get(i).setX(borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() + 0.2f);
 									}
 									
 								}
 								if(borders.get(k).getRectangle().getY()>enemies.get(i).getY() + enemies.get(i).getHeight()) {// The enemy is down
 									System.out.println("ENEMY COLLIDING DOWN");
-									enemies.get(i).setY(enemies.get(i).getY() - ( borders.get(k).getRectangle().getHeight() - ydiff));
+									enemies.get(i).setY(borders.get(k).getRectangle().getY() - enemies.get(i).getHeight() -  0.2f);
 									
 									if(enemies.get(i).getX() + enemies.get(i).getWidth()< borders.get(k).getRectangle().getX() ) { // Down and left
-										
+										enemies.get(i).setX(borders.get(k).getRectangle().getX() - enemies.get(i).getWidth() - 0.2f);
 									}else if(enemies.get(i).getX()> borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth()) { // Down and right 
-										
+										enemies.get(i).setX(borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() + 0.2f);
 									}
 									
 								
 									
 								}
 								
-							
-								if(player.getY()>enemies.get(i).getY() + enemies.get(i).getHeight()) {
-									
-									enemies.get(i).setxVel(1);
-								} 
-							
-								if(player.getY() + player.getHeight()<enemies.get(i).getY()) {
-									enemies.get(i).setxVel(-1);
-							
-								}if(player.getX()< enemies.get(i).getX()+ enemies.get(i).getWidth()) {
-									enemies.get(i).setyVel(-1);
+							// VELOCITIES FOR AVOIDING OBSTACLE
+								
+								if(enemies.get(i).getY()>borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()) { //Enemy going down 
+								enemies.get(i).setxVel(-1);
+								enemies.get(i).setyVel(0);
+									if(enemies.get(i).getX() >= borders.get(k).getRectangle().getX()) { // Going left
+										enemies.get(i).setxVel(-1);
+										enemies.get(i).setyVel(0);
+									}else if(enemies.get(i).getX()<=borders.get(k).getRectangle().getX()) { // Going right
+										enemies.get(i).setxVel(1);
+										enemies.get(i).setyVel(0);
+									}
 								}
-								if(player.getX() + player.getWidth()> enemies.get(i).getX()) {
+								else if(enemies.get(i).getY() + enemies.get(i).getHeight()<borders.get(k).getRectangle().getY()) { //Enemy going up
+									enemies.get(i).setxVel(1);
+									enemies.get(i).setyVel(0);
+									if(enemies.get(i).getX() >= borders.get(k).getRectangle().getX()) { // Going left
+										enemies.get(i).setxVel(-1);
+										enemies.get(i).setyVel(0);
+									}else if(enemies.get(i).getX() <= borders.get(k).getRectangle().getX()) { // going right
+										enemies.get(i).setxVel(1);
+										enemies.get(i).setyVel(0);
+									}
+								}
+								else if(enemies.get(i).getX() > borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth()) { // going left
 									enemies.get(i).setyVel(1);
+									enemies.get(i).setxVel(0);
+									if(enemies.get(i).getY()<=borders.get(k).getRectangle().getY()) { // going up
+										enemies.get(i).setyVel(1);
+										enemies.get(i).setxVel(0);
+									}else if(enemies.get(i).getY()>=borders.get(k).getRectangle().getY()){ // going down
+										enemies.get(i).setyVel(-1);
+										enemies.get(i).setxVel(0);
+									}
 								}
-								
-								
-								
-								
-								if(player.getY()>=enemies.get(i).getY() + enemies.get(i).getHeight()  && player.getX() + player.getWidth()<=enemies.get(i).getX()) {
-									enemies.get(i).setxVel(-1);
-									
-								} 
-							
-								if(player.getY()>=enemies.get(i).getY() + enemies.get(i).getHeight() &&player.getX()>=enemies.get(i).getX() + enemies.get(i).getWidth()) {
-									enemies.get(i).setxVel(1);
-							
-								}if(player.getY() + player.getHeight()<=enemies.get(i).getY()&&player.getX() + player.getWidth()<= enemies.get(i).getX()) {
-									enemies.get(i).setxVel(-1);
-									
+								else if(enemies.get(i).getX() + enemies.get(i).getWidth()<borders.get(k).getRectangle().getX()) { //going right
+									enemies.get(i).setyVel(1);
+									enemies.get(i).setxVel(0);
+									if(enemies.get(i).getY()<=borders.get(k).getRectangle().getY()) { // going up
+										enemies.get(i).setyVel(1);
+										enemies.get(i).setxVel(0);
+									}else if(enemies.get(i).getY()>=borders.get(k).getRectangle().getY()){ // going down
+										enemies.get(i).setyVel(-1);
+										enemies.get(i).setxVel(0);
+									}
 								}
-								if(player.getY() + player.getHeight()<=enemies.get(i).getY()&&player.getX()>=enemies.get(i).getX() + enemies.get(i).getWidth()) {
-									enemies.get(i).setxVel(1);
-									
-								}
-								/*
-								// Northeast
-								if(enemies.get(i).getX()>borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() && enemies.get(i).getY()>borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()  ) {
-									enemies.get(i).setY(enemies.get(i).getY() + (borders.get(k).getRectangle().getHeight()  - ydiff));
-									enemies.get(i).setX(enemies.get(i).getX() + ( borders.get(k).getRectangle().getWidth() - xdiff));
-									
-									enemies.get(i).setxVel(-1);
-									enemies.get(i).setyVel(0);
-									
-								}else if(enemies.get(i).getX()>borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() && enemies.get(i).getY() + enemies.get(i).getHeight() <borders.get(k).getRectangle().getY()) { // Southeast
-									enemies.get(i).setY(enemies.get(i).getY() - ( borders.get(k).getRectangle().getHeight() - ydiff));
-									enemies.get(i).setX(enemies.get(i).getX() + ( borders.get(k).getRectangle().getWidth() - xdiff));
-									
-									enemies.get(i).setxVel(-1);
-									enemies.get(i).setyVel(0);
-									
-								}else if(enemies.get(i).getX() + enemies.get(i).getWidth()<borders.get(k).getRectangle().getX() && enemies.get(i).getY() + enemies.get(i).getHeight() < borders.get(k).getRectangle().getY()) { // Southwest
-									enemies.get(i).setY(enemies.get(i).getY() - ( borders.get(k).getRectangle().getHeight() - ydiff));
-									enemies.get(i).setX(enemies.get(i).getX() - ( borders.get(k).getRectangle().getWidth()  - xdiff));
-									
-									enemies.get(i).setxVel(1);
-									enemies.get(i).setyVel(0);
-									
-								}else if(enemies.get(i).getX() + enemies.get(i).getWidth()<borders.get(k).getRectangle().getX() && enemies.get(i).getY() > borders.get(k).getRectangle().getY() + borders.get(k).getRectangle().getHeight()) { // NorthWest
-									enemies.get(i).setY(enemies.get(i).getY() + (borders.get(k).getRectangle().getHeight()  - ydiff));
-									enemies.get(i).setX(enemies.get(i).getX() - ( borders.get(k).getRectangle().getWidth()  - xdiff));
-									
-									enemies.get(i).setxVel(1);
-									enemies.get(i).setyVel(0);
-								}
-*/
-					    		
 					    		
 					    	}
 								
