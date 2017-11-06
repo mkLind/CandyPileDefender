@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -10,6 +12,8 @@ public class SpriteCommons {
 	
 private float x;
 private float y;
+private float targetX;
+private float targetY;
 private float xVel;
 private float yVel;
 private int width;
@@ -17,6 +21,8 @@ private int height;
 private int HP;
 private Rectangle hitbox;
 private Texture texture;
+private boolean isColliding;
+private long timeSinceCollision;
 
 // inactivity timer after attacking etc.
 private int timeoutTimer;
@@ -31,6 +37,10 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	this.HP = HP;
 	hitbox = new Rectangle(x, y, width, height);
 	timeoutTimer = 0;
+	isColliding = false;
+	targetX = 0;
+	targetY = 0;
+	timeSinceCollision = 0;
 }
 
 public SpriteCommons(int width, int height, float x, float y,float xVel, float yVel){
@@ -42,6 +52,47 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	this.yVel = yVel;
 	hitbox = new Rectangle(x, y, width, height);
 	timeoutTimer = 0;
+	
+}
+
+public long getTimeSinceCollision() {
+	return timeSinceCollision;
+}
+
+public void setTimeSinceCollision(long timeSinceCollision) {
+	this.timeSinceCollision = timeSinceCollision;
+}
+
+public float getTargetX() {
+	return targetX;
+}
+
+public void setTargetX(float targetX) {
+	this.targetX = targetX;
+}
+
+public float getTargetY() {
+	return targetY;
+}
+
+public void setTargetY(float targetY) {
+	this.targetY = targetY;
+}
+
+public boolean isColliding() {
+	return isColliding;
+}
+
+public void setColliding(boolean isColliding) {
+	this.isColliding = isColliding;
+}
+
+public void setHitbox(Rectangle hitbox) {
+	this.hitbox = hitbox;
+}
+
+public void setTexture(Texture texture) {
+	this.texture = texture;
 }
 
 public TextureRegion getCurrentFrame( float time){	
@@ -132,5 +183,7 @@ public int getTimeoutTimer() {
 public void setTimeoutTimer(int timeoutTimer) {
 	this.timeoutTimer = timeoutTimer;
 }
+
+
 
 }
