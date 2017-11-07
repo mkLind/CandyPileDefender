@@ -221,7 +221,7 @@ public class Updater implements Screen {
 
 		// Health bar
 		drawable = new TextureRegionDrawable(
-				new TextureRegion(game.getLoader().getManager().get("HealthBarBackGround.png", Texture.class)));
+				new TextureRegion(game.getLoader().getManager().get("HealthbarBackGround.png", Texture.class)));
 		healthBar = new ProgressBar(0f, 1f, 0.01f, false, new ProgressBarStyle());
 		healthBar.getStyle().background = drawable;
 
@@ -233,7 +233,7 @@ public class Updater implements Screen {
 		pixmap.dispose();
 
 		drawable = new TextureRegionDrawable(
-				new TextureRegion(game.getLoader().getManager().get("HealthBar.png", Texture.class)));
+				new TextureRegion(game.getLoader().getManager().get("Healthbar.png", Texture.class)));
 		healthBar.getStyle().knobBefore = drawable;
 
 		healthBar.setWidth(120);

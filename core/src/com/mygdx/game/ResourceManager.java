@@ -100,9 +100,9 @@ public class ResourceManager {
 			manager.load("Sounds/walking/grass1.wav", Sound.class);
 			manager.load("Sounds/walking/gravel1.wav", Sound.class);
 			
-			manager.load("HealthBar.png", Texture.class);
-			manager.load("HealthBarBackGround.png", Texture.class);
-			manager.load("HealthBarKnob.png", Texture.class);
+			manager.load("Healthbar.png", Texture.class);
+			manager.load("HealthbarBackGround.png", Texture.class);
+			manager.load("HealthbarKnob.png", Texture.class);
 			manager.load("warning2.png", Texture.class);
 			/*
 			FileHandleResolver resolver = new InternalFileHandleResolver();
