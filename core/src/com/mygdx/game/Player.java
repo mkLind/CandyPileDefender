@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,9 +24,12 @@ public class Player extends SpriteCommons {
 	private long ShootingCooldown;
 	private long LastShot;
 	private long attackAnimStart;
+	
 	private float hasteVel;
 	private boolean isAttacking;
-	
+	private ArrayList<Float> previousX;
+	private ArrayList<Float> previousY;
+	private long lastPreviousSet;
 	
 	
 /**
@@ -45,8 +50,11 @@ public class Player extends SpriteCommons {
 		ShootingCooldown =  500;
 		isAttacking = false;
 		attackAnimStart = 0;
-		
-		
+		previousX = new ArrayList<Float>();
+		previousY = new ArrayList<Float>();
+		lastPreviousSet = 0;
+		setPreviousX(super.getX());
+		setPreviousY(super.getY());
 		
 		
 	}
@@ -58,6 +66,10 @@ public class Player extends SpriteCommons {
 		animations = new Animator(row, column, frametime, spritesheet);
 		
 	}
+	
+	
+	
+	
 	/*
 	 * Method for changing the frame of current animation. 
 	 * @param row = which row from the spritesheet is used
@@ -65,6 +77,24 @@ public class Player extends SpriteCommons {
 	 */
 	
 	
+	public long getLastPreviousSet() {
+		return lastPreviousSet;
+	}
+
+
+
+
+
+
+
+
+	public void setLastPreviousSet(long lastPreviousSet) {
+		this.lastPreviousSet = lastPreviousSet;
+	}
+
+
+
+
 	public TextureRegion getCurrentFrame( float time){
 		
 				
@@ -247,5 +277,43 @@ public void setAttackAnimStart(long attackAnimStart) {
 	
 	public float getMiddleY(){return super.getY()+super.getHeight()/2;}
 	public float getMiddleX(){return super.getX()+super.getWidth()/2;}
+
+
+public void setPreviousX(float x) {
+	if(previousX.size()<5 && !previousX.contains(x)) {
+		previousX.add(x);
+	}else {
+		previousX.remove(0);
+		previousX.add(x);
+	}
+}
+public void setPreviousY(float y) {
+	if(previousY.size()<5 && !previousY.contains(y)) {
+		previousY.add(y);
+	}else {
+		previousY.remove(0);
+		previousY.add(y);
+	}
+}
+	
+public float getPreviousX() {
+	float x = 0f;
+	
+        x = previousX.get(0);
+	
+	
+	return x;
+}
+
+public float getPreviousY() {
+	float y = 0f;
+	
+    y = previousY.get(0);
+	
+	
+	
+	
+	return y;
+}
 
 }
