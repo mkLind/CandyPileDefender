@@ -728,6 +728,7 @@ public class Updater implements Screen {
 								
 								//enemies.get(i).setxVel(0);
 								//enemies.get(i).setyVel(0);
+								/*
 								
 							if(borders.get(k).getRectangle().getX() + borders.get(k).getRectangle().getWidth() < enemies.get(i).getX()) {
 								
@@ -790,10 +791,131 @@ public class Updater implements Screen {
 							}
 							
 							
-						}
+							*/
+								
+								if(enemies.get(i) instanceof ChaserEnemy ) {
+									// "pathfinding" around the pile (probably badly optimized)
+
+									if ((player.getPreviousY() - enemies.get(i).getY() > 0)) { // player is up
+
+										enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() + 1.2f);
+
+										// check if up is clear
+										if (!(Intersector.overlaps(enemies.get(i).getHitbox(), borders.get(k).getRectangle()))) {
+
+											// move enemy up
+											enemies.get(i).setY(enemies.get(i).getY() + 1.2f);
+
+										} else { // up is blocked -> right or left
+
+											if (player.getPreviousX() - enemies.get(i).getX() > 0) { // player is right and up
+
+												// move enemy right
+												enemies.get(i).setX(enemies.get(i).getX() + 1.2f);
+
+											} else { // player is left and up
+
+												// move enemy left
+												enemies.get(i).setX(enemies.get(i).getX() - 1.2f);
+
+											}
+
+										}
+
+									} else { // player is down
+
+										enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() - 1.2f);
+
+										// check if down is clear
+										if (!(Intersector.overlaps(enemies.get(i).getHitbox(), borders.get(k).getRectangle()))) {
+
+											// move enemy down
+											enemies.get(i).setY(enemies.get(i).getY() - 1.2f);
+
+										} else { // down is blocked -> right or left
+
+											if (player.getPreviousX() - enemies.get(i).getX() > 0) { // player is right and down
+
+												// move enemy right
+												enemies.get(i).setX(enemies.get(i).getX() + 1.2f);
+
+											} else { // player is left and down
+
+												// move enemy left
+												enemies.get(i).setX(enemies.get(i).getX() - 1.2f);
+
+											}
+
+										}
+
+									}
+										
+									
+								}
+								if(enemies.get(i) instanceof StealingEnemy ) {
+									// "pathfinding" around the pile (probably badly optimized)
+
+									if ((pile.getY() - enemies.get(i).getY() > 0)) { // player is up
+
+										enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() + 1.2f);
+
+										// check if up is clear
+										if (!(Intersector.overlaps(enemies.get(i).getHitbox(), borders.get(k).getRectangle()))) {
+
+											// move enemy up
+											enemies.get(i).setY(enemies.get(i).getY() + 1.2f);
+
+										} else { // up is blocked -> right or left
+
+											if (pile.getX() - enemies.get(i).getX() > 0) { // player is right and up
+
+												// move enemy right
+												enemies.get(i).setX(enemies.get(i).getX() + 1.2f);
+
+											} else { // player is left and up
+
+												// move enemy left
+												enemies.get(i).setX(enemies.get(i).getX() - 1.2f);
+
+											}
+
+										}
+
+									} else { // player is down
+
+										enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() - 1.2f);
+
+										// check if down is clear
+										if (!(Intersector.overlaps(enemies.get(i).getHitbox(), borders.get(k).getRectangle()))) {
+
+											// move enemy down
+											enemies.get(i).setY(enemies.get(i).getY() - 1.2f);
+
+										} else { // down is blocked -> right or left
+
+											if (pile.getX() - enemies.get(i).getX() > 0) { // player is right and down
+
+												// move enemy right
+												enemies.get(i).setX(enemies.get(i).getX() + 1.2f);
+
+											} else { // player is left and down
+
+												// move enemy left
+												enemies.get(i).setX(enemies.get(i).getX() - 1.2f);
+
+											}
+
+										}
+
+									}
+								}
+							
+							
+						
 							
 							
 							
+							}
 							
 
 				}
@@ -1222,6 +1344,8 @@ public class Updater implements Screen {
 						enemies.remove(i);
 						break;
 					}
+				}else if(Intersector.overlaps(proj.get(j).getHitbox(), pile.getHitbox())) {
+					proj.remove(j);
 				}
 			}
 		}
@@ -1263,11 +1387,20 @@ public class Updater implements Screen {
 
 		mapRender.setView(camera);
 		mapRender.render();
+		if(!effects.isEmpty()) {
+			for(int i = 0; i<effects.size();i++) {
+				effects.get(i).update(statetime);
+			}
+		}
 
 		game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
 		
 		//Draw powerups
+		
+		
+		
+
 		if (!powerups.isEmpty()) {
 			for (int i = 0; i < powerups.size(); i++) {
 
@@ -1374,13 +1507,6 @@ public class Updater implements Screen {
 	
 		
 
-		// Wait 10 sec between waves.
-		/*
-		 * if (TimeUtils.timeSinceMillis(timeSinceWave) > 10000 && enemies.isEmpty() &&
-		 * mapObjects.isEmpty()) {
-		 * 
-		 * spawnEnemies(); }
-		 */
 
 		// Test 1 sec
 		if (TimeUtils.timeSinceMillis(timeSinceWave) > 10000 && enemies.isEmpty()) {
@@ -1393,16 +1519,19 @@ public class Updater implements Screen {
 		
 		// Update particles in the list FURTHER WORK REQUIRED
 		if (!effects.isEmpty()) {
-
+System.out.println("AMOUNT OF EFFECTS CURRENTLY RENDERING: " + effects.size());
 			for (int i = 0; i < effects.size(); i++) {
 
 				if (!effects.get(i).isComplete()) {
 
-					effects.get(i).update(statetime);
+					
 					effects.get(i).draw(game.batch);
 				} else {
 					effects.get(i).dispose();
 					effects.remove(i);
+					
+					
+					
 				}
 			}
 
@@ -1459,7 +1588,7 @@ public class Updater implements Screen {
 	}
 
 	public Powerup spawnPowerUp(GameWorld world, Core game) {
-
+System.out.println("SPAWNING POWERUP");
 		float x = MathUtils.random(world.getMinimumX(), world.getmaximumX());
 		float y = MathUtils.random(world.getMinimumY(), world.getMaximumY());
 		for (int i = 0; i < borders.size; i++) {
@@ -1499,6 +1628,7 @@ public class Updater implements Screen {
 
 		effect.start();
 		effects.add(effect);
+		System.out.println("Returning a new powerup");
 		return powerup;
 
 	}
