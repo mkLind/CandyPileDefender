@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class MainMenuScreen implements Screen {
 
 	final Core game;
+	private UserInterface userInterface;
 	private BitmapFont font;
 	private Skin mySkin;
 	private TextButton playButton;
@@ -44,175 +45,157 @@ public class MainMenuScreen implements Screen {
 	private String DateToStr;
 	private String currentScore;
 	private String tmp;
-//	private String name;
+	// private String name;
 	private Music ambience;
 
 	public MainMenuScreen(final Core game) {
 		this.game = game;
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
+		userInterface = new UserInterface(game);
 
 		this.font = game.font;
 		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-//		mySkin.getFont("font-label").getData().setScale(1.5f);
-		playButton = new TextButton("Play", mySkin);
-		playButton.setWidth(Gdx.graphics.getWidth()/3);
-        playButton.setPosition(Gdx.graphics.getWidth()/3 - playButton.getWidth()/2,Gdx.graphics.getHeight()/2 - playButton.getHeight()/3);
-        ambience = game.getLoader().getManager().get("Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
-        ambience.setLooping(true);
-        ambience.play();
-        playButton.addListener(new InputListener(){
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-            	dispose();
-            	ambience.stop();
-        		game.getLoader().setScore(0);
-                game.setScreen(new Updater(game));
-            }
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-        });
-        stage.addActor(playButton);
-        
-//        game.getLoader().setScore(30);
-        /*
-        game.getLoader().setHighScore("0     00/00/0000");
-        game.getLoader().setSecond("0     00/00/0000");
-        game.getLoader().setThird("0     00/00/0000");
-        game.getLoader().setFourth("0     00/00/0000");
-        game.getLoader().setFifth("0     00/00/0000");
-        */
-        
-        date = new Date(TimeUtils.millis());
-        format = new SimpleDateFormat("dd/MM/yyyy");
-        DateToStr = format.format(date);
-        
-        currentScore = Integer.toString(game.getLoader().getScore()) + "     " + DateToStr;
-        tmp = checkScores();
-        
-        /*
-        name = Base64Coder.encodeString("Tommi");
-        try {
-        	sendScores();
-        }catch(Exception e) {
-        	System.out.println(e.getMessage());
-        }*/
-        
-        int row_height = Gdx.graphics.getWidth() / 10;
-        int col_width = Gdx.graphics.getWidth() / 12;
-        
-    	label1 = new Label("Highscores: ", mySkin);
-    	label1.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight() - row_height*0.8f);
-        label1.setAlignment(Align.topRight);
-        label1.setWidth(Gdx.graphics.getWidth()/4);
-        stage.addActor(label1);
-        
-        label2 = new Label("Your score: " + game.getLoader().getScore(), mySkin);
-    	label2.setPosition(Gdx.graphics.getWidth()/4,Gdx.graphics.getHeight() - Gdx.graphics.getWidth()/9);
-        label2.setAlignment(Align.topLeft);
-        label2.setWidth(Gdx.graphics.getWidth()/4);
-        stage.addActor(label2);
-        
-        label3 = new Label("1. " + game.getLoader().getHighScore(), mySkin);
-    	label3.setPosition(Gdx.graphics.getWidth()/1.5f,Gdx.graphics.getHeight() - row_height*1.1f);
-        label3.setAlignment(Align.left);
-        label3.setWidth(Gdx.graphics.getWidth()/4);
-        stage.addActor(label3);
-        
-        label4= new Label("2. " + game.getLoader().getSecond(), mySkin);
-    	label4.setPosition(Gdx.graphics.getWidth()/1.5f,Gdx.graphics.getHeight() - row_height*1.3f);
-        label4.setAlignment(Align.left);
-        label4.setWidth(Gdx.graphics.getWidth()/4);
-        stage.addActor(label4);
-        
-        label5 = new Label("3. " + game.getLoader().getThird(), mySkin);
-    	label5.setPosition(Gdx.graphics.getWidth()/1.5f,Gdx.graphics.getHeight() - row_height*1.5f);
-        label5.setAlignment(Align.left);
-        label5.setWidth(Gdx.graphics.getWidth()/4);
-        stage.addActor(label5);
-        
-        label6 = new Label("4. " + game.getLoader().getFourth(), mySkin);
-    	label6.setPosition(Gdx.graphics.getWidth()/1.5f,Gdx.graphics.getHeight() - row_height*1.7f);
-        label6.setAlignment(Align.left);
-        label6.setWidth(Gdx.graphics.getWidth()/4);
-        stage.addActor(label6);
-        
-        label7 = new Label("5. " + game.getLoader().getFifth(), mySkin);
-    	label7.setPosition(Gdx.graphics.getWidth()/1.5f,Gdx.graphics.getHeight() - row_height*1.9f);
-        label7.setAlignment(Align.left);
-        label7.setWidth(Gdx.graphics.getWidth()/4);
-        stage.addActor(label7);
-        
-        if(game.getLoader().getScore() == 0) {
-        	label2.setText("");
-        }
-        if(Integer.parseInt(game.getLoader().getHighScore().split(" ")[0]) == 0) {
-            label3.setText("1. ");
-        }
-        if(Integer.parseInt(game.getLoader().getSecond().split(" ")[0]) == 0) {
-            label4.setText("2. ");
-        }
-        if(Integer.parseInt(game.getLoader().getThird().split(" ")[0]) == 0) {
-            label5.setText("3. ");
-        }
-        if(Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) == 0) {
-            label6.setText("4. ");
-        }
-        if(Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) == 0) {
-            label7.setText("5. ");
-        }
-        if(game.getLoader().getScore() != 0) {
-	    	if(tmp == "first") {
-	    		label2.setText("New highscore!: " + game.getLoader().getScore());
-	    		label3.setText("1. " + game.getLoader().getHighScore() + "  <-");
-	    		if(Integer.parseInt(game.getLoader().getSecond().split(" ")[0]) != 0) {
-		    		label4.setText("2. " + game.getLoader().getSecond());
-	    		}
-	    		if(Integer.parseInt(game.getLoader().getThird().split(" ")[0]) != 0) {
-	    			label5.setText("3. " + game.getLoader().getThird());
-	    		}
-	    		if(Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) != 0) {
-	    			label6.setText("4. " + game.getLoader().getFourth());
-	    		}
-	    		if(Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) != 0) {
-		    		label7.setText("5. " + game.getLoader().getFifth());
-	    		}
-	    	}else if (tmp == "second"){
-	            label2.setText("Your score: " + game.getLoader().getScore());
-	            label4.setText("2. " + game.getLoader().getSecond() + "  <-");
-	            if(Integer.parseInt(game.getLoader().getThird().split(" ")[0]) != 0) {
-	    			label5.setText("3. " + game.getLoader().getThird());
-	    		}
-	    		if(Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) != 0) {
-	    			label6.setText("4. " + game.getLoader().getFourth());
-	    		}
-	    		if(Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) != 0) {
-		    		label7.setText("5. " + game.getLoader().getFifth());
-	    		}
-	    	}else if (tmp == "third"){
-	            label2.setText("Your score: " + game.getLoader().getScore());
-	            label5.setText("3. " + game.getLoader().getThird() + "  <-");
-	            if(Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) != 0) {
-	    			label6.setText("4. " + game.getLoader().getFourth());
-	    		}
-	    		if(Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) != 0) {
-		    		label7.setText("5. " + game.getLoader().getFifth());
-	    		}
-	    	}else if (tmp == "fourth"){
-	            label2.setText("Your score: " + game.getLoader().getScore());
-	            label6.setText("4. " + game.getLoader().getFourth() + "  <-");
-	            if(Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) != 0) {
-		    		label7.setText("5. " + game.getLoader().getFifth());
-	    		}
-	    	}else if (tmp == "fifth"){
-	            label2.setText("Your score: " + game.getLoader().getScore());
-	            label7.setText("5. " + game.getLoader().getFifth() + "  <-");
-	    	}else {
-	    		label2.setText("Your score: " + game.getLoader().getScore());
-	    	}
-        }
+		// mySkin.getFont("font-label").getData().setScale(1.5f);
+
+		ambience = game.getLoader().getManager().get("Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
+		ambience.setLooping(true);
+		ambience.play();
+
+		playButton = userInterface.newPlayButton("Play", Gdx.graphics.getWidth() / 3, Gdx.graphics.getWidth() / 3,
+				Gdx.graphics.getHeight() / 2);
+		playButton.addListener(new InputListener() {
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				dispose();
+				ambience.stop();
+				game.getLoader().setScore(0);
+				game.setScreen(new Updater(game));
+			}
+
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+		});
+		stage.addActor(playButton);
+
+		// game.getLoader().setScore(30);
+
+		/*
+		 * game.getLoader().setHighScore("0     00/00/0000");
+		 * game.getLoader().setSecond("0     00/00/0000");
+		 * game.getLoader().setThird("0     00/00/0000");
+		 * game.getLoader().setFourth("0     00/00/0000");
+		 * game.getLoader().setFifth("0     00/00/0000");
+		 */
+
+		date = new Date(TimeUtils.millis());
+		format = new SimpleDateFormat("dd/MM/yyyy");
+		DateToStr = format.format(date);
+
+		currentScore = Integer.toString(game.getLoader().getScore()) + "     " + DateToStr;
+		tmp = checkScores();
+
+		/*
+		 * name = Base64Coder.encodeString("Tommi"); try { sendScores();
+		 * }catch(Exception e) { System.out.println(e.getMessage()); }
+		 */
+
+		int row_height = Gdx.graphics.getWidth() / 10;
+		int col_width = Gdx.graphics.getWidth() / 12;
+
+		label1 = userInterface.newLabel("Highscores: ", Gdx.graphics.getWidth() / 2,
+				Gdx.graphics.getHeight() - row_height * 0.8f, Align.topRight, Gdx.graphics.getWidth() / 4);
+		label2 = userInterface.newLabel("Your score: " + game.getLoader().getScore(), Gdx.graphics.getWidth() / 4,
+				Gdx.graphics.getHeight() - Gdx.graphics.getWidth() / 9, Align.topLeft, Gdx.graphics.getWidth() / 4);
+		label3 = userInterface.newLabel("1. " + game.getLoader().getHighScore(), Gdx.graphics.getWidth() / 1.5f,
+				Gdx.graphics.getHeight() - row_height * 1.1f, Align.left, Gdx.graphics.getWidth() / 4);
+		label4 = userInterface.newLabel("2. " + game.getLoader().getSecond(), Gdx.graphics.getWidth() / 1.5f,
+				Gdx.graphics.getHeight() - row_height * 1.3f, Align.left, Gdx.graphics.getWidth() / 4);
+		label5 = userInterface.newLabel("3. " + game.getLoader().getThird(), Gdx.graphics.getWidth() / 1.5f,
+				Gdx.graphics.getHeight() - row_height * 1.5f, Align.left, Gdx.graphics.getWidth() / 4);
+		label6 = userInterface.newLabel("4. " + game.getLoader().getFourth(), Gdx.graphics.getWidth() / 1.5f,
+				Gdx.graphics.getHeight() - row_height * 1.7f, Align.left, Gdx.graphics.getWidth() / 4);
+		label7 = userInterface.newLabel("5. " + game.getLoader().getFifth(), Gdx.graphics.getWidth() / 1.5f,
+				Gdx.graphics.getHeight() - row_height * 1.9f, Align.left, Gdx.graphics.getWidth() / 4);
+		
+		stage.addActor(label1);
+		stage.addActor(label2);
+		stage.addActor(label3);
+		stage.addActor(label4);
+		stage.addActor(label5);
+		stage.addActor(label6);
+		stage.addActor(label7);
+
+		if (game.getLoader().getScore() == 0) {
+			label2.setText("");
+		}
+		if (Integer.parseInt(game.getLoader().getHighScore().split(" ")[0]) == 0) {
+			label3.setText("1. ");
+		}
+		if (Integer.parseInt(game.getLoader().getSecond().split(" ")[0]) == 0) {
+			label4.setText("2. ");
+		}
+		if (Integer.parseInt(game.getLoader().getThird().split(" ")[0]) == 0) {
+			label5.setText("3. ");
+		}
+		if (Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) == 0) {
+			label6.setText("4. ");
+		}
+		if (Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) == 0) {
+			label7.setText("5. ");
+		}
+		if (game.getLoader().getScore() != 0) {
+			if (tmp == "first") {
+				label2.setText("New highscore!: " + game.getLoader().getScore());
+				label3.setText("1. " + game.getLoader().getHighScore() + "  <-");
+				if (Integer.parseInt(game.getLoader().getSecond().split(" ")[0]) != 0) {
+					label4.setText("2. " + game.getLoader().getSecond());
+				}
+				if (Integer.parseInt(game.getLoader().getThird().split(" ")[0]) != 0) {
+					label5.setText("3. " + game.getLoader().getThird());
+				}
+				if (Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) != 0) {
+					label6.setText("4. " + game.getLoader().getFourth());
+				}
+				if (Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) != 0) {
+					label7.setText("5. " + game.getLoader().getFifth());
+				}
+			} else if (tmp == "second") {
+				label2.setText("Your score: " + game.getLoader().getScore());
+				label4.setText("2. " + game.getLoader().getSecond() + "  <-");
+				if (Integer.parseInt(game.getLoader().getThird().split(" ")[0]) != 0) {
+					label5.setText("3. " + game.getLoader().getThird());
+				}
+				if (Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) != 0) {
+					label6.setText("4. " + game.getLoader().getFourth());
+				}
+				if (Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) != 0) {
+					label7.setText("5. " + game.getLoader().getFifth());
+				}
+			} else if (tmp == "third") {
+				label2.setText("Your score: " + game.getLoader().getScore());
+				label5.setText("3. " + game.getLoader().getThird() + "  <-");
+				if (Integer.parseInt(game.getLoader().getFourth().split(" ")[0]) != 0) {
+					label6.setText("4. " + game.getLoader().getFourth());
+				}
+				if (Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) != 0) {
+					label7.setText("5. " + game.getLoader().getFifth());
+				}
+			} else if (tmp == "fourth") {
+				label2.setText("Your score: " + game.getLoader().getScore());
+				label6.setText("4. " + game.getLoader().getFourth() + "  <-");
+				if (Integer.parseInt(game.getLoader().getFifth().split(" ")[0]) != 0) {
+					label7.setText("5. " + game.getLoader().getFifth());
+				}
+			} else if (tmp == "fifth") {
+				label2.setText("Your score: " + game.getLoader().getScore());
+				label7.setText("5. " + game.getLoader().getFifth() + "  <-");
+			} else {
+				label2.setText("Your score: " + game.getLoader().getScore());
+			}
+		}
 
 	}
 
@@ -298,68 +281,55 @@ public class MainMenuScreen implements Screen {
 	 * 
 	 * } }; Gdx.net.sendHttpRequest(httpRequest, httpResponseListener); }
 	 *
-
-
-        }else return "";
-	    }
-	*/
+	 * 
+	 * 
+	 * }else return ""; }
+	 */
 	/*
-	public void sendScores() {
-		HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
-        HttpRequest httpRequest = requestBuilder.newRequest().method(HttpMethods.POST).url(
-        		"http://ftp.thilanne.altervista.org/CandyPileDefender/addscore.php").content(
-        				"name="+name+"&score="+(Integer.toString(game.getLoader().getScore()))+"&hash=mkGZgaG0Gl").build();
-        HttpResponseListener httpResponseListener = new HttpResponseListener() {
-			
-			@Override
-			public void handleHttpResponse(HttpResponse httpResponse) {
-				System.out.println(httpResponse.getHeaders());
-				System.out.println("name="+name+"&score="+(Integer.toString(game.getLoader().getScore()))+"&hash=mkGZgaG0Gl");
-				
-			}
-			
-			@Override
-			public void failed(Throwable t) {
-				System.out.println(t.getLocalizedMessage());
-				
-			}
-			
-			@Override
-			public void cancelled() {
-				System.out.println("cancelled");
-				
-			}
-		};
-		Gdx.net.sendHttpRequest(httpRequest, httpResponseListener);
-	}
-	public void getScores() {
-		HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
-        HttpRequest httpRequest = requestBuilder.newRequest().method(HttpMethods.GET).url(
-        		"http://ftp.thilanne.altervista.org/CandyPileDefender/addscore.php").content(
-        				"name="+name+"&no_lines="+(Integer.toString(5))+"&hash=mkGZgaG0Gl").build();
-        HttpResponseListener httpResponseListener = new HttpResponseListener() {
-			
-			@Override
-			public void handleHttpResponse(HttpResponse httpResponse) {
-				String answer = httpResponse.getResultAsString();
-				
-			}
-			
-			@Override
-			public void failed(Throwable t) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void cancelled() {
-				// TODO Auto-generated method stub
-				
-			}
-		};
-		Gdx.net.sendHttpRequest(httpRequest, httpResponseListener);
-	}*/
-	
+	 * public void sendScores() { HttpRequestBuilder requestBuilder = new
+	 * HttpRequestBuilder(); HttpRequest httpRequest =
+	 * requestBuilder.newRequest().method(HttpMethods.POST).url(
+	 * "http://ftp.thilanne.altervista.org/CandyPileDefender/addscore.php").content(
+	 * "name="+name+"&score="+(Integer.toString(game.getLoader().getScore()))+
+	 * "&hash=mkGZgaG0Gl").build(); HttpResponseListener httpResponseListener = new
+	 * HttpResponseListener() {
+	 * 
+	 * @Override public void handleHttpResponse(HttpResponse httpResponse) {
+	 * System.out.println(httpResponse.getHeaders());
+	 * System.out.println("name="+name+"&score="+(Integer.toString(game.getLoader().
+	 * getScore()))+"&hash=mkGZgaG0Gl");
+	 * 
+	 * }
+	 * 
+	 * @Override public void failed(Throwable t) {
+	 * System.out.println(t.getLocalizedMessage());
+	 * 
+	 * }
+	 * 
+	 * @Override public void cancelled() { System.out.println("cancelled");
+	 * 
+	 * } }; Gdx.net.sendHttpRequest(httpRequest, httpResponseListener); } public
+	 * void getScores() { HttpRequestBuilder requestBuilder = new
+	 * HttpRequestBuilder(); HttpRequest httpRequest =
+	 * requestBuilder.newRequest().method(HttpMethods.GET).url(
+	 * "http://ftp.thilanne.altervista.org/CandyPileDefender/addscore.php").content(
+	 * "name="+name+"&no_lines="+(Integer.toString(5))+"&hash=mkGZgaG0Gl").build();
+	 * HttpResponseListener httpResponseListener = new HttpResponseListener() {
+	 * 
+	 * @Override public void handleHttpResponse(HttpResponse httpResponse) { String
+	 * answer = httpResponse.getResultAsString();
+	 * 
+	 * }
+	 * 
+	 * @Override public void failed(Throwable t) { // TODO Auto-generated method
+	 * stub
+	 * 
+	 * }
+	 * 
+	 * @Override public void cancelled() { // TODO Auto-generated method stub
+	 * 
+	 * } }; Gdx.net.sendHttpRequest(httpRequest, httpResponseListener); }
+	 */
 
 	@Override
 	public void render(float delta) {
