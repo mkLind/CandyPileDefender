@@ -1027,7 +1027,7 @@ public class Updater implements Screen {
 
 							player.getY() + player.getHeight() / 2, velX, velY,
 
-							game.getLoader().getManager().get("Carrot.png", Texture.class)); //Eggplant replacement
+							game.getLoader().getManager().get("Eggplant.png", Texture.class));
 
 
 
