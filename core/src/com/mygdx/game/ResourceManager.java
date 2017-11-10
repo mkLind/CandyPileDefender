@@ -79,7 +79,7 @@ public class ResourceManager {
 			manager.load("Tomato.png",Texture.class);
 			manager.load("Broccoli.png",Texture.class);
 			
-			//manager.load("EggPlant.png",Texture.class);  //Does not load on jar file
+			manager.load("Eggplant.png",Texture.class);
 			// Music and sounds
 			
 			manager.load("Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
@@ -100,9 +100,9 @@ public class ResourceManager {
 			manager.load("Sounds/walking/grass1.wav", Sound.class);
 			manager.load("Sounds/walking/gravel1.wav", Sound.class);
 			
-			manager.load("HealthBar.png", Texture.class);
-			manager.load("HealthBarBackGround.png", Texture.class);
-			manager.load("HealthBarKnob.png", Texture.class);
+			manager.load("Healthbar.png", Texture.class);
+			manager.load("HealthbarBackGround.png", Texture.class);
+			manager.load("HealthbarKnob.png", Texture.class);
 			manager.load("warning2.png", Texture.class);
 			/*
 			FileHandleResolver resolver = new InternalFileHandleResolver();
