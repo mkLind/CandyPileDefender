@@ -469,7 +469,7 @@ public class Updater implements Screen {
 							((float) (1.2f / hypot * (pile.getX() + (pile.getWidth() / 2) - enemies.get(i).getX()))));
 					enemies.get(i).setyVel(
 							((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
-					// Maby correct direction to stealer?
+					// Maybe correct direction to stealer?
 
 				}
 
