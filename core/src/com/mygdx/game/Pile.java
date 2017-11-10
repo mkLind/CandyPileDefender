@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +18,7 @@ public class Pile extends SpriteCommons {
 	private Texture pileTexture3;
 	private Texture pileTexture4;
 	private ArrayList<Vector2> trail;
+	private HashMap<Integer,ArrayList<Vector2>> paths;
 	
 	public Pile(int width, int height, float x, float y, Texture pileTexture, Texture pileTexture2, Texture pileTexture3, Texture pileTexture4) {
 		
@@ -26,7 +29,7 @@ public class Pile extends SpriteCommons {
 		this.pileTexture3 = pileTexture3;
 		this.pileTexture4 = pileTexture4;
 
-		
+		paths = new HashMap<Integer, ArrayList<Vector2>>();
 		health = 8;
 		trail = new  ArrayList<Vector2>();
 		
@@ -63,72 +66,87 @@ public class Pile extends SpriteCommons {
 	public Texture getPileTexture4() {
 		return pileTexture4;
 	}
-public void calculatePointsAroundObstacle(Rectangle obstacle, Rectangle collidingEnemy) {
+public void calculatePointsAroundObstacle(Rectangle obstacle, Rectangle collidingEnemy, int enemyId) {
 	// Right and up collision
+	ArrayList<Vector2> trail = new ArrayList<Vector2>();
+	
 	if(obstacle.getX() + obstacle.getWidth()<collidingEnemy.getX() && obstacle.getY() + obstacle.getHeight()<collidingEnemy.getY() ) {
 		trail.add(new Vector2(collidingEnemy.getX() + collidingEnemy.getWidth(),collidingEnemy.getY()));
 		trail.add(new Vector2(collidingEnemy.getX() + collidingEnemy.getWidth(),collidingEnemy.getY() - collidingEnemy.getHeight()));
 		trail.add(new Vector2(collidingEnemy.getX() + collidingEnemy.getWidth(),collidingEnemy.getY() - collidingEnemy.getHeight() * 2));
 	}
 	// Right and down collision
-	if(obstacle.getX() + obstacle.getWidth()<collidingEnemy.getX() && obstacle.getY()>collidingEnemy.getY() + collidingEnemy.getHeight()) {
+	else if(obstacle.getX() + obstacle.getWidth()<collidingEnemy.getX() && obstacle.getY()>collidingEnemy.getY() + collidingEnemy.getHeight()) {
 		trail.add(new Vector2(collidingEnemy.getX(),collidingEnemy.getY() - collidingEnemy.getHeight()));
 		trail.add(new Vector2(collidingEnemy.getX() - collidingEnemy.getWidth() ,collidingEnemy.getY() - collidingEnemy.getHeight()));
 		trail.add(new Vector2(collidingEnemy.getX() - collidingEnemy.getWidth()*2 ,collidingEnemy.getY() - collidingEnemy.getHeight()));
 	}
 	//  Left and up collision
-	if(obstacle.getX()>collidingEnemy.getX() + collidingEnemy.getWidth() && obstacle.getY() + obstacle.getHeight()<collidingEnemy.getY()) {
+	else if(obstacle.getX()>collidingEnemy.getX() + collidingEnemy.getWidth() && obstacle.getY() + obstacle.getHeight()<collidingEnemy.getY()) {
 		trail.add(new Vector2(collidingEnemy.getX() - collidingEnemy.getWidth() ,collidingEnemy.getY()));
 		trail.add(new Vector2(collidingEnemy.getX() - collidingEnemy.getWidth(),collidingEnemy.getY() - collidingEnemy.getHeight()));
 		trail.add(new Vector2(collidingEnemy.getX() - collidingEnemy.getWidth() ,collidingEnemy.getY()- collidingEnemy.getHeight()*2));
 	}
 	// Left and down collision
-	if(obstacle.getX()>collidingEnemy.getX() + collidingEnemy.getWidth() && obstacle.getY()>collidingEnemy.getY() + collidingEnemy.getHeight()) {
+	else if(obstacle.getX()>collidingEnemy.getX() + collidingEnemy.getWidth() && obstacle.getY()>collidingEnemy.getY() + collidingEnemy.getHeight()) {
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY() - collidingEnemy.getHeight()));
 		trail.add(new Vector2(collidingEnemy.getX() + collidingEnemy.getWidth() ,collidingEnemy.getY() - collidingEnemy.getHeight()));
 		trail.add(new Vector2(collidingEnemy.getX() + collidingEnemy.getWidth()*2,collidingEnemy.getY() - collidingEnemy.getHeight()));
 	}
 	// Right collision
-	if(obstacle.getX() + obstacle.getWidth()<collidingEnemy.getX()) {
+	else if(obstacle.getX() + obstacle.getWidth()<collidingEnemy.getX()) {
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
 	}
 	// Left collision
-	if(obstacle.getX()>collidingEnemy.getX() + collidingEnemy.getWidth()) {
+	else if(obstacle.getX()>collidingEnemy.getX() + collidingEnemy.getWidth()) {
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
 		
 	}
 	// Up collision
-	if(obstacle.getY() + obstacle.getHeight()<collidingEnemy.getY()) {
+	else if(obstacle.getY() + obstacle.getHeight()<collidingEnemy.getY()) {
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
 	}
 	// down collision
-	if(obstacle.getY()>collidingEnemy.getY() + collidingEnemy.getHeight()) {
+	else if(obstacle.getY()>collidingEnemy.getY() + collidingEnemy.getHeight()) {
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
 		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
 	}
+	paths.put(enemyId, trail);
+
 	
 }
 
-public Vector2 getPath() {
+public Vector2 getPath(int enemyId) {
 	
 	Vector2 target;
-	if(!trail.isEmpty()) {
-	target = trail.get(0);
+	if(paths.containsKey(enemyId)) {
+		
+	target = paths.get(enemyId).get(0);
 	}else {
 		target = new Vector2(super.getX(), super.getY());
 	}
 	return target;
 }
-public void consumePath(Rectangle enemy, Vector2 pathTail) {
-	if(!trail.isEmpty() && enemy.contains(pathTail.x, pathTail.y)) {
-		trail.remove(0);
+public void consumePath(int enemyId, Rectangle enemy) {
+	if(paths.containsKey(enemyId)) {
+		if(enemy.contains(paths.get(enemyId).get(0).x,paths.get(enemyId).get(0).y)) {
+			paths.get(enemyId).remove(0);
+			
+			if(paths.get(enemyId).size()==0) {
+				paths.remove(enemyId);
+			}
+			
+			
+			
+		}
+		
 	}
 	
 }
