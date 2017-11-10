@@ -24,6 +24,8 @@ private Texture texture;
 private boolean isColliding;
 private long timeSinceCollision;
 
+private int id;
+
 // inactivity timer after attacking etc.
 private int timeoutTimer;
 
@@ -41,6 +43,8 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	targetX = 0;
 	targetY = 0;
 	timeSinceCollision = 0;
+	id = 0;
+	
 }
 
 public SpriteCommons(int width, int height, float x, float y,float xVel, float yVel){
@@ -53,6 +57,14 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	hitbox = new Rectangle(x, y, width, height);
 	timeoutTimer = 0;
 	
+}
+
+public int getId() {
+	return id;
+}
+
+public void setId(int id) {
+	this.id = id;
 }
 
 public long getTimeSinceCollision() {

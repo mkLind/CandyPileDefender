@@ -95,28 +95,28 @@ public void calculatePointsAroundObstacle(Rectangle obstacle, Rectangle collidin
 	}
 	// Right collision
 	else if(obstacle.getX() + obstacle.getWidth()<collidingEnemy.getX()) {
-		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
-		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
-		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
-	}
+		trail.add(new Vector2(collidingEnemy.getX()+collidingEnemy.getWidth() ,collidingEnemy.getY()));
+		trail.add(new Vector2(collidingEnemy.getX() +collidingEnemy.getWidth(),collidingEnemy.getY() - collidingEnemy.getHeight()));
+		trail.add(new Vector2(collidingEnemy.getX() +collidingEnemy.getWidth(),collidingEnemy.getY()- collidingEnemy.getHeight()*2));
+	} 
 	// Left collision
 	else if(obstacle.getX()>collidingEnemy.getX() + collidingEnemy.getWidth()) {
-		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
-		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
-		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
+		trail.add(new Vector2(collidingEnemy.getX()-collidingEnemy.getWidth() ,collidingEnemy.getY()));
+		trail.add(new Vector2(collidingEnemy.getX()-collidingEnemy.getWidth()  ,collidingEnemy.getY()- collidingEnemy.getHeight()));
+		trail.add(new Vector2(collidingEnemy.getX()-collidingEnemy.getWidth()  ,collidingEnemy.getY()- collidingEnemy.getHeight()*2));
 		
 	}
 	// Up collision
 	else if(obstacle.getY() + obstacle.getHeight()<collidingEnemy.getY()) {
-		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
-		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
-		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
+		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY() + collidingEnemy.getHeight()));
+		trail.add(new Vector2(collidingEnemy.getX() + collidingEnemy.getWidth() ,collidingEnemy.getY() + collidingEnemy.getHeight()));
+		trail.add(new Vector2(collidingEnemy.getX() + collidingEnemy.getWidth()*2 ,collidingEnemy.getY() + collidingEnemy.getHeight()));
 	}
 	// down collision
 	else if(obstacle.getY()>collidingEnemy.getY() + collidingEnemy.getHeight()) {
-		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
-		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
-		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY()));
+		trail.add(new Vector2(collidingEnemy.getX() ,collidingEnemy.getY() - collidingEnemy.getHeight()));
+		trail.add(new Vector2(collidingEnemy.getX() + collidingEnemy.getWidth() ,collidingEnemy.getY() - collidingEnemy.getHeight()));
+		trail.add(new Vector2(collidingEnemy.getX() + collidingEnemy.getWidth()*2 ,collidingEnemy.getY() - collidingEnemy.getHeight()));
 	}
 	paths.put(enemyId, trail);
 
@@ -127,9 +127,11 @@ public Vector2 getPath(int enemyId) {
 	
 	Vector2 target;
 	if(paths.containsKey(enemyId)) {
-		
+		System.out.println("GETTING POINT FOR ENEMY " + enemyId + "AFTER COLLISION");
 	target = paths.get(enemyId).get(0);
 	}else {
+		System.out.println("NO PATH FOR ENEMY " + enemyId);
+		
 		target = new Vector2(super.getX(), super.getY());
 	}
 	return target;
@@ -138,8 +140,9 @@ public void consumePath(int enemyId, Rectangle enemy) {
 	if(paths.containsKey(enemyId)) {
 		if(enemy.contains(paths.get(enemyId).get(0).x,paths.get(enemyId).get(0).y)) {
 			paths.get(enemyId).remove(0);
-			
+			System.out.println("CONSUMING PATH OF ENEMY: " + enemyId);
 			if(paths.get(enemyId).size()==0) {
+				System.out.println("PATH CONSUMED FOR ENEMY " + enemyId);
 				paths.remove(enemyId);
 			}
 			
