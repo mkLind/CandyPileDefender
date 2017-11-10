@@ -374,6 +374,9 @@ public class Updater implements Screen {
 
 		// ALL ENEMY STUFF
 		for (int i = 0; i < enemies.size(); i++) {
+			
+			pile.consumePath(i, enemies.get(i).getHitbox());
+			
 			double hypot = Math.hypot(enemies.get(i).getX() - player.getX(), enemies.get(i).getY() - player.getY());
 			//Warnings: topleftcorner
 			if (hypot > Gdx.graphics.getWidth() / 3 && enemies.get(i).getX() < player.getX()
@@ -462,13 +465,13 @@ public class Updater implements Screen {
 
 				if (enemies.get(i) instanceof StealingEnemy) {
 
-					hypot = Math.hypot(enemies.get(i).getX() - pile.getPath().x + (pile.getWidth() / 2),
-							enemies.get(i).getX() - pile.getPath().y + (pile.getHeight() / 2));
+					hypot = Math.hypot(enemies.get(i).getX() - pile.getPath(i).x + (pile.getWidth() / 2),
+							enemies.get(i).getX() - pile.getPath(i).y + (pile.getHeight() / 2));
 					// TEST SPEED 3! was 1.2
 					enemies.get(i).setxVel(
-							((float) (1.2f / hypot * (pile.getPath().x + (pile.getWidth() / 2) - enemies.get(i).getX()))));
+							((float) (1.2f / hypot * (pile.getPath(i).x + (pile.getWidth() / 2) - enemies.get(i).getX()))));
 					enemies.get(i).setyVel(
-							((float) (1.2f / hypot * (pile.getPath().y + (pile.getHeight() / 2) - enemies.get(i).getY()))));
+							((float) (1.2f / hypot * (pile.getPath(i).y + (pile.getHeight() / 2) - enemies.get(i).getY()))));
 					// Maybe correct direction to stealer?
 
 				}
@@ -617,7 +620,7 @@ public class Updater implements Screen {
 
 				} else {
 					// Enemy collisions with borders
-
+					
 					for (int k = 0; k < borders.size; k++) {
 
 						if (Intersector.overlaps(borders.get(k).getRectangle(), enemies.get(i).getHitbox())) {
@@ -773,7 +776,7 @@ public class Updater implements Screen {
 
 							}
 							if (enemies.get(i) instanceof StealingEnemy) {
-								pile.calculatePointsAroundObstacle(borders.get(k).getRectangle(), enemies.get(i).getHitbox());
+								pile.calculatePointsAroundObstacle(borders.get(k).getRectangle(), enemies.get(i).getHitbox(),i);
 								
 								/*
 								// "pathfinding" around the pile (probably badly optimized)
