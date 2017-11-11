@@ -100,6 +100,7 @@ public class Updater implements Screen {
 	private Sound GameOver;
 	private Sound walk1;
 	private Sound walk2;
+
 	private long walkSet;
 
 	private Texture warningTexture;
@@ -166,6 +167,7 @@ public class Updater implements Screen {
 		GameOver = game.getLoader().getManager().get("Sounds/game_over/NFF-death-bell.wav", Sound.class);
 		walk1 = game.getLoader().getManager().get("Sounds/walking/grass1.wav", Sound.class);
 		walk2 = game.getLoader().getManager().get("Sounds/walking/gravel1.wav", Sound.class);
+		
 
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
@@ -199,6 +201,7 @@ public class Updater implements Screen {
 
 		player.setAnimations(8, 3, 0.10f, game.getLoader().getManager().get("PirateTileset.png", Texture.class));
 		player.setDir(DIRECTION.DOWN);
+		player.setCandyIndicator(game.getLoader().getManager().get("candyindicator.png", Texture.class));
 
 		camera.position.set(player.getX(), player.getY(), 0);
 		camera.update();
@@ -300,13 +303,13 @@ public class Updater implements Screen {
 		// Set The direction of stealers to pile
 		for (int i = 0; i < enemies.size(); i++) {
 			if (enemies.get(i) instanceof StealingEnemy) {
-				double hypot = Math.hypot(enemies.get(i).getX() - pile.getPath(enemies.get(i).getId()).x + (pile.getWidth() / 2),
-						enemies.get(i).getY() - pile.getPath(enemies.get(i).getId()).y + (pile.getHeight() / 2));
+				double hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
+						enemies.get(i).getY() - pile.getY() + (pile.getHeight() / 2));
 				// TEST SPEED 3! was 1.2
 				enemies.get(i).setxVel(
-						((float) (1.2f / hypot * (pile.getPath(enemies.get(i).getId()).x + (pile.getWidth() / 2) - enemies.get(i).getX()))));
+						((float) (1.2f / hypot * (pile.getX() + (pile.getWidth() / 2) - enemies.get(i).getX()))));
 				enemies.get(i).setyVel(
-						((float) (1.2f / hypot * (pile.getPath(enemies.get(i).getId()).y + (pile.getHeight() / 2) - enemies.get(i).getY()))));
+						((float) (1.2f / hypot * (pile.getY()+ (pile.getHeight() / 2) - enemies.get(i).getY()))));
 			}
 		}
 	}
@@ -358,6 +361,7 @@ public class Updater implements Screen {
 		}
 		// Player fetching candy from machine
 		if(Intersector.overlaps(player.getHitbox(), machine.getHitbox())) {
+		
 			player.setxVel(0);
 			player.setyVel(0);
 			
@@ -365,15 +369,21 @@ public class Updater implements Screen {
 			
 			
 		}
+		// Add collected candy to pile
+		if(Intersector.overlaps(player.getHitbox(), pile.getHitbox())) {
+			if(player.getCollectedCandy()>0) {
+				pile.setHealth(pile.getHealth() + player.getCollectedCandy());
+				player.setCollectedCandy(0);
+			}
+			
+		}
 
 		if (Intersector.overlaps(player.getHitbox(), pile.getHitbox()) || noEnemies == false) {
 
 			// pulls the hitbox back
 			player.updateHitbox();
-			if(player.getCollectedCandy()>0) {
-				pile.setHealth(pile.getHealth() + player.getCollectedCandy());
-				player.setCollectedCandy(0);
-			}
+		
+			
 			
 			
 
@@ -493,7 +503,7 @@ public class Updater implements Screen {
 
 				if (enemies.get(i) instanceof StealingEnemy) {
 					
-					pile.consumePath(enemies.get(i).getId(), enemies.get(i).getHitbox());
+				
 					
 					hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
 							enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
@@ -591,55 +601,58 @@ public class Updater implements Screen {
 					} else {
 
 						// "pathfinding" around the pile (probably badly optimized)
+						System.out.println("ENEMY WITH ID: " + i + " TRYING TO GET AROUND PILE");
+						
+						if ((player.getPreviousY() - enemies.get(i).getY() >= 0)) { // player is up
 
-						if ((player.getPreviousY() - enemies.get(i).getY() > 0)) { // player is up
-
-							enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() + 1.2f);
+							enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() + 1.5f);
 
 							// check if up is clear
 							if (!(Intersector.overlaps(enemies.get(i).getHitbox(), pile.getHitbox()))) {
 
 								// move enemy up
-								enemies.get(i).setY(enemies.get(i).getY() + 1.2f);
-
+								enemies.get(i).setY(enemies.get(i).getY() + 1.5f);
+							//	player.setPreviousY(enemies.get(i).getY()+ pile.getHeight() + pile.getHeight()*2);
 							} else { // up is blocked -> right or left
 
-								if (player.getPreviousX() - enemies.get(i).getX() > 0) { // player is right and up
+								if (player.getPreviousX() - enemies.get(i).getX() >= 0) { // player is right and up
 
 									// move enemy right
-									enemies.get(i).setX(enemies.get(i).getX() + 1.2f);
+									enemies.get(i).setX(enemies.get(i).getX() + 1.5f);
+								//	player.setPreviousX(enemies.get(i).getX()+ pile.getWidth() + pile.getWidth()*2);
 
 								} else { // player is left and up
 
 									// move enemy left
-									enemies.get(i).setX(enemies.get(i).getX() - 1.2f);
-
+									enemies.get(i).setX(enemies.get(i).getX() - 1.5f);
+							//		player.setPreviousX(enemies.get(i).getX() - pile.getWidth()*2);
 								}
 
 							}
 
 						} else { // player is down
 
-							enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() - 1.2f);
+							enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() - 1.5f);
 
 							// check if down is clear
 							if (!(Intersector.overlaps(enemies.get(i).getHitbox(), pile.getHitbox()))) {
 
 								// move enemy down
-								enemies.get(i).setY(enemies.get(i).getY() - 1.2f);
-
+								enemies.get(i).setY(enemies.get(i).getY() - 1.5f);
+								// player.setPreviousY(enemies.get(i).getY() - pile.getHeight()*2);
 							} else { // down is blocked -> right or left
 
-								if (player.getPreviousX() - enemies.get(i).getX() > 0) { // player is right and down
+								if (player.getPreviousX() - enemies.get(i).getX() >= 0) { // player is right and down
 
 									// move enemy right
-									enemies.get(i).setX(enemies.get(i).getX() + 1.2f);
+									enemies.get(i).setX(enemies.get(i).getX() + 1.5f);
+									// player.setPreviousX(enemies.get(i).getX()+ pile.getWidth() + pile.getWidth()*2);
 
 								} else { // player is left and down
 
 									// move enemy left
-									enemies.get(i).setX(enemies.get(i).getX() - 1.2f);
-
+									enemies.get(i).setX(enemies.get(i).getX() - 1.5f);
+								//	player.setPreviousX(enemies.get(i).getX() -pile.getWidth()*2);
 								}
 
 							}
@@ -748,7 +761,7 @@ public class Updater implements Screen {
 								
 								// "pathfinding" around the pile (probably badly optimized)
 
-								if ((player.getPreviousY() - enemies.get(i).getY() > 0)) { // player is up
+								if ((player.getY() - enemies.get(i).getY() >=0)) { // player is up
 
 									enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() + 1.2f);
 
@@ -761,7 +774,7 @@ public class Updater implements Screen {
 
 									} else { // up is blocked -> right or left
 
-										if (player.getPreviousX() - enemies.get(i).getX() > 0) { // player is right and
+										if (player.getX() - enemies.get(i).getX() >= 0) { // player is right and
 																									// up
 
 											// move enemy right
@@ -789,7 +802,7 @@ public class Updater implements Screen {
 
 									} else { // down is blocked -> right or left
 
-										if (player.getPreviousX() - enemies.get(i).getX() > 0) { // player is right and
+										if (player.getX() - enemies.get(i).getX() >= 0) { // player is right and
 																									// down
 
 											// move enemy right
@@ -815,7 +828,7 @@ public class Updater implements Screen {
 								
 								// "pathfinding" around the pile (probably badly optimized)
 
-								if ((pile.getY() - enemies.get(i).getY() > 0)) { // player is up
+								if ((pile.getY() - enemies.get(i).getY() >= 0)) { // player is up
 
 									enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() + 1.5f);
 
@@ -828,7 +841,7 @@ public class Updater implements Screen {
 
 									} else { // up is blocked -> right or left
 
-										if (pile.getY() - enemies.get(i).getX() > 0) { // player is right and
+										if (pile.getY() - enemies.get(i).getX() >= 0) { // player is right and
 																									// up
 
 											// move enemy right
@@ -856,7 +869,7 @@ public class Updater implements Screen {
 
 									} else { // down is blocked -> right or left
 
-										if (pile.getX() - enemies.get(i).getX() > 0) { // player is right and
+										if (pile.getX() - enemies.get(i).getX() >=0) { // player is right and
 																									// down
 
 											// move enemy right
@@ -1250,7 +1263,7 @@ public class Updater implements Screen {
 
 		// Powerup spawns here
 
-		if (TimeUtils.timeSinceMillis(timeToNextPowerup) > 10000) {
+		if (TimeUtils.timeSinceMillis(timeToNextPowerup) > 10000 && player.getPowerupType() == null) {
 			powerups.add(spawnPowerUp(world, game));
 			timeToNextPowerup = TimeUtils.millis();
 
@@ -1439,16 +1452,24 @@ public class Updater implements Screen {
 			}
 
 		}
-
+// render player
 		if (player.isAttacking()) {
 
 			game.batch.draw(player.getCurrentAttackFrame(statetime), player.getX(), player.getY(), player.getWidth(),
 					player.getHeight());
+			
 
 		} else {
 			game.batch.draw(player.getCurrentFrame(statetime), player.getX(), player.getY(), player.getWidth(),
 					player.getHeight());
 		}
+		if(player.getCollectedCandy()>0) {
+			game.batch.draw(player.getCandyIndicator(), player.getX() , player.getY() + player.getHeight(), 13f,
+					13f);
+			game.font.draw(game.batch, " x " + player.getCollectedCandy(), player.getX() + player.getWidth()/2, player.getY() + player.getHeight() + 10);
+			
+		}
+		// Render projectiles
 		for (int i = 0; i < proj.size(); i++) {
 			game.batch.draw(proj.get(i).getT(), proj.get(i).getX(), proj.get(i).getY(), proj.get(i).getWidth(),
 					proj.get(i).getHeight());

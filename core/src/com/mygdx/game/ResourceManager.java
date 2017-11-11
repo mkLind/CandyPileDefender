@@ -55,6 +55,7 @@ public class ResourceManager {
 			manager.load("pileTest.png", Texture.class);
 			manager.load("pileTest2.png", Texture.class);
 			manager.load("vendingmachine.png",Texture.class);
+			manager.load("candyindicator.png",Texture.class);
 			
 			manager.load("WalkingSpeedUp.png", Texture.class);
 			manager.load("FireRateUp.png", Texture.class);
@@ -88,6 +89,7 @@ public class ResourceManager {
 			
 			manager.load("Sounds/game_over/NFF-death-bell.wav", Sound.class);
 			manager.load("Sounds/game_over/NFF-zomboid.wav", Sound.class);
+		
 			
 			manager.load("Sounds/hit/NFF-dusty-hit.wav", Sound.class);
 			manager.load("Sounds/hit/NFF-explode.wav", Sound.class);

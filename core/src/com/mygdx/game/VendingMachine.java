@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.AudioDevice;
+import com.badlogic.gdx.audio.AudioRecorder;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -21,8 +24,10 @@ public class VendingMachine extends SpriteCommons {
 	
 	public int distributeCandy(Rectangle player) {
 		int additionToCandy = 0;
-		if(super.getHitbox().overlaps(player) && TimeUtils.timeSinceMillis(candyDistributed)>10000) {
+
+		if(super.getHitbox().overlaps(player) && TimeUtils.timeSinceMillis(candyDistributed)>2000) {
 			additionToCandy = 1;
+		
 			candyDistributed = TimeUtils.millis();
 		}
 		return additionToCandy;
@@ -30,6 +35,8 @@ public class VendingMachine extends SpriteCommons {
 		
 		
 	}
+	
+
 	
 	
 }
