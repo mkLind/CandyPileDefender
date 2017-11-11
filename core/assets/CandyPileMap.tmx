@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="30" tileheight="30" nextobjectid="33">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="30" tileheight="30" nextobjectid="37">
  <tileset firstgid="1" name="BaseTiles" tilewidth="30" tileheight="30" tilecount="12" columns="4">
   <image source="BaseTilesets.png" trans="ffffff" width="120" height="90"/>
  </tileset>
@@ -77,25 +77,31 @@
     <property name="Spawnpoint" value="Enemy"/>
    </properties>
   </object>
-  <object id="29" x="330" y="553">
+  <object id="29" x="1029" y="173">
    <properties>
     <property name="Spawnpoint" value="Enemy"/>
    </properties>
   </object>
-  <object id="30" x="1139" y="590">
+  <object id="30" x="1140" y="551">
    <properties>
     <property name="Spawnpoint" value="Enemy"/>
    </properties>
   </object>
-  <object id="31" x="64.3333" y="410">
+  <object id="31" x="77.3333" y="296">
    <properties>
     <property name="Spawnpoint" value="Enemy"/>
    </properties>
   </object>
-  <object id="32" x="59" y="530.667">
+  <object id="32" x="456" y="524.667">
    <properties>
     <property name="Spawnpoint" value="Enemy"/>
    </properties>
   </object>
+  <object id="33" x="1144" y="381">
+   <properties>
+    <property name="Spawnpoint" value="vendingmachine"/>
+   </properties>
+  </object>
+  <object id="34" x="263" y="380"/>
  </objectgroup>
 </map>

@@ -1,10 +1,35 @@
 package com.mygdx.game;
 
-public class VendingMachine extends SpriteCommons {
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.TimeUtils;
 
-	public VendingMachine(int width, int height, float x, float y, float xVel, float yVel) {
+public class VendingMachine extends SpriteCommons {
+	private Texture machine;
+	private long candyDistributed;
+	public VendingMachine(int width, int height, float x, float y, float xVel, float yVel, Texture machine) {
 		super(width, height, x, y, xVel, yVel);
+		this.machine = machine;
+		candyDistributed = 0;
+		
 		
 	}
 
+	public Texture getGraphic() {
+		return machine;
+	}
+	
+	public int distributeCandy(Rectangle player) {
+		int additionToCandy = 0;
+		if(super.getHitbox().overlaps(player) && TimeUtils.timeSinceMillis(candyDistributed)>10000) {
+			additionToCandy = 1;
+			candyDistributed = TimeUtils.millis();
+		}
+		return additionToCandy;
+		
+		
+		
+	}
+	
+	
 }

@@ -55,6 +55,7 @@ public class Updater implements Screen {
 
 	// Texture img;
 	private float aspectRatio;
+	private VendingMachine machine;
 	private OrthographicCamera camera;
 	private Stage stage;
 	private ShapeRenderer r;
@@ -183,6 +184,11 @@ public class Updater implements Screen {
 						game.getLoader().getManager().get("CPSmallCrop.png", Texture.class),
 						game.getLoader().getManager().get("CPTinyCrop.png", Texture.class));
 
+			}
+			if(spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("vendingmachine")) {
+				
+				machine = new VendingMachine(64, 128, spawnPoints.get(i).getRectangle().getX(), spawnPoints.get(i).getRectangle().getY(), 0, 0, game.getLoader().getManager().get("vendingmachine.png", Texture.class));
+				
 			}
 		}
 		for (int i = 0; i < spawnPoints.size; i++) {
@@ -350,11 +356,26 @@ public class Updater implements Screen {
 				player.updateHitbox();
 			}
 		}
+		// Player fetching candy from machine
+		if(Intersector.overlaps(player.getHitbox(), machine.getHitbox())) {
+			player.setxVel(0);
+			player.setyVel(0);
+			
+			player.setCollectedCandy(player.getCollectedCandy() + machine.distributeCandy(player.getHitbox()));
+			
+			
+		}
 
 		if (Intersector.overlaps(player.getHitbox(), pile.getHitbox()) || noEnemies == false) {
 
 			// pulls the hitbox back
 			player.updateHitbox();
+			if(player.getCollectedCandy()>0) {
+				pile.setHealth(pile.getHealth() + player.getCollectedCandy());
+				player.setCollectedCandy(0);
+			}
+			
+			
 
 		} else {
 			// Move the player
@@ -1323,6 +1344,10 @@ public class Updater implements Screen {
 
 		game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
+		
+		// Render the vending machine
+		
+		game.batch.draw(machine.getGraphic(),machine.getX(),machine.getY(),machine.getWidth(), machine.getHeight());
 
 		// Draw powerups
 
