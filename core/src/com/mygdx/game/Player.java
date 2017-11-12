@@ -30,6 +30,8 @@ public class Player extends SpriteCommons {
 	private ArrayList<Float> previousX;
 	private ArrayList<Float> previousY;
 	private long lastPreviousSet;
+	private int collectedCandy;
+	private Texture candyIndicator;
 	
 	
 /**
@@ -55,7 +57,8 @@ public class Player extends SpriteCommons {
 		lastPreviousSet = 0;
 		setPreviousX(super.getX());
 		setPreviousY(super.getY());
-		
+		collectedCandy = 0;
+		candyIndicator = null;
 		
 	}
 	public enum DIRECTION{
@@ -84,6 +87,34 @@ public class Player extends SpriteCommons {
 
 
 
+
+
+
+
+	public Texture getCandyIndicator() {
+		return candyIndicator;
+	}
+
+
+
+
+	public void setCandyIndicator(Texture candyIndicator) {
+		this.candyIndicator = candyIndicator;
+	}
+
+
+
+
+	public int getCollectedCandy() {
+		return collectedCandy;
+	}
+
+
+
+
+	public void setCollectedCandy(int collectedCandy) {
+		this.collectedCandy = collectedCandy;
+	}
 
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="30" tileheight="30" nextobjectid="33">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="30" tileheight="30" nextobjectid="37">
  <tileset firstgid="1" name="BaseTiles" tilewidth="30" tileheight="30" tilecount="12" columns="4">
   <image source="BaseTilesets.png" trans="ffffff" width="120" height="90"/>
  </tileset>
@@ -7,10 +7,10 @@
   <image source="DecoTilesets.png" trans="ffffff" width="360" height="158"/>
   <tile id="0">
    <animation>
-    <frame tileid="0" duration="100"/>
-    <frame tileid="1" duration="100"/>
-    <frame tileid="2" duration="100"/>
-    <frame tileid="3" duration="100"/>
+    <frame tileid="0" duration="200"/>
+    <frame tileid="1" duration="200"/>
+    <frame tileid="2" duration="200"/>
+    <frame tileid="3" duration="200"/>
    </animation>
   </tile>
  </tileset>
@@ -34,7 +34,7 @@
    eJzt1MkJACAMBEBr8GkB9l+iPn0JiuA100A25AgBxsTdAaq0sfZs/3lpClon7CTQ506Bk9z0k27K+hNzAXhDAbHOAL8=
   </data>
  </layer>
- <objectgroup name="Borders">
+ <objectgroup name="Borders" visible="0">
   <object id="1" x="0" y="104.667" width="600" height="38.6667"/>
   <object id="2" x="693.333" y="108.667" width="506.667" height="36"/>
   <object id="3" x="1180.25" y="143.167" width="30.6667" height="546.667"/>
@@ -72,29 +72,34 @@
     <property name="Spawnpoint" value="Player"/>
    </properties>
   </object>
-  <object id="28" x="643" y="158">
+  <object id="28" x="644" y="183">
    <properties>
     <property name="Spawnpoint" value="Enemy"/>
    </properties>
   </object>
-  <object id="29" x="330" y="553">
+  <object id="29" x="999" y="195">
    <properties>
     <property name="Spawnpoint" value="Enemy"/>
    </properties>
   </object>
-  <object id="30" x="1139" y="590">
+  <object id="30" x="1140" y="551">
    <properties>
     <property name="Spawnpoint" value="Enemy"/>
    </properties>
   </object>
-  <object id="31" x="64.3333" y="410">
+  <object id="31" x="77.3333" y="296">
    <properties>
     <property name="Spawnpoint" value="Enemy"/>
    </properties>
   </object>
-  <object id="32" x="59" y="530.667">
+  <object id="32" x="456" y="524.667">
    <properties>
     <property name="Spawnpoint" value="Enemy"/>
+   </properties>
+  </object>
+  <object id="33" x="1110" y="382">
+   <properties>
+    <property name="Spawnpoint" value="vendingmachine"/>
    </properties>
   </object>
  </objectgroup>
