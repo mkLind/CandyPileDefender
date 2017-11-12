@@ -612,20 +612,20 @@ public class Updater implements Screen {
 
 								// move enemy up
 								enemies.get(i).setY(enemies.get(i).getY() + 1.5f);
-							//	player.setPreviousY(enemies.get(i).getY()+ pile.getHeight() + pile.getHeight()*2);
+								player.setPreviousY(enemies.get(i).getY()+ pile.getHeight() + pile.getHeight()*2);
 							} else { // up is blocked -> right or left
 
 								if (player.getPreviousX() - enemies.get(i).getX() >= 0) { // player is right and up
 
 									// move enemy right
 									enemies.get(i).setX(enemies.get(i).getX() + 1.5f);
-								//	player.setPreviousX(enemies.get(i).getX()+ pile.getWidth() + pile.getWidth()*2);
+									player.setPreviousX(enemies.get(i).getX()+ pile.getWidth() + pile.getWidth()*2);
 
 								} else { // player is left and up
 
 									// move enemy left
 									enemies.get(i).setX(enemies.get(i).getX() - 1.5f);
-							//		player.setPreviousX(enemies.get(i).getX() - pile.getWidth()*2);
+								player.setPreviousX(enemies.get(i).getX() - pile.getWidth()*2);
 								}
 
 							}
@@ -639,20 +639,20 @@ public class Updater implements Screen {
 
 								// move enemy down
 								enemies.get(i).setY(enemies.get(i).getY() - 1.5f);
-								// player.setPreviousY(enemies.get(i).getY() - pile.getHeight()*2);
+								 player.setPreviousY(enemies.get(i).getY() - pile.getHeight()*2);
 							} else { // down is blocked -> right or left
 
 								if (player.getPreviousX() - enemies.get(i).getX() >= 0) { // player is right and down
 
 									// move enemy right
 									enemies.get(i).setX(enemies.get(i).getX() + 1.5f);
-									// player.setPreviousX(enemies.get(i).getX()+ pile.getWidth() + pile.getWidth()*2);
+									 player.setPreviousX(enemies.get(i).getX()+ pile.getWidth() + pile.getWidth()*2);
 
 								} else { // player is left and down
 
 									// move enemy left
 									enemies.get(i).setX(enemies.get(i).getX() - 1.5f);
-								//	player.setPreviousX(enemies.get(i).getX() -pile.getWidth()*2);
+									player.setPreviousX(enemies.get(i).getX() -pile.getWidth()*2);
 								}
 
 							}
