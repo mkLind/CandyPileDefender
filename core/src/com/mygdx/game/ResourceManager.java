@@ -21,10 +21,12 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoa
 public class ResourceManager {
 	private AssetManager manager;
 	private static Preferences prefs;
+	private boolean masterVolume;
 
 	public ResourceManager() {
 		// System.out.println("Internal storage path: " +
 		// Gdx.files.getLocalStoragePath());
+		masterVolume = true;
 		manager = new AssetManager();
 		prefs = Gdx.app.getPreferences("Scores");
 		if (!prefs.contains("highScore")) {
@@ -187,5 +189,11 @@ public class ResourceManager {
 
 	public String getFifth() {
 		return prefs.getString("5");
+	}
+	public void setMasterVolume(boolean value) {
+		masterVolume = value;
+	}
+	public boolean getMasterVolume() {
+		return masterVolume;
 	}
 }

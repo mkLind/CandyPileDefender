@@ -25,6 +25,7 @@ private boolean isColliding;
 private long timeSinceCollision;
 
 private int id;
+private boolean isHit;
 
 // inactivity timer after attacking etc.
 private int timeoutTimer;
@@ -44,6 +45,7 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	targetY = 0;
 	timeSinceCollision = 0;
 	id = 0;
+	isHit = false;
 	
 }
 
@@ -196,6 +198,13 @@ public void setTimeoutTimer(int timeoutTimer) {
 	this.timeoutTimer = timeoutTimer;
 }
 
+public void setIsHit(boolean hit) {
+	this.isHit = hit;
+}
+
+public boolean getIsHit() {
+	return isHit;
+}
 
 
 }

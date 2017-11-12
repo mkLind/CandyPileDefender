@@ -40,7 +40,7 @@ public class Pile extends SpriteCommons {
 		health--;
 	}
 
-
+	
 	public int getHealth() {
 		return health;
 	}
@@ -66,6 +66,11 @@ public class Pile extends SpriteCommons {
 	public Texture getPileTexture4() {
 		return pileTexture4;
 	}
+	public void reduceHitbox() {
+		super.getHitbox().setHeight(super.getHeight());
+		super.getHitbox().setWidth(super.getWidth());
+	}
+	
 public void calculatePointsAroundObstacle(Rectangle obstacle, Rectangle collidingEnemy, int enemyId) {
 	// Right and up collision
 	ArrayList<Vector2> trail = new ArrayList<Vector2>();

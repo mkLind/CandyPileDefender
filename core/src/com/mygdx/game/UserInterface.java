@@ -1,17 +1,25 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -27,21 +35,32 @@ public class UserInterface {
 	private Texture warningTexture;
 	private TextureRegion region;
 	private Image warning;
-	private TextButton playButton;
+	private TextButton button;
+	private Button musicButton; 
+	private BitmapFont font;
 	
 	public UserInterface(final Core game) {
+		this.font = game.font;
 		manager = game.getLoader().getManager();
 		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 	}
 	
 	public Label newLabel(String name, float x, float y, int align, float width) {
-		label = new Label(name, mySkin);
+		Label.LabelStyle style = new LabelStyle();
+		style.font = mySkin.getFont("font-title");
+		if(name.substring(0, 2).equals("Yo")) {
+			label = new Label(name, mySkin, "title");
+		}else {
+			label = new Label(name, style);
+		}
 		label.setPosition(x, y);
 		label.setAlignment(align);
 		label.setWidth(width);
 		return label;
 		
 	}
+	
+	
 	
 	public ProgressBar newHealthBar(float min, float max, float stepSize, boolean vertical, ProgressBarStyle style, float x, float y) {
 		//The bar background
@@ -50,7 +69,7 @@ public class UserInterface {
 		healthBar.getStyle().background = drawable;
 		
 		//The bar knob
-		Pixmap pixmap = new Pixmap(0, 19, Format.RGBA8888);
+		Pixmap pixmap = new Pixmap(0, 35, Format.RGBA8888);
 		pixmap.setColor(Color.GREEN);
 		pixmap.fill();
 		drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
@@ -62,12 +81,12 @@ public class UserInterface {
 				new TextureRegion(manager.get("Healthbar.png", Texture.class)));
 		healthBar.getStyle().knobBefore = drawable;
 
-		healthBar.setWidth(160);
+		healthBar.setWidth(350);
 //		healthBar.setHeight(19);
-		healthBar.getStyle().background.setMinHeight(19);
-		healthBar.getStyle().knobBefore.setMinHeight(19);
-		healthBar.getStyle().knob.setMinHeight(19);
-//		healthBar.setAnimateDuration(1f);
+		healthBar.getStyle().background.setMinHeight(35);
+		healthBar.getStyle().knobBefore.setMinHeight(35);
+		healthBar.getStyle().knob.setMinHeight(35);
+//		healthBar.setAnimateDuration(0.5f);
 		healthBar.setValue(1f);
 		healthBar.setPosition(x, y);
 		return healthBar;
@@ -75,7 +94,7 @@ public class UserInterface {
 	
 	public Image newWarning(float x, float y) {
 		warningTexture = manager.get("warning2.png", Texture.class);
-		region = new TextureRegion(warningTexture, 7, 36);
+		region = new TextureRegion(warningTexture, 11, 57);
 		warning = new Image(region);
 		warning.setPosition(x, y);
 		warning.setVisible(false);
@@ -83,10 +102,37 @@ public class UserInterface {
 		
 	}
 	
-	public TextButton newPlayButton(String name, float width, float x, float y) {
-		playButton = new TextButton(name, mySkin);
-		playButton.setWidth(width);
-        playButton.setPosition(x - playButton.getWidth()/2, y  - playButton.getHeight()/3);
-        return playButton;
+	public TextButton newButton(String name, float width, float x, float y) {
+		button = new TextButton(name, mySkin);
+		button.setWidth(width);
+        button.setPosition(x - button.getWidth()/2, y  - button.getHeight()/2);
+        
+        return button;
 	}
+	
+	public Button newSoundButton(float width, float x, float y) {
+//		ButtonStyle buttonStyle = mySkin.get("sound", ButtonStyle.class);
+		musicButton = new Button(mySkin, "sound");
+		musicButton.setWidth(width);
+		musicButton.setHeight(width);
+        musicButton.setPosition(x - musicButton.getWidth()/2, y  - musicButton.getHeight()/2);   
+        return musicButton;
+	}
+	
+	public Dialog newDialog() {
+		Dialog dialog = new Dialog("", mySkin, "dialog");
+		dialog.getBackground().setMinWidth(500f);
+		dialog.getBackground().setMinHeight(500f);
+		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		Label text = new Label("Here are the\ncredits. \n", mySkin);
+		text.setAlignment(Align.left);
+//		text.setWrap(true);
+		dialog.text(text);
+		dialog.align(Align.left);
+		dialog.button("Exit", true); //sends "true" as the result
+		dialog.key(Keys.ENTER, true); //sends "true" when the ENTER key is pressed
+		return dialog;
+	}
+	
+	
 }

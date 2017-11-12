@@ -87,10 +87,6 @@ public class Player extends SpriteCommons {
 
 
 
-
-
-
-
 	public Texture getCandyIndicator() {
 		return candyIndicator;
 	}
