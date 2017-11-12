@@ -199,26 +199,32 @@ public void setTimeoutTimer(int timeoutTimer) {
 public Vector2 investigatePath(Rectangle obstacle) {
 	
 	
-	float futureX = x +   xVel*50;
-	float futureY = y  +  yVel*50;
+	float futureX = (x + width/2) +   xVel*30;
+	float futureY = (y + height/2)  +  yVel*30;
 	
-
+	
+		Rectangle tmp = new Rectangle(obstacle);
+		tmp.setX(tmp.getX()-tmp.getWidth()/2);
+		tmp.setY(tmp.getY()-tmp.getHeight()/2);
 		
-		if(obstacle.contains(futureX,futureY)) {
+		tmp.setWidth(tmp.getWidth() + tmp.getWidth()/2);
+		tmp.setHeight(tmp.getHeight() + tmp.getHeight()/2);
+		
+		if(tmp.contains(futureX,futureY)) {
 			// calculates a target point around the pile
-			while(obstacle.contains(futureX,futureY)){
+			while(tmp.contains(futureX,futureY)){
 				
-				if(Math.abs(obstacle.getX() - futureX) <Math.abs((obstacle.getX() + obstacle.getWidth()) - futureX)) {
-					futureX =- width;
+				if(Math.abs(tmp.getX() - futureX) <Math.abs((tmp.getX() + tmp.getWidth()) - futureX)) {
+					futureX --;
 				}else {
 					
-					futureX =+ width;
+					futureX++;
 				}
-				if(Math.abs(obstacle.getY() - futureY) <Math.abs((obstacle.getY() + obstacle.getHeight()) - futureY)) {
-					futureY =- height;
+				if(Math.abs(tmp.getY() - futureY) <Math.abs((tmp.getY() + tmp.getHeight()) - futureY)) {
+					futureY --;
 				}else {
 					
-					futureY =+ height;
+					futureY ++;
 				}
 				
 				
@@ -237,8 +243,8 @@ public Vector2 investigatePath(Rectangle obstacle) {
 }
 
 public boolean getCollisionForecast(Rectangle obstacle) {
-	float futureX = x + xVel*50;
-	float futureY = y + yVel*50;
+	float futureX = x + xVel*30;
+	float futureY = y + yVel*30;
 	
 	boolean aboutToCollide = false;
 	if(obstacle.contains(futureX,futureY)) {

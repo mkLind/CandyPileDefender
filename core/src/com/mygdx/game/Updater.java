@@ -700,7 +700,7 @@ public class Updater implements Screen {
 					for (int k = 0; k < borders.size; k++) {
 
 						if (Intersector.overlaps(borders.get(k).getRectangle(), enemies.get(i).getHitbox())) {
-/*
+
 							 enemies.get(i).setxVel(0);
 							 enemies.get(i).setyVel(0);
 							
@@ -783,7 +783,7 @@ public class Updater implements Screen {
 							  
 							  
 							  }
-							  */
+							  
 							  
 							 
 
@@ -1544,10 +1544,10 @@ public class Updater implements Screen {
 		
 		  for(int i = 0; i<enemies.size();i++) {
 			  for(RectangleMapObject b : borders) {
-				  r.line(enemies.get(i).getX(), enemies.get(i).getY(),enemies.get(i).investigatePath(b.getRectangle()).x, enemies.get(i).investigatePath(b.getRectangle()).y);
+				  r.line(enemies.get(i).getX() + enemies.get(i).getWidth()/2, enemies.get(i).getY()+ enemies.get(i).getHeight()/2,enemies.get(i).investigatePath(b.getRectangle()).x, enemies.get(i).investigatePath(b.getRectangle()).y);
 				  
 			  }
-			  r.line(enemies.get(i).getX(), enemies.get(i).getY(),enemies.get(i).investigatePath(pile.getHitbox()).x, enemies.get(i).investigatePath(pile.getHitbox()).y);
+			  r.line(enemies.get(i).getX()+ enemies.get(i).getWidth()/2, enemies.get(i).getY()+ enemies.get(i).getHeight()/2,enemies.get(i).investigatePath(pile.getHitbox()).x, enemies.get(i).investigatePath(pile.getHitbox()).y);
 		  }
 		  
 		  r.end();
