@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 /*
  * Class that has all the common aspects of a sprite like coordinates, velocities, proportions and bounding rectangle (For collisions)
  */
@@ -195,7 +196,56 @@ public int getTimeoutTimer() {
 public void setTimeoutTimer(int timeoutTimer) {
 	this.timeoutTimer = timeoutTimer;
 }
+public Vector2 investigatePath(Rectangle obstacle) {
+	
+	
+	float futureX = x +   xVel*50;
+	float futureY = y  +  yVel*50;
+	
 
+		
+		if(obstacle.contains(futureX,futureY)) {
+			// calculates a target point around the pile
+			while(obstacle.contains(futureX,futureY)){
+				
+				if(Math.abs(obstacle.getX() - futureX) <Math.abs((obstacle.getX() + obstacle.getWidth()) - futureX)) {
+					futureX =- width;
+				}else {
+					
+					futureX =+ width;
+				}
+				if(Math.abs(obstacle.getY() - futureY) <Math.abs((obstacle.getY() + obstacle.getHeight()) - futureY)) {
+					futureY =- height;
+				}else {
+					
+					futureY =+ height;
+				}
+				
+				
+			}
+			
+		}
+		
+		
+	
+	
+	return new Vector2(futureX, futureY);
+	
+	
+	
+	
+}
+
+public boolean getCollisionForecast(Rectangle obstacle) {
+	float futureX = x + xVel*50;
+	float futureY = y + yVel*50;
+	
+	boolean aboutToCollide = false;
+	if(obstacle.contains(futureX,futureY)) {
+		aboutToCollide = true;
+	}
+	return aboutToCollide;
+}
 
 
 }
