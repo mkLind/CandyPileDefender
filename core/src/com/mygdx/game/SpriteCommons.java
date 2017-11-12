@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 /*
  * Class that has all the common aspects of a sprite like coordinates, velocities, proportions and bounding rectangle (For collisions)
  */
@@ -197,6 +198,51 @@ public int getTimeoutTimer() {
 public void setTimeoutTimer(int timeoutTimer) {
 	this.timeoutTimer = timeoutTimer;
 }
+public Vector2 investigatePath(Rectangle obstacle) {
+	
+	
+	float futureX = (x + width/2) +   xVel*30;
+	float futureY = (y + height/2)  +  yVel*30;
+	
+	
+		Rectangle tmp = new Rectangle(obstacle);
+		tmp.setX(tmp.getX()-tmp.getWidth()/2);
+		tmp.setY(tmp.getY()-tmp.getHeight()/2);
+		
+		tmp.setWidth(tmp.getWidth() + tmp.getWidth()/2);
+		tmp.setHeight(tmp.getHeight() + tmp.getHeight()/2);
+		
+		if(tmp.contains(futureX,futureY)) {
+			// calculates a target point around the pile
+			while(tmp.contains(futureX,futureY)){
+				
+				if(Math.abs(tmp.getX() - futureX) <Math.abs((tmp.getX() + tmp.getWidth()) - futureX)) {
+					futureX --;
+				}else {
+					
+					futureX++;
+				}
+				if(Math.abs(tmp.getY() - futureY) <Math.abs((tmp.getY() + tmp.getHeight()) - futureY)) {
+					futureY --;
+				}else {
+					
+					futureY ++;
+				}
+				
+				
+			}
+			
+		}
+		
+		
+	
+	
+	return new Vector2(futureX, futureY);
+	
+	
+	
+	
+}
 
 public void setIsHit(boolean hit) {
 	this.isHit = hit;
@@ -204,6 +250,16 @@ public void setIsHit(boolean hit) {
 
 public boolean getIsHit() {
 	return isHit;
+	}
+public boolean getCollisionForecast(Rectangle obstacle) {
+	float futureX = x + xVel*30;
+	float futureY = y + yVel*30;
+	
+	boolean aboutToCollide = false;
+	if(obstacle.contains(futureX,futureY)) {
+		aboutToCollide = true;
+	}
+	return aboutToCollide;
 }
 
 
