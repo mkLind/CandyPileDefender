@@ -493,6 +493,13 @@ public class Updater implements Screen {
 
 				// Calculates enemy velocities
 				if (enemies.get(i) instanceof ChaserEnemy) {
+					
+					hypot = Math.hypot(enemies.get(i).getX() - player.getPreviousX(),
+							enemies.get(i).getY() - player.getPreviousY());
+					
+					enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
+					enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
+					
 					if(collidesToObstacle(enemies.get(i))) {
 						for(RectangleMapObject obj : borders) {
 							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
@@ -511,18 +518,21 @@ public class Updater implements Screen {
 						enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).y - enemies.get(i).getY()))));
 						
 					}
-					else {
-						
-					hypot = Math.hypot(enemies.get(i).getX() - player.getPreviousX(),
-							enemies.get(i).getY() - player.getPreviousY());
 					
-					enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
-					enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
-					}
+					
+					
 					
 				}
 
 				if (enemies.get(i) instanceof StealingEnemy) {
+					
+					hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
+							enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
+					// TEST SPEED 3! was 1.2
+					enemies.get(i).setxVel(
+							((float) (1.2f / hypot * (pile.getX()+ (pile.getWidth() / 2) - enemies.get(i).getX()))));
+					enemies.get(i).setyVel(
+							((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
 					
 					if(collidesToObstacle(enemies.get(i))) {
 						
@@ -533,15 +543,9 @@ public class Updater implements Screen {
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
 						}
-					}else {
-						hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
-								enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
-						// TEST SPEED 3! was 1.2
-						enemies.get(i).setxVel(
-								((float) (1.2f / hypot * (pile.getX()+ (pile.getWidth() / 2) - enemies.get(i).getX()))));
-						enemies.get(i).setyVel(
-								((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
 					}
+						
+					
 					// Maybe correct direction to stealer?
 
 				}
