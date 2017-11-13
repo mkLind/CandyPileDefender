@@ -161,7 +161,7 @@ public class Updater implements Screen {
 		game.batch.setProjectionMatrix(camera.combined);
 
 		if (game.getLoader().getMasterVolume()) {
-			ambience = game.getLoader().getManager().get("Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
+			ambience = game.getLoader().getManager().get("Music/POL-horror-ambience-1-short_16bit.ogg", Music.class);
 			ambience.setLooping(true);
 			ambience.play();
 		}

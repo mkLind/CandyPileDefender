@@ -61,7 +61,7 @@ public class MainMenuScreen implements Screen {
 		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 		// mySkin.getFont("font-label").getData().setScale(1.5f);
 		
-		ambience = game.getLoader().getManager().get("Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
+		ambience = game.getLoader().getManager().get("Music/POL-horror-ambience-2-short_16bit.ogg", Music.class);
 		ambience.setLooping(true);
 		
 		int row_height = Gdx.graphics.getWidth() / 10;
@@ -159,7 +159,6 @@ public class MainMenuScreen implements Screen {
 				Gdx.graphics.getHeight() - row_height * 0.8f, Align.topRight, Gdx.graphics.getWidth() / 4);
 		label2 = userInterface.newLabel("Your score: " + game.getLoader().getScore(), Gdx.graphics.getWidth() / 4,
 				Gdx.graphics.getHeight() - row_height * 2f, Align.topLeft, Gdx.graphics.getWidth() / 6);
-		label2.setAlignment(Align.center);
 		label3 = userInterface.newLabel("1. " + game.getLoader().getHighScore(), Gdx.graphics.getWidth() / 1.5f,
 				Gdx.graphics.getHeight() - row_height * 1.1f, Align.left, Gdx.graphics.getWidth() / 4);
 		label4 = userInterface.newLabel("2. " + game.getLoader().getSecond(), Gdx.graphics.getWidth() / 1.5f,
@@ -174,6 +173,7 @@ public class MainMenuScreen implements Screen {
 		
 //		stage.addActor(label1);
 		stage.addActor(label2);
+		label2.setAlignment(Align.center);
 //		stage.addActor(label3);
 //		stage.addActor(label4);
 //		stage.addActor(label5);

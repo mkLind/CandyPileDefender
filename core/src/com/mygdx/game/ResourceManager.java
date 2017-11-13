@@ -86,8 +86,8 @@ public class ResourceManager {
 			manager.load("Eggplant.png",Texture.class);
 			// Music and sounds
 			
-			manager.load("Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
-			manager.load("Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
+			manager.load("Music/POL-horror-ambience-1-short_16bit.ogg", Music.class);
+			manager.load("Music/POL-horror-ambience-2-short_16bit.ogg", Music.class);
 			
 			manager.load("Sounds/game_over/NFF-death-bell.wav", Sound.class);
 			manager.load("Sounds/game_over/NFF-zomboid.wav", Sound.class);
