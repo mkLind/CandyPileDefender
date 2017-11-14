@@ -23,6 +23,7 @@ private int HP;
 private Rectangle hitbox;
 private Texture texture;
 private boolean isColliding;
+private boolean targetSet;
 private long timeSinceCollision;
 
 private int id;
@@ -47,7 +48,7 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	timeSinceCollision = 0;
 	id = 0;
 	isHit = false;
-	
+	targetSet = false;
 }
 
 public SpriteCommons(int width, int height, float x, float y,float xVel, float yVel){
@@ -60,6 +61,14 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	hitbox = new Rectangle(x, y, width, height);
 	timeoutTimer = 0;
 	
+}
+
+public boolean isTargetSet() {
+	return targetSet;
+}
+
+public void setTargetSet(boolean targetSet) {
+	this.targetSet = targetSet;
 }
 
 public int getId() {
@@ -84,15 +93,26 @@ public float getTargetX() {
 
 public void setTargetX(float targetX) {
 	this.targetX = targetX;
+	targetSet = true;
 }
 
 public float getTargetY() {
+
 	return targetY;
 }
 
 public void setTargetY(float targetY) {
+	targetSet = true;
 	this.targetY = targetY;
 }
+
+public void consumeTarget() {
+	if(hitbox.contains(targetX, targetY)) {
+		targetSet = false;
+	}
+	
+}
+
 
 public boolean isColliding() {
 	return isColliding;

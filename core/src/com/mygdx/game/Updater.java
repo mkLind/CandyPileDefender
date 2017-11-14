@@ -413,7 +413,7 @@ public class Updater implements Screen {
 
 		// ALL ENEMY STUFF
 		for (int i = 0; i < enemies.size(); i++) {
-
+			
 			double hypot = Math.hypot(enemies.get(i).getX() - player.getX(), enemies.get(i).getY() - player.getY());
 			// Warnings: topleftcorner
 			if (hypot > camera.viewportWidth / 3 && enemies.get(i).getX() < player.getX()
@@ -505,6 +505,9 @@ public class Updater implements Screen {
 							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
 									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
 							
+							enemies.get(i).setTargetX(enemies.get(i).investigatePath(obj.getRectangle()).x);
+							enemies.get(i).setTargetY(enemies.get(i).investigatePath(obj.getRectangle()).y);
+							
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
 						}
@@ -513,6 +516,9 @@ public class Updater implements Screen {
 						
 						hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(pile.getHitbox()).x,
 								enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
+						
+						enemies.get(i).setTargetX(enemies.get(i).investigatePath(pile.getHitbox()).x);
+						enemies.get(i).setTargetY(enemies.get(i).investigatePath(pile.getHitbox()).y);
 						
 						enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).x - enemies.get(i).getX()))));
 						enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).y - enemies.get(i).getY()))));
