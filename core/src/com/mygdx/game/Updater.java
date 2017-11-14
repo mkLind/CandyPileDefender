@@ -79,6 +79,7 @@ public class Updater implements Screen {
 	private long timeScore;
 	private long playerIsHitTime;
 	private long enemyIsHitTime;
+	private long pileIsHitTime;
 	private GameWorld world;
 	private Random randomizer;
 	private OrthogonalTiledMapRenderer mapRender;
@@ -193,9 +194,9 @@ public class Updater implements Screen {
 			}
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("vendingmachine")) {
 
-				machine = new VendingMachine(64, 128, spawnPoints.get(i).getRectangle().getX(),
+				machine = new VendingMachine(14, 42, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(), 0, 0,
-						game.getLoader().getManager().get("vendingmachine.png", Texture.class));
+						game.getLoader().getManager().get("VendingMachine.png", Texture.class));
 
 			}
 		}
@@ -246,8 +247,6 @@ public class Updater implements Screen {
 		stage.addActor(bottomLeftCorner);
 		stage.addActor(bottomRightCorner);
 
-		System.out.println(camera.viewportWidth);
-		System.out.println(camera.viewportHeight);
 	}
 
 	// Spawn enemies. Enemy count increases by one every time to make the wave
@@ -410,10 +409,10 @@ public class Updater implements Screen {
 		}
 
 		noEnemies = true;
-
+		
 		// ALL ENEMY STUFF
 		for (int i = 0; i < enemies.size(); i++) {
-
+			
 			double hypot = Math.hypot(enemies.get(i).getX() - player.getX(), enemies.get(i).getY() - player.getY());
 			// Warnings: topleftcorner
 			if (hypot > camera.viewportWidth / 3 && enemies.get(i).getX() < player.getX()
@@ -490,7 +489,6 @@ public class Updater implements Screen {
 
 			// checks if the enemy is on timeout and does nothing if is
 			if (enemies.get(i).getTimeoutTimer() == 0) {
-
 				// Calculates enemy velocities
 				if (enemies.get(i) instanceof ChaserEnemy) {
 					if(collidesToObstacle(enemies.get(i))) {
@@ -612,6 +610,7 @@ public class Updater implements Screen {
 							GameOver.play();
 							ambience.stop();
 						}
+						game.getLoader().setPlayerDead(true);
 						game.setScreen(new LoadingScreen(game));
 						this.dispose();
 					}
@@ -623,7 +622,6 @@ public class Updater implements Screen {
 					if (enemies.get(i) instanceof StealingEnemy) {
 
 						if (Intersector.overlaps((enemies.get(i).getHitbox()), pile.getHitbox())) {
-
 							pile.reduceHealth();
 							enemies.remove(i);
 
@@ -1415,13 +1413,11 @@ public class Updater implements Screen {
 		}
 		// Draw pile; four health states
 		if (pile.getHealth() > 6) {
-
 			game.batch.draw(pile.getPileTexture(), pile.getX(), pile.getY());
 			pile.setHeight(62);
 			pile.setWidth(87);
 
 		} else if (pile.getHealth() > 4) {
-
 			game.batch.draw(pile.getPileTexture2(), pile.getX(), pile.getY());
 			pile.setHeight(49);
 			pile.setWidth(87);
@@ -1438,18 +1434,18 @@ public class Updater implements Screen {
 
 		} else if (pile.getHealth() > 0) {
 
-			game.batch.draw(pile.getPileTexture3(), pile.getX(), pile.getY());
+			game.batch.draw(pile.getPileTexture4(), pile.getX(), pile.getY());
 			pile.setHeight(27);
 			pile.setWidth(65);
 //			pile.reduceHitbox();
 
 		} else if (pile.getHealth() == 0) {
 
-			System.out.println("The whole pile was stolen");
 			if (game.getLoader().getMasterVolume()) {
 				GameOver.play();
 				ambience.stop();
 			}
+			game.getLoader().setPileStolen(true);
 			game.setScreen(new LoadingScreen(game));
 			this.dispose();
 
@@ -1589,7 +1585,7 @@ public class Updater implements Screen {
 		stage.draw();
 
 		// shape renderer for debugging
-		
+		/*
 		  r.setProjectionMatrix(camera.combined); 
 		  r.begin(ShapeType.Line);
 		  r.setColor(Color.RED);
@@ -1604,7 +1600,7 @@ public class Updater implements Screen {
 		  }
 		  
 		  r.end();
-		 
+		 */
 	}
 
 	public Powerup spawnPowerUp(GameWorld world, Core game) {
