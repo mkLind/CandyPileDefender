@@ -23,6 +23,7 @@ private int HP;
 private Rectangle hitbox;
 private Texture texture;
 private boolean isColliding;
+private boolean targetSet;
 private long timeSinceCollision;
 
 private int id;
@@ -47,7 +48,7 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	timeSinceCollision = 0;
 	id = 0;
 	isHit = false;
-	
+	targetSet = false;
 }
 
 public SpriteCommons(int width, int height, float x, float y,float xVel, float yVel){
@@ -60,6 +61,14 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	hitbox = new Rectangle(x, y, width, height);
 	timeoutTimer = 0;
 	
+}
+
+public boolean isTargetSet() {
+	return targetSet;
+}
+
+public void setTargetSet(boolean targetSet) {
+	this.targetSet = targetSet;
 }
 
 public int getId() {
@@ -84,15 +93,26 @@ public float getTargetX() {
 
 public void setTargetX(float targetX) {
 	this.targetX = targetX;
+	targetSet = true;
 }
 
 public float getTargetY() {
+
 	return targetY;
 }
 
 public void setTargetY(float targetY) {
+	targetSet = true;
 	this.targetY = targetY;
 }
+
+public void consumeTarget() {
+	if(hitbox.contains(targetX, targetY)) {
+		targetSet = false;
+	}
+	
+}
+
 
 public boolean isColliding() {
 	return isColliding;
@@ -201,16 +221,19 @@ public void setTimeoutTimer(int timeoutTimer) {
 public Vector2 investigatePath(Rectangle obstacle) {
 	
 	
-	float futureX = (x + width/2) +   xVel*30;
-	float futureY = (y + height/2)  +  yVel*30;
+	//float futureX = (x + width/2) +   xVel*30;
+	//float futureY = (y + height/2)+  yVel*30;
 	
 	
 		Rectangle tmp = new Rectangle(obstacle);
-		tmp.setX(tmp.getX()-tmp.getWidth()/2);
-		tmp.setY(tmp.getY()-tmp.getHeight()/2);
 		
-		tmp.setWidth(tmp.getWidth() + tmp.getWidth()/2);
-		tmp.setHeight(tmp.getHeight() + tmp.getHeight()/2);
+		
+		int additions = 0;
+		float futureX = x;
+		float futureY = y;
+		while(additions < 30) {
+		futureX = futureX + xVel;
+		futureY = futureY + yVel;
 		
 		if(tmp.contains(futureX,futureY)) {
 			// calculates a target point around the pile
@@ -233,7 +256,8 @@ public Vector2 investigatePath(Rectangle obstacle) {
 			}
 			
 		}
-		
+		additions ++;
+		}
 		
 	
 	
@@ -252,12 +276,19 @@ public boolean getIsHit() {
 	return isHit;
 	}
 public boolean getCollisionForecast(Rectangle obstacle) {
-	float futureX = x + xVel*30;
-	float futureY = y + yVel*30;
+	float futureX = x ;
+	float futureY = y ;
 	
 	boolean aboutToCollide = false;
+	int additions = 0;
+	while(additions<30) {
+		futureX = futureX + xVel;
+		futureY = futureY + yVel;
+		
 	if(obstacle.contains(futureX,futureY)) {
 		aboutToCollide = true;
+	}
+	additions++;
 	}
 	return aboutToCollide;
 }
