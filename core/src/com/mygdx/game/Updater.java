@@ -103,6 +103,7 @@ public class Updater implements Screen {
 	private Sound GameOver;
 	private Sound walk1;
 	private Sound walk2;
+	private Sound hurt;
 
 	private long walkSet;
 
@@ -172,7 +173,7 @@ public class Updater implements Screen {
 		GameOver = game.getLoader().getManager().get("Sounds/game_over/NFF-death-bell.wav", Sound.class);
 		walk1 = game.getLoader().getManager().get("Sounds/walking/grass1.wav", Sound.class);
 		walk2 = game.getLoader().getManager().get("Sounds/walking/gravel1.wav", Sound.class);
-
+		hurt = game.getLoader().getManager().get("Sounds/hit/NFF-kid-hurt.wav",Sound.class);
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
@@ -593,6 +594,7 @@ public class Updater implements Screen {
 					// damages player if no shield
 					if (player.getPowerupType() != POWERUPTYPE.SHIELD) {
 						player.setHP(player.getHP() - 1);
+						hurt.play();
 						// Update healthbar
 						healthBar.setValue(healthBar.getValue() - 0.1f);
 						player.setIsHit(true);
