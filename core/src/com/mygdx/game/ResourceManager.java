@@ -22,11 +22,15 @@ public class ResourceManager {
 	private AssetManager manager;
 	private static Preferences prefs;
 	private boolean masterVolume;
+	private boolean playerDead;
+	private boolean pileStolen;
 
 	public ResourceManager() {
 		// System.out.println("Internal storage path: " +
 		// Gdx.files.getLocalStoragePath());
 		masterVolume = true;
+		playerDead = false;
+		pileStolen = false;
 		manager = new AssetManager();
 		prefs = Gdx.app.getPreferences("Scores");
 		if (!prefs.contains("highScore")) {
@@ -56,7 +60,7 @@ public class ResourceManager {
 			manager.load("stealTest.png", Texture.class);
 			manager.load("pileTest.png", Texture.class);
 			manager.load("pileTest2.png", Texture.class);
-			manager.load("vendingmachine.png",Texture.class);
+			manager.load("VendingMachine.png",Texture.class);
 			manager.load("candyindicator.png",Texture.class);
 			
 			manager.load("WalkingSpeedUp.png", Texture.class);
@@ -108,7 +112,7 @@ public class ResourceManager {
 			manager.load("Healthbar.png", Texture.class);
 			manager.load("HealthbarBackGround.png", Texture.class);
 			manager.load("HealthbarKnob.png", Texture.class);
-			manager.load("warning2.png", Texture.class);
+			manager.load("warning.png", Texture.class);
 			/*
 			FileHandleResolver resolver = new InternalFileHandleResolver();
 			manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
@@ -195,5 +199,17 @@ public class ResourceManager {
 	}
 	public boolean getMasterVolume() {
 		return masterVolume;
+	}
+	public void setPlayerDead(boolean value) {
+		playerDead = value;
+	}
+	public boolean getPlayerDead() {
+		return playerDead;
+	}
+	public void setPileStolen(boolean value) {
+		pileStolen = value;
+	}
+	public boolean getPileStolen() {
+		return pileStolen;
 	}
 }
