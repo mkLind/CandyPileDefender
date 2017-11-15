@@ -293,5 +293,34 @@ public boolean getCollisionForecast(Rectangle obstacle) {
 	return aboutToCollide;
 }
 
+public boolean existsObstaclesinLine(Rectangle obstacle, Rectangle Target) {
+	
+	double  hypot = Math.hypot(hitbox.getX() - Target.getX()+ (Target.getWidth() / 2),
+			hitbox.getX() - Target.getY() + (Target.getHeight() / 2));
+	float xDelta = (float) (1.2f / hypot * (Target.getX()+ (Target.getWidth() / 2) - hitbox.getX()));
+	float yDelta =  (float) (1.2f / hypot * (Target.getY()+ (Target.getHeight() / 2) - hitbox.getY()));
+	
+	boolean existsObstacles = false;
+	
+	float futureX = x;
+	float futureY = y;
+	
+	int additions = 0;
+	while(additions<30) {
+		futureX = futureX + xDelta;
+		futureY = futureY + yDelta;
+		
+	if(obstacle.contains(futureX,futureY)) {
+		existsObstacles = true;
+		break;
+	}
+	additions++;
+	}
+	
+	return existsObstacles;
+	
+	
+}
+
 
 }

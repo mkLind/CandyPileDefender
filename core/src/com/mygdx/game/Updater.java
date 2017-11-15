@@ -499,8 +499,9 @@ public class Updater implements Screen {
 					enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
 					enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
 					
-					if(collidesToObstacle(enemies.get(i))) {
+					
 						for(RectangleMapObject obj : borders) {
+							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
 							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
 									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
 							
@@ -509,10 +510,12 @@ public class Updater implements Screen {
 							
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
+							}
+						
 						}
 						
-					}else if(collidesToPile(enemies.get(i))) {
-						
+				
+						if(enemies.get(i).existsObstaclesinLine(pile.getHitbox(), player.getHitbox())) {
 						hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(pile.getHitbox()).x,
 								enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
 						
@@ -521,8 +524,8 @@ public class Updater implements Screen {
 						
 						enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).x - enemies.get(i).getX()))));
 						enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).y - enemies.get(i).getY()))));
-						
-					}
+						}
+					
 					
 					
 					
@@ -539,16 +542,19 @@ public class Updater implements Screen {
 					enemies.get(i).setyVel(
 							((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
 					
-					if(collidesToObstacle(enemies.get(i))) {
+				
 						
 						for(RectangleMapObject obj : borders) {
+							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
 							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
 									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
 							
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
 						}
-					}
+						
+						}
+					
 						
 					
 					// Maybe correct direction to stealer?
@@ -1346,6 +1352,7 @@ public class Updater implements Screen {
 						if (enemies.get(i) instanceof ChaserEnemy) {
 							game.getLoader().setScore(game.getLoader().getScore() + 1000);
 						}
+					
 						enemies.remove(i);
 						break;
 					}
@@ -1597,7 +1604,7 @@ public class Updater implements Screen {
 		stage.draw();
 
 		// shape renderer for debugging
-		/*
+		
 		  r.setProjectionMatrix(camera.combined); 
 		  r.begin(ShapeType.Line);
 		  r.setColor(Color.RED);
@@ -1612,7 +1619,7 @@ public class Updater implements Screen {
 		  }
 		  
 		  r.end();
-		 */
+		 
 	}
 
 	public Powerup spawnPowerUp(GameWorld world, Core game) {
