@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,7 +17,8 @@ public class Pile extends SpriteCommons {
 	private Texture pileTexture2;
 	private Texture pileTexture3;
 	private Texture pileTexture4;
-	private ArrayList<Vector2> trail;
+	
+
 	
 	public Pile(int width, int height, float x, float y, Texture pileTexture, Texture pileTexture2, Texture pileTexture3, Texture pileTexture4) {
 		
@@ -26,9 +29,9 @@ public class Pile extends SpriteCommons {
 		this.pileTexture3 = pileTexture3;
 		this.pileTexture4 = pileTexture4;
 
-		
+	
 		health = 8;
-		trail = new  ArrayList<Vector2>();
+
 		
 	}
 
@@ -37,7 +40,7 @@ public class Pile extends SpriteCommons {
 		health--;
 	}
 
-
+	
 	public int getHealth() {
 		return health;
 	}
@@ -63,20 +66,9 @@ public class Pile extends SpriteCommons {
 	public Texture getPileTexture4() {
 		return pileTexture4;
 	}
-public void calculatePointsAroundObstacle(Rectangle obstacle, Rectangle collidingEnemy) {
-	
-	
-}
-
-public Vector2 getPath() {
-	
-	Vector2 target;
-	if(trail.isEmpty()) {
-	target = trail.get(0);
-	}else {
-		target = new Vector2(super.getX(), super.getY());
-	}
-	return target;
-}
+	public void reduceHitbox() {
+		super.getHitbox().setHeight(super.getHeight());
+		super.getHitbox().setWidth(super.getWidth());
+	}	
 
 }

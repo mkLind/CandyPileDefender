@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 /*
  * Class that has all the common aspects of a sprite like coordinates, velocities, proportions and bounding rectangle (For collisions)
  */
@@ -25,7 +26,11 @@ private int HP;
 private Rectangle hitbox;
 private Texture texture;
 private boolean isColliding;
+private boolean targetSet;
 private long timeSinceCollision;
+
+private int id;
+private boolean isHit;
 
 // inactivity timer after attacking etc.
 private int timeoutTimer;
@@ -44,6 +49,9 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	targetX = 0;
 	targetY = 0;
 	timeSinceCollision = 0;
+	id = 0;
+	isHit = false;
+	targetSet = false;
 }
 
 public SpriteCommons(int width, int height, float x, float y,float xVel, float yVel){
@@ -122,6 +130,22 @@ public void move() {
 	this.setX(this.getX() + this.getxVel());
 	this.setY(this.getY() + this.getyVel());
 }
+	
+public boolean isTargetSet() {
+	return targetSet;
+}
+
+public void setTargetSet(boolean targetSet) {
+	this.targetSet = targetSet;
+}
+
+public int getId() {
+	return id;
+}
+
+public void setId(int id) {
+	this.id = id;
+}
 
 public long getTimeSinceCollision() {
 	return timeSinceCollision;
@@ -137,15 +161,26 @@ public float getTargetX() {
 
 public void setTargetX(float targetX) {
 	this.targetX = targetX;
+	targetSet = true;
 }
 
 public float getTargetY() {
+
 	return targetY;
 }
 
 public void setTargetY(float targetY) {
+	targetSet = true;
 	this.targetY = targetY;
 }
+
+public void consumeTarget() {
+	if(hitbox.contains(targetX, targetY)) {
+		targetSet = false;
+	}
+	
+}
+
 
 public boolean isColliding() {
 	return isColliding;
@@ -251,7 +286,109 @@ public int getTimeoutTimer() {
 public void setTimeoutTimer(int timeoutTimer) {
 	this.timeoutTimer = timeoutTimer;
 }
+public Vector2 investigatePath(Rectangle obstacle) {
+	
+	
+	//float futureX = (x + width/2) +   xVel*30;
+	//float futureY = (y + height/2)+  yVel*30;
+	
+	
+		Rectangle tmp = new Rectangle(obstacle);
+		
+		
+		int additions = 0;
+		float futureX = x;
+		float futureY = y;
+		while(additions < 30) {
+		futureX = futureX + xVel;
+		futureY = futureY + yVel;
+		
+		if(tmp.contains(futureX,futureY)) {
+			// calculates a target point around the pile
+			while(tmp.contains(futureX,futureY)){
+				
+				if(Math.abs(tmp.getX() - futureX) <Math.abs((tmp.getX() + tmp.getWidth()) - futureX)) {
+					futureX --;
+				}else {
+					
+					futureX++;
+				}
+				if(Math.abs(tmp.getY() - futureY) <Math.abs((tmp.getY() + tmp.getHeight()) - futureY)) {
+					futureY --;
+				}else {
+					
+					futureY ++;
+				}
+				
+				
+			}
+			
+		}
+		additions ++;
+		}
+		
+	
+	
+	return new Vector2(futureX, futureY);
+	
+	
+	
+	
+}
 
+public void setIsHit(boolean hit) {
+	this.isHit = hit;
+}
+
+public boolean getIsHit() {
+	return isHit;
+	}
+public boolean getCollisionForecast(Rectangle obstacle) {
+	float futureX = x ;
+	float futureY = y ;
+	
+	boolean aboutToCollide = false;
+	int additions = 0;
+	while(additions<30) {
+		futureX = futureX + xVel;
+		futureY = futureY + yVel;
+		
+	if(obstacle.contains(futureX,futureY)) {
+		aboutToCollide = true;
+	}
+	additions++;
+	}
+	return aboutToCollide;
+}
+
+public boolean existsObstaclesinLine(Rectangle obstacle, Rectangle Target) {
+	
+	double  hypot = Math.hypot(hitbox.getX() - Target.getX()+ (Target.getWidth() / 2),
+			hitbox.getX() - Target.getY() + (Target.getHeight() / 2));
+	float xDelta = (float) (1.2f / hypot * (Target.getX()+ (Target.getWidth() / 2) - hitbox.getX()));
+	float yDelta =  (float) (1.2f / hypot * (Target.getY()+ (Target.getHeight() / 2) - hitbox.getY()));
+	
+	boolean existsObstacles = false;
+	
+	float futureX = x;
+	float futureY = y;
+	
+	int additions = 0;
+	while(additions<30) {
+		futureX = futureX + xDelta;
+		futureY = futureY + yDelta;
+		
+	if(obstacle.contains(futureX,futureY)) {
+		existsObstacles = true;
+		break;
+	}
+	additions++;
+	}
+	
+	return existsObstacles;
+	
+	
+}
 
 
 }

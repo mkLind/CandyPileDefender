@@ -21,10 +21,16 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoa
 public class ResourceManager {
 	private AssetManager manager;
 	private static Preferences prefs;
+	private boolean masterVolume;
+	private boolean playerDead;
+	private boolean pileStolen;
 
 	public ResourceManager() {
 		// System.out.println("Internal storage path: " +
 		// Gdx.files.getLocalStoragePath());
+		masterVolume = true;
+		playerDead = false;
+		pileStolen = false;
 		manager = new AssetManager();
 		prefs = Gdx.app.getPreferences("Scores");
 		if (!prefs.contains("highScore")) {
@@ -54,6 +60,9 @@ public class ResourceManager {
 			manager.load("stealTest.png", Texture.class);
 			manager.load("pileTest.png", Texture.class);
 			manager.load("pileTest2.png", Texture.class);
+			manager.load("VendingMachine.png",Texture.class);
+			manager.load("candyindicator.png",Texture.class);
+			manager.load("Cloud.png",Texture.class);
 			
 			manager.load("WalkingSpeedUp.png", Texture.class);
 			manager.load("FireRateUp.png", Texture.class);
@@ -82,11 +91,12 @@ public class ResourceManager {
 			manager.load("Eggplant.png",Texture.class);
 			// Music and sounds
 			
-			manager.load("Music/POL-horror-ambience-1-short_16bit.wav", Music.class);
-			manager.load("Music/POL-horror-ambience-2-short_16bit.wav", Music.class);
+			manager.load("Music/POL-horror-ambience-1-short_16bit.ogg", Music.class);
+			manager.load("Music/POL-horror-ambience-2-short_16bit.ogg", Music.class);
 			
 			manager.load("Sounds/game_over/NFF-death-bell.wav", Sound.class);
 			manager.load("Sounds/game_over/NFF-zomboid.wav", Sound.class);
+		
 			
 			manager.load("Sounds/hit/NFF-dusty-hit.wav", Sound.class);
 			manager.load("Sounds/hit/NFF-explode.wav", Sound.class);
@@ -103,7 +113,7 @@ public class ResourceManager {
 			manager.load("Healthbar.png", Texture.class);
 			manager.load("HealthbarBackGround.png", Texture.class);
 			manager.load("HealthbarKnob.png", Texture.class);
-			manager.load("warning2.png", Texture.class);
+			manager.load("warning.png", Texture.class);
 			/*
 			FileHandleResolver resolver = new InternalFileHandleResolver();
 			manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
@@ -184,5 +194,23 @@ public class ResourceManager {
 
 	public String getFifth() {
 		return prefs.getString("5");
+	}
+	public void setMasterVolume(boolean value) {
+		masterVolume = value;
+	}
+	public boolean getMasterVolume() {
+		return masterVolume;
+	}
+	public void setPlayerDead(boolean value) {
+		playerDead = value;
+	}
+	public boolean getPlayerDead() {
+		return playerDead;
+	}
+	public void setPileStolen(boolean value) {
+		pileStolen = value;
+	}
+	public boolean getPileStolen() {
+		return pileStolen;
 	}
 }

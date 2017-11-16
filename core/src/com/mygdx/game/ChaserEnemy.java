@@ -2,6 +2,10 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.StealingEnemy.DIRECTION;
 
 public class ChaserEnemy extends SpriteCommons {
@@ -32,7 +36,6 @@ public void setDir(DIRECTION dir) {
 		this.dir = dir;
 	}
 	
-
 	/*
 	// Sets all the animations
 	public void setAnimations(int row, int column, float frametime, Texture spritesheet){

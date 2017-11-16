@@ -47,7 +47,7 @@ public class Powerup extends SpriteCommons {
 	public void setTypeAndGraphic(Core game){
 		
 		this.type = POWERUPTYPE.values()[MathUtils.random(0, POWERUPTYPE.values().length-1)];
-		//this.type = POWERUPTYPE.CLEARSCREEN;
+		//this.type = POWERUPTYPE.SLOWDOWN;
 		if(type == POWERUPTYPE.CLEARSCREEN){
 			 graphic = game.getLoader().getManager().get("Explosion.png",Texture.class);
 			 effectTime = (long) 1000;

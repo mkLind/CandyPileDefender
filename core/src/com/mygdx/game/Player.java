@@ -1,11 +1,13 @@
 package com.mygdx.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Powerup.POWERUPTYPE;
 
  // sprite.setRegion(animation.getKeyFrame(time));
@@ -30,6 +32,9 @@ public class Player extends SpriteCommons {
 	private ArrayList<Float> previousX;
 	private ArrayList<Float> previousY;
 	private long lastPreviousSet;
+	private int collectedCandy;
+	private Texture candyIndicator;
+	private HashMap<Integer, ArrayList<Vector2>> goAround;
 	
 	
 /**
@@ -55,7 +60,9 @@ public class Player extends SpriteCommons {
 		lastPreviousSet = 0;
 		setPreviousX(super.getX());
 		setPreviousY(super.getY());
-		
+		collectedCandy = 0;
+		candyIndicator = null; 
+		goAround = new HashMap<Integer, ArrayList<Vector2>>();
 		
 	}
 	public enum DIRECTION{
@@ -76,6 +83,50 @@ public class Player extends SpriteCommons {
 	
 	public long getLastPreviousSet() {
 		return lastPreviousSet;
+	}
+
+	public Texture getCandyIndicator() {
+		return candyIndicator;
+	}
+
+
+
+
+	public void setCandyIndicator(Texture candyIndicator) {
+		this.candyIndicator = candyIndicator;
+	}
+
+	public void setGoAround(int enemyId, Vector2 path) {
+		if(goAround.containsKey(enemyId)) {
+			goAround.get(enemyId).add(path);
+			
+			if(goAround.get(enemyId).size()>5) {
+				goAround.get(enemyId).remove(0);
+			}
+			
+		}else {
+	     
+		 ArrayList<Vector2> coords = new ArrayList<Vector2>();
+	     coords.add(path);
+		 goAround.put(enemyId, coords );
+		
+		}
+	}
+	
+	
+
+
+
+
+	public int getCollectedCandy() {
+		return collectedCandy;
+	}
+
+
+
+
+	public void setCollectedCandy(int collectedCandy) {
+		this.collectedCandy = collectedCandy;
 	}
 
 	public void setLastPreviousSet(long lastPreviousSet) {
@@ -287,19 +338,19 @@ public void setPreviousY(float y) {
 }
 	
 public float getPreviousX() {
-	
+
 	float x = 0f;
 	
 	x = previousX.get(0);	
-	
+
 	return x;
 }
 
 public float getPreviousY() {
 
 	float y = 0f;
-	
-    y = previousY.get(0);
+	  
+		    y = previousY.get(0);
 	
 	return y;
 }
