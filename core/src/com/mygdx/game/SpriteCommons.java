@@ -364,6 +364,9 @@ public Vector2 investigatePath(Rectangle obstacle) {
 		Rectangle tmp = new Rectangle(obstacle);
 		
 		
+		
+		
+		
 		int additions = 0;
 		float futureX = x;
 		float futureY = y;
@@ -377,16 +380,16 @@ public Vector2 investigatePath(Rectangle obstacle) {
 				while(tmp.contains(futureX,futureY)){
 					
 					if(Math.abs(tmp.getX() - futureX) <Math.abs((tmp.getX() + tmp.getWidth()) - futureX)) {
-						futureX --;
+						futureX  = futureX - width-20;
 					}else {
 						
-						futureX++;
+						futureX = futureX + width+20;
 					}
 					if(Math.abs(tmp.getY() - futureY) <Math.abs((tmp.getY() + tmp.getHeight()) - futureY)) {
-						futureY --;
+						futureY = futureY - height-20;
 					}else {
 						
-						futureY ++;
+						futureY = futureY + height+20;
 					}
 					
 					

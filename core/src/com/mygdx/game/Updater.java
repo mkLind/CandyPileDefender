@@ -569,7 +569,7 @@ public class Updater implements Screen {
 						if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
 							
 							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
-									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
+									enemies.get(i).getY() - enemies.get(i).investigatePath(obj.getRectangle()).y);
 							
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
@@ -601,13 +601,15 @@ public class Updater implements Screen {
 							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
 								
 								hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
-										enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
+										enemies.get(i).getY() - enemies.get(i).investigatePath(obj.getRectangle()).y);
 								
 								enemies.get(i).setTargetX(enemies.get(i).investigatePath(obj.getRectangle()).x);
 								enemies.get(i).setTargetY(enemies.get(i).investigatePath(obj.getRectangle()).y);
 								
 								enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
+								
 								enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
+							break;
 							}
 						
 						}
@@ -623,6 +625,7 @@ public class Updater implements Screen {
 							
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).x - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).y - enemies.get(i).getY()))));
+					
 						}
 					
 					} else {
@@ -646,7 +649,7 @@ public class Updater implements Screen {
 							
 								enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
 								enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
-							
+							break;
 							}
 						
 						}
@@ -739,6 +742,12 @@ public class Updater implements Screen {
 
 						// "pathfinding" around the pile (probably badly optimized)
 						// implemented in SpriteCommons
+						
+						
+					
+						
+						
+						
 						enemies.get(i).goAround(pile, player);
 						
 					}
@@ -750,15 +759,16 @@ public class Updater implements Screen {
 					
 				} else {
 					// Enemy collisions with borders
-
 					for (int k = 0; k < borders.size; k++) {
 
 						if (Intersector.overlaps(borders.get(k).getRectangle(), enemies.get(i).getHitbox())) {
 								
 							if(enemies.get(i) instanceof StealingEnemy) {
 						    	enemies.get(i).goAround(borders.get(k).getRectangle(),pile.getHitbox());
+						    	break;
 							}else if (enemies.get(i) instanceof ChaserEnemy)  {
 								enemies.get(i).goAround(borders.get(k).getRectangle(),player.getHitbox());
+								break;
 							}
 						
 							  
