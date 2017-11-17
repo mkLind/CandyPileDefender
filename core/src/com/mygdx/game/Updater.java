@@ -152,7 +152,7 @@ public class Updater implements Screen {
 
 		camera = new OrthographicCamera();
 		aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
-		camera.setToOrtho(false, 250f * aspectRatio, 250f);
+		camera.setToOrtho(false, 350f * aspectRatio, 350f);
 		// camera.setToOrtho(false, 700f,700f);
 
 		mapRender = world.getMapRenderer(camera);
@@ -518,9 +518,11 @@ public class Updater implements Screen {
 					enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
 					
 					
+
 					for(RectangleMapObject obj : borders) {
 						if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
 							
+
 							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
 									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
 							
@@ -529,6 +531,7 @@ public class Updater implements Screen {
 							
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
+
 						}
 					
 					}
@@ -544,17 +547,17 @@ public class Updater implements Screen {
 						
 						enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).x - enemies.get(i).getX()))));
 						enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).y - enemies.get(i).getY()))));
-					}					
+
+				
+						
+						}
+					
+					
+
 					
 				} else if (enemies.get(i) instanceof StealingEnemy) {
 
-					/*
-					hypot = Math.hypot(enemies.get(i).getX() - pile.getX() + (pile.getWidth() / 2), enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
-					
-					enemies.get(i).setxVel(((float) (1.2f / hypot * (pile.getX() + (pile.getWidth() / 2) - enemies.get(i).getX()))));
-					enemies.get(i).setyVel(((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
-					// Maby correct direction to stealer?
-					*/
+				
 					
 					hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
 							enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
