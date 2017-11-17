@@ -1539,6 +1539,7 @@ public class Updater implements Screen {
 		// TODO Auto-generated method stub
 
 	}
+	/*
 public boolean collidesToPile(SpriteCommons e) {
 	if(e.getCollisionForecast(pile.getHitbox())) {
 	
@@ -1558,6 +1559,8 @@ public boolean collidesToObstacle(SpriteCommons e) {
 		}
 	}
 	return isAboutToCollide;
+	
+	
 }
-
+*/
 }
