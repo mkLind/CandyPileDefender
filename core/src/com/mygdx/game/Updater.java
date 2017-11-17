@@ -760,24 +760,12 @@ public class Updater implements Screen {
 							}else if (enemies.get(i) instanceof ChaserEnemy)  {
 								enemies.get(i).goAround(borders.get(k).getRectangle(),player.getHitbox());
 							}
-						
-							  
-							
+							break;
 
 						}
 						
-						
-						
-						
-						
-									 }
+					}
 
-			
-					
-						
-						
-	
-		
 					
 					// move enemies
 					enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());

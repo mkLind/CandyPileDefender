@@ -79,18 +79,28 @@ public void goAround(SpriteCommons obstacle, SpriteCommons target) {
 
 			// move enemy up
 			this.setY(this.getY() + 1.2f);
+			this.updateHitbox();
 
 		} else { // up is blocked -> right or left
 
 			if (target.getX() - this.getX() > 0) { // target is right and up
+				
+				this.moveHitbox(this.getX() + 1.2f, this.getY());
+				if (!(Intersector.overlaps(this.getHitbox(), obstacle.getHitbox()))) {
+					// move enemy right
+					this.setX(this.getX() + 1.2f);
+					this.updateHitbox();
+				}
 
-				// move enemy right
-				this.setX(this.getX() + 1.2f);
-
-			} else { // target is left and up
-
-				// move enemy left
-				this.setX(this.getX() - 1.2f);
+			} else { // target is left and up			
+				
+				this.moveHitbox(this.getX() - 1.2f, this.getY());
+				
+				if (!(Intersector.overlaps(this.getHitbox(), obstacle.getHitbox()))) {
+					// move enemy left
+					this.setX(this.getX() - 1.2f);
+					this.updateHitbox();
+				}
 
 			}
 
@@ -105,18 +115,28 @@ public void goAround(SpriteCommons obstacle, SpriteCommons target) {
 
 			// move enemy down
 			this.setY(this.getY() - 1.2f);
+			this.updateHitbox();
 
 		} else { // down is blocked -> right or left
 
-			if (target.getX() - this.getX() > 0) { // target is right and down
+			if (target.getX() - this.getX() > 0) { // target is right and up
+				
+				this.moveHitbox(this.getX() + 1.2f, this.getY());
+				if (!(Intersector.overlaps(this.getHitbox(), obstacle.getHitbox()))) {
+					// move enemy right
+					this.setX(this.getX() + 1.2f);
+					this.updateHitbox();
+				}
 
-				// move enemy right
-				this.setX(this.getX() + 1.2f);
-
-			} else { // target is left and down
-
-				// move enemy left
-				this.setX(this.getX() - 1.2f);
+			} else { // target is left and up			
+				
+				this.moveHitbox(this.getX() - 1.2f, this.getY());
+				
+				if (!(Intersector.overlaps(this.getHitbox(), obstacle.getHitbox()))) {
+					// move enemy left
+					this.setX(this.getX() - 1.2f);
+					this.updateHitbox();
+				}
 
 			}
 
@@ -138,18 +158,28 @@ public void goAround(Rectangle obstacle, Rectangle target) {
 
 			// move enemy up
 			this.setY(this.getY() + 1.2f);
+			this.updateHitbox();
 
 		} else { // up is blocked -> right or left
 
 			if (target.getX() - this.getX() > 0) { // target is right and up
-
-				// move enemy right
-				this.setX(this.getX() + 1.2f);
+				
+				this.moveHitbox(this.getX() + 1.2f, this.getY());
+				
+				if (!(Intersector.overlaps(this.getHitbox(), obstacle))) {
+					// move enemy right
+					this.setX(this.getX() + 1.2f);
+					this.updateHitbox();
+				}
 
 			} else { // target is left and up
-
-				// move enemy left
-				this.setX(this.getX() - 1.2f);
+					
+				this.moveHitbox(this.getX() - 1.2f, this.getY());
+				if (!(Intersector.overlaps(this.getHitbox(), obstacle))) {
+					// move enemy left
+					this.setX(this.getX() - 1.2f);
+					this.updateHitbox();
+				}
 
 			}
 
@@ -164,18 +194,28 @@ public void goAround(Rectangle obstacle, Rectangle target) {
 
 			// move enemy down
 			this.setY(this.getY() - 1.2f);
+			this.updateHitbox();
 
 		} else { // down is blocked -> right or left
 
-			if (target.getX() - this.getX() > 0) { // target is right and down
+			if (target.getX() - this.getX() > 0) { // target is right and up
+				
+				this.moveHitbox(this.getX() + 1.2f, this.getY());
+				
+				if (!(Intersector.overlaps(this.getHitbox(), obstacle))) {
+					// move enemy right
+					this.setX(this.getX() + 1.2f);
+					this.updateHitbox();
+				}
 
-				// move enemy right
-				this.setX(this.getX() + 1.2f);
-
-			} else { // target is left and down
-
-				// move enemy left
-				this.setX(this.getX() - 1.2f);
+			} else { // target is left and up
+					
+				this.moveHitbox(this.getX() - 1.2f, this.getY());
+				if (!(Intersector.overlaps(this.getHitbox(), obstacle))) {
+					// move enemy left
+					this.setX(this.getX() - 1.2f);
+					this.updateHitbox();
+				}
 
 			}
 
