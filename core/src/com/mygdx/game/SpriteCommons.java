@@ -245,6 +245,15 @@ public float getxVel() {
 	return xVel;
 }
 
+public float getXCenter() {
+	return this.getX() + this.getWidth() / 2;
+}
+
+public float getYCenter() {
+	return this.getX() + this.getHeight() / 2;
+}
+
+
 public void setxVel(float xVel) {
 	this.xVel = xVel;
 }
@@ -286,6 +295,7 @@ public int getTimeoutTimer() {
 public void setTimeoutTimer(int timeoutTimer) {
 	this.timeoutTimer = timeoutTimer;
 }
+
 public Vector2 investigatePath(Rectangle obstacle) {
 	
 	
@@ -299,31 +309,33 @@ public Vector2 investigatePath(Rectangle obstacle) {
 		int additions = 0;
 		float futureX = x;
 		float futureY = y;
-		while(additions < 30) {
-		futureX = futureX + xVel;
-		futureY = futureY + yVel;
 		
-		if(tmp.contains(futureX,futureY)) {
-			// calculates a target point around the pile
-			while(tmp.contains(futureX,futureY)){
-				
-				if(Math.abs(tmp.getX() - futureX) <Math.abs((tmp.getX() + tmp.getWidth()) - futureX)) {
-					futureX --;
-				}else {
+		while(additions < 30) {
+			futureX = futureX + xVel;
+			futureY = futureY + yVel;
+			
+			if(tmp.contains(futureX,futureY)) {
+				// calculates a target point around the pile
+				while(tmp.contains(futureX,futureY)){
 					
-					futureX++;
-				}
-				if(Math.abs(tmp.getY() - futureY) <Math.abs((tmp.getY() + tmp.getHeight()) - futureY)) {
-					futureY --;
-				}else {
+					if(Math.abs(tmp.getX() - futureX) <Math.abs((tmp.getX() + tmp.getWidth()) - futureX)) {
+						futureX --;
+					}else {
+						
+						futureX++;
+					}
+					if(Math.abs(tmp.getY() - futureY) <Math.abs((tmp.getY() + tmp.getHeight()) - futureY)) {
+						futureY --;
+					}else {
+						
+						futureY ++;
+					}
 					
-					futureY ++;
+					
 				}
-				
 				
 			}
-			
-		}
+		
 		additions ++;
 		}
 		
@@ -374,6 +386,7 @@ public boolean existsObstaclesinLine(Rectangle obstacle, Rectangle Target) {
 	float futureY = y;
 	
 	int additions = 0;
+	
 	while(additions<30) {
 		futureX = futureX + xDelta;
 		futureY = futureY + yDelta;

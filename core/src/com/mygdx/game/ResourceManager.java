@@ -77,6 +77,7 @@ public class ResourceManager {
 			manager.load("PirateTileset.png",Texture.class);
 			
 			manager.load("SkeletonTileset.png", Texture.class);
+			manager.load("thirdEnemyTest.png", Texture.class);
 			// Each candy pile phase is a different .png
 			manager.load("CPBigCrop.png", Texture.class);
 			manager.load("CPMedCrop.png", Texture.class);

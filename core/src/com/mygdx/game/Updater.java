@@ -67,6 +67,9 @@ public class Updater implements Screen {
 	private Pile pile;
 	private ArrayList<SpriteCommons> enemies;
 	private ArrayList<SpriteCommons> enemyAdd;
+	
+	// the distance between the third enemy type and player, when the third attacks
+	private float attackDistance = 75;
 
 	boolean noEnemies;
 
@@ -175,6 +178,7 @@ public class Updater implements Screen {
 		walk1 = game.getLoader().getManager().get("Sounds/walking/grass1.wav", Sound.class);
 		walk2 = game.getLoader().getManager().get("Sounds/walking/gravel1.wav", Sound.class);
 		hurt = game.getLoader().getManager().get("Sounds/hit/NFF-kid-hurt.wav",Sound.class);
+		
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
@@ -264,6 +268,7 @@ public class Updater implements Screen {
 				tmp2 = MathUtils.random(0, monsterSpawns.size - 1);
 
 				// new stealer
+				// why tmp here and chaser in the second one?
 				StealingEnemy tmpSE = new StealingEnemy(30, 40, monsterSpawns.get(tmp).getRectangle().getX(),
 						monsterSpawns.get(tmp).getRectangle().getY(), 1);
 				tmpSE.setAnimations(4, 3, 0.10f,
@@ -279,6 +284,15 @@ public class Updater implements Screen {
 				chaser.setId(timesCalled + i);
 
 				enemyAdd.add(chaser);
+				
+				//THIRD ENEMY TRY, NO IDEA ABOUT ID
+				ThirdEnemy thirdEnemy = new ThirdEnemy(30, 40, monsterSpawns.get(tmp).getRectangle().getX(),
+						monsterSpawns.get(tmp).getRectangle().getY(), 1);
+				thirdEnemy.setAnimations(4, 3, 0.10f,
+						game.getLoader().getManager().get("thirdEnemyTest.png", Texture.class));
+				//thirdEnemy.setId(); what's the point of the ID
+				enemyAdd.add(thirdEnemy);
+				
 
 			}
 		}
@@ -504,8 +518,85 @@ public class Updater implements Screen {
 					enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
 					
 					
+					for(RectangleMapObject obj : borders) {
+						if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
+							
+							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
+									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
+							
+							enemies.get(i).setTargetX(enemies.get(i).investigatePath(obj.getRectangle()).x);
+							enemies.get(i).setTargetY(enemies.get(i).investigatePath(obj.getRectangle()).y);
+							
+							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
+							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
+						}
+					
+					}
+					
+			
+					if(enemies.get(i).existsObstaclesinLine(pile.getHitbox(), player.getHitbox())) {
+						
+						hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(pile.getHitbox()).x,
+								enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
+						
+						enemies.get(i).setTargetX(enemies.get(i).investigatePath(pile.getHitbox()).x);
+						enemies.get(i).setTargetY(enemies.get(i).investigatePath(pile.getHitbox()).y);
+						
+						enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).x - enemies.get(i).getX()))));
+						enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).y - enemies.get(i).getY()))));
+					}					
+					
+				} else if (enemies.get(i) instanceof StealingEnemy) {
+
+					/*
+					hypot = Math.hypot(enemies.get(i).getX() - pile.getX() + (pile.getWidth() / 2), enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
+					
+					enemies.get(i).setxVel(((float) (1.2f / hypot * (pile.getX() + (pile.getWidth() / 2) - enemies.get(i).getX()))));
+					enemies.get(i).setyVel(((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
+					// Maby correct direction to stealer?
+					*/
+					
+					hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
+							enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
+	
+					enemies.get(i).setxVel(((float) (1.2f / hypot * (pile.getX()+ (pile.getWidth() / 2) - enemies.get(i).getX()))));
+					enemies.get(i).setyVel(((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
+						
+					for(RectangleMapObject obj : borders) {
+						if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
+							
+							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
+									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
+							
+							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
+							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
+					
+						}
+					
+					}
+					
+						
+					
+					// Maybe correct direction to stealer?
+
+
+				} else if (enemies.get(i) instanceof ThirdEnemy) {
+					
+					// Tests if the player is closer than attackDistance (75) and chases if it is
+					if( (Math.abs(enemies.get(i).getX() - player.getPreviousX()) < attackDistance) || (Math.abs(enemies.get(i).getY() - player.getPreviousY()) < attackDistance) ) {
+						
+						//Copied from chaser, might not work
+						hypot = Math.hypot(enemies.get(i).getX() - player.getPreviousX(),
+								enemies.get(i).getY() - player.getPreviousY());
+						
+
+						enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
+						enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
+						
+						
 						for(RectangleMapObject obj : borders) {
 							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
+								
 								hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
 										enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
 								
@@ -520,6 +611,7 @@ public class Updater implements Screen {
 						
 				
 						if(enemies.get(i).existsObstaclesinLine(pile.getHitbox(), player.getHitbox())) {
+							
 							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(pile.getHitbox()).x,
 									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
 							
@@ -530,49 +622,36 @@ public class Updater implements Screen {
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).y - enemies.get(i).getY()))));
 						}
 					
-					
-					
-					
-					
-				}
-				
-				
-				if (enemies.get(i) instanceof StealingEnemy) {
-
-					/*
-					hypot = Math.hypot(enemies.get(i).getX() - pile.getX() + (pile.getWidth() / 2), enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
-					
-					enemies.get(i).setxVel(((float) (1.2f / hypot * (pile.getX() + (pile.getWidth() / 2) - enemies.get(i).getX()))));
-					enemies.get(i).setyVel(((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
-					// Maby correct direction to stealer?
-					*/
-					
-					hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
-							enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
-					// TEST SPEED 3! was 1.2
-					enemies.get(i).setxVel(
-							((float) (1.2f / hypot * (pile.getX()+ (pile.getWidth() / 2) - enemies.get(i).getX()))));
-					enemies.get(i).setyVel(
-							((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
-					
-				
+					} else {
 						
+						// Copied from stealer, might not work properly
+						hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
+								enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
+						enemies.get(i).setxVel(
+								((float) (1.5f / hypot * (pile.getX()+ (pile.getWidth() / 2) - enemies.get(i).getX()))));
+						enemies.get(i).setyVel(
+								((float) (1.5f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
+						
+					
+							
 						for(RectangleMapObject obj : borders) {
+							
 							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
-							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
+							
+								hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
 									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
 							
-							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
-							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
-						}
+								enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
+								enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
+							
+							}
 						
 						}
-					
 						
+						
+					}
 					
-					// Maybe correct direction to stealer?
-
-
+					
 				}
 
 				// SLOW THE ENEMIES DOWN IF ONE OF THEM HITS A POOL OF TAR
@@ -613,7 +692,7 @@ public class Updater implements Screen {
 						continue enemyloop; // jumps to next i in enemies
 					}
 				}
-
+				// Enemy collides with the player
 				if (Intersector.overlaps(enemies.get(i).getHitbox(), player.getHitbox())) {
 
 					// damages player if no shield
@@ -645,7 +724,7 @@ public class Updater implements Screen {
 				} else if (Intersector.overlaps(enemies.get(i).getHitbox(), pile.getHitbox())) {
 
 					// steal from the pile
-					if (enemies.get(i) instanceof StealingEnemy) {
+					if (enemies.get(i) instanceof StealingEnemy || enemies.get(i) instanceof ThirdEnemy) {
 
 						if (Intersector.overlaps((enemies.get(i).getHitbox()), pile.getHitbox())) {
 							pile.reduceHealth();
@@ -1130,6 +1209,7 @@ public class Updater implements Screen {
 		// PLAYER INPUT STUFF
 		statetime += delta;
 		// Movement logic template for the character
+		// Should this be a switch. Now every if statement if handled 
 
 		if (Gdx.input.isKeyPressed(Keys.A)) {
 			player.setDir(Player.DIRECTION.LEFT);
@@ -1534,28 +1614,6 @@ public class Updater implements Screen {
 				}
 			}
 		}
-		// If enemy and player touch they both lose HP
-		// Teppo moved this elsewhere
-		/*
-		 * for (int i = 0; i < enemies.size(); i++) { if
-		 * (Intersector.overlaps(player.getHitbox(), enemies.get(i).getHitbox()) &&
-		 * enemies.get(i).getHP() > 0 && player.getHP() > 0) {
-		 * 
-		 * if (player.getPowerupType() != POWERUPTYPE.SHIELD) {
-		 * player.setHP(player.getHP() - 1); // Update healthbar
-		 * healthBar.setValue(healthBar.getValue() - 0.1f); }
-		 * enemies.get(i).setHP(enemies.get(i).getHP() - 1);
-		 * 
-		 * if (enemies.get(i).getHP() <= 0) { // Get points if (enemies.get(i)
-		 * instanceof StealingEnemy) {
-		 * game.getLoader().setScore(game.getLoader().getScore() + 500); } if
-		 * (enemies.get(i) instanceof ChaserEnemy) {
-		 * game.getLoader().setScore(game.getLoader().getScore() + 1000); }
-		 * enemies.remove(i); } if (player.getHP() < 1) {
-		 * System.out.println("Player HP now zero");
-		 * 
-		 * game.setScreen(new LoadingScreen(game)); this.dispose(); } } }
-		 */
 
 		camera.position.set(
 				MathUtils.clamp(player.getX(), camera.viewportWidth * .5f,
@@ -1694,7 +1752,28 @@ public class Updater implements Screen {
 					game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
 							enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 				}
+			
+			// Third Enemy
+			} else  if (enemies.get(i) instanceof ThirdEnemy) {
+				
+				// Copied from stealing enemy, so may not work
+				if (enemies.get(i).getIsHit()) {
+					
+					game.batch.setColor(Color.RED);
+					game.batch.draw(enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
+							enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
+					game.batch.setColor(Color.WHITE);
+				
+				} else {
+					
+					game.batch.draw(enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
+							enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
+					
+				}
+				
 			}
+						
+			
 			if (TimeUtils.timeSinceMillis(enemyIsHitTime) > 500) {
 				enemies.get(i).setIsHit(false);
 			}
