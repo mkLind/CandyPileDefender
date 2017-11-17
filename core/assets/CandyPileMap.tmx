@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="35" height="30" tilewidth="30" tileheight="30" nextobjectid="42">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="35" height="30" tilewidth="30" tileheight="30" nextobjectid="43">
  <tileset firstgid="1" name="BaseTiles" tilewidth="30" tileheight="30" tilecount="12" columns="4">
   <image source="BaseTilesets.png" trans="ffffff" width="120" height="90"/>
  </tileset>
@@ -54,6 +54,7 @@
   <object id="20" x="-7.58333" y="143.583" width="34.6667" height="504"/>
   <object id="21" x="37" y="598.5" width="18.5" height="49.5"/>
   <object id="23" x="601" y="91" width="95" height="23"/>
+  <object id="42" x="1020" y="146" width="31" height="508"/>
  </objectgroup>
  <objectgroup name="Coordinates">
   <object id="26" x="487.333" y="384.333">
