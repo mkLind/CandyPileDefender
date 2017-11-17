@@ -522,15 +522,15 @@ public class Updater implements Screen {
 					for(RectangleMapObject obj : borders) {
 						if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
 							
-
-							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
-									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
+							Vector2 newTarget = enemies.get(i).investigatePath(obj.getRectangle());
 							
-							enemies.get(i).setTargetX(enemies.get(i).investigatePath(obj.getRectangle()).x);
-							enemies.get(i).setTargetY(enemies.get(i).investigatePath(obj.getRectangle()).y);
+							hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
+									enemies.get(i).getY() - newTarget.y);
 							
-							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
-							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
+					
+							
+							enemies.get(i).setxVel(((float) (1.5f / hypot * newTarget.x - enemies.get(i).getX())));
+							enemies.get(i).setyVel(((float) (1.5f / hypot * newTarget.y - enemies.get(i).getY())));
 
 						}
 					
@@ -538,15 +538,15 @@ public class Updater implements Screen {
 					
 			
 					if(enemies.get(i).existsObstaclesinLine(pile.getHitbox(), player.getHitbox())) {
+						Vector2 newTarget = enemies.get(i).investigatePath(pile.getHitbox());
 						
-						hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(pile.getHitbox()).x,
-								enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
+						hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
+								enemies.get(i).getY() - newTarget.y);
 						
-						enemies.get(i).setTargetX(enemies.get(i).investigatePath(pile.getHitbox()).x);
-						enemies.get(i).setTargetY(enemies.get(i).investigatePath(pile.getHitbox()).y);
+				
 						
-						enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).x - enemies.get(i).getX()))));
-						enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).y - enemies.get(i).getY()))));
+						enemies.get(i).setxVel(((float) (1.5f / hypot * newTarget.x - enemies.get(i).getX())));
+						enemies.get(i).setyVel(((float) (1.5f / hypot * newTarget.y - enemies.get(i).getY())));
 
 				
 						
@@ -568,11 +568,13 @@ public class Updater implements Screen {
 					for(RectangleMapObject obj : borders) {
 						if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
 							
-							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
-									enemies.get(i).getY() - enemies.get(i).investigatePath(obj.getRectangle()).y);
+							Vector2 newTarget = enemies.get(i).investigatePath(obj.getRectangle());
 							
-							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
-							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
+							hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
+									enemies.get(i).getY() - newTarget.y);
+							
+							enemies.get(i).setxVel(((float) (1.5f / hypot * newTarget.x - enemies.get(i).getX())));
+							enemies.get(i).setyVel(((float) (1.5f / hypot * newTarget.y - enemies.get(i).getY())));
 					
 						}
 					
@@ -599,17 +601,15 @@ public class Updater implements Screen {
 						
 						for(RectangleMapObject obj : borders) {
 							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
+								Vector2 newTarget = enemies.get(i).investigatePath(obj.getRectangle());
 								
-								hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
-										enemies.get(i).getY() - enemies.get(i).investigatePath(obj.getRectangle()).y);
+								hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
+										enemies.get(i).getY() - newTarget.y);
 								
-								enemies.get(i).setTargetX(enemies.get(i).investigatePath(obj.getRectangle()).x);
-								enemies.get(i).setTargetY(enemies.get(i).investigatePath(obj.getRectangle()).y);
+								enemies.get(i).setxVel(((float) (1.5f / hypot * newTarget.x - enemies.get(i).getX())));
+								enemies.get(i).setyVel(((float) (1.5f / hypot * newTarget.y - enemies.get(i).getY())));
 								
-								enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
-								
-								enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
-							break;
+								break;
 							}
 						
 						}
@@ -617,15 +617,16 @@ public class Updater implements Screen {
 				
 						if(enemies.get(i).existsObstaclesinLine(pile.getHitbox(), player.getHitbox())) {
 							
-							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(pile.getHitbox()).x,
-									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
+							Vector2 newTarget = enemies.get(i).investigatePath(pile.getHitbox());
 							
-							enemies.get(i).setTargetX(enemies.get(i).investigatePath(pile.getHitbox()).x);
-							enemies.get(i).setTargetY(enemies.get(i).investigatePath(pile.getHitbox()).y);
+							hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
+									enemies.get(i).getY() - newTarget.y);
 							
-							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).x - enemies.get(i).getX()))));
-							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).y - enemies.get(i).getY()))));
 					
+							
+							enemies.get(i).setxVel(((float) (1.5f / hypot * newTarget.x - enemies.get(i).getX())));
+							enemies.get(i).setyVel(((float) (1.5f / hypot * newTarget.y - enemies.get(i).getY())));
+
 						}
 					
 					} else {
@@ -644,12 +645,15 @@ public class Updater implements Screen {
 							
 							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
 							
-								hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
-									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
-							
-								enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
-								enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
-							break;
+								Vector2 newTarget = enemies.get(i).investigatePath(obj.getRectangle());
+								
+								hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
+										enemies.get(i).getY() - newTarget.y);
+								
+								enemies.get(i).setxVel(((float) (1.5f / hypot * newTarget.x - enemies.get(i).getX())));
+								enemies.get(i).setyVel(((float) (1.5f / hypot * newTarget.y - enemies.get(i).getY())));
+								
+								break;
 							}
 						
 						}
