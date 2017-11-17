@@ -96,22 +96,7 @@ public class Player extends SpriteCommons {
 		this.candyIndicator = candyIndicator;
 	}
 
-	public void setGoAround(int enemyId, Vector2 path) {
-		if(goAround.containsKey(enemyId)) {
-			goAround.get(enemyId).add(path);
-			
-			if(goAround.get(enemyId).size()>5) {
-				goAround.get(enemyId).remove(0);
-			}
-			
-		}else {
-	     
-		 ArrayList<Vector2> coords = new ArrayList<Vector2>();
-	     coords.add(path);
-		 goAround.put(enemyId, coords );
-		
-		}
-	}
+
 	
 	
 
