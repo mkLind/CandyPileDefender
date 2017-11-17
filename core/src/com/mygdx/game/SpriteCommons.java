@@ -125,7 +125,65 @@ public void goAround(SpriteCommons obstacle, SpriteCommons target) {
 	}
 	
 }
+//pathfinding method for going around a obstacle towards a target
+public void goAround(Rectangle obstacle, Rectangle target) {
+	
+	if ((target.getY() - this.getY() > 0)) { // target is up
+		
+		// replace 1.2f with right velocity
+		this.moveHitbox(this.getX(), this.getY() + 1.2f);
 
+		// check if up is clear
+		if (!(Intersector.overlaps(this.getHitbox(), obstacle))) {
+
+			// move enemy up
+			this.setY(this.getY() + 1.2f);
+
+		} else { // up is blocked -> right or left
+
+			if (target.getX() - this.getX() > 0) { // target is right and up
+
+				// move enemy right
+				this.setX(this.getX() + 1.2f);
+
+			} else { // target is left and up
+
+				// move enemy left
+				this.setX(this.getX() - 1.2f);
+
+			}
+
+		}
+
+	} else { // target is down
+
+		this.moveHitbox(this.getX(), this.getY() - 1.2f);
+
+		// check if down is clear
+		if (!(Intersector.overlaps(this.getHitbox(), obstacle))) {
+
+			// move enemy down
+			this.setY(this.getY() - 1.2f);
+
+		} else { // down is blocked -> right or left
+
+			if (target.getX() - this.getX() > 0) { // target is right and down
+
+				// move enemy right
+				this.setX(this.getX() + 1.2f);
+
+			} else { // target is left and down
+
+				// move enemy left
+				this.setX(this.getX() - 1.2f);
+
+			}
+
+		}
+
+	}
+	
+}
 public void move() {
 	this.setX(this.getX() + this.getxVel());
 	this.setY(this.getY() + this.getyVel());
