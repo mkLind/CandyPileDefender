@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenuScreen implements Screen {
@@ -54,10 +56,15 @@ public class MainMenuScreen implements Screen {
 	private String tmp;
 	// private String name;
 	private Music ambience;
-
+	
 	public MainMenuScreen(final Core game) {
 		this.game = game;
-		stage = new Stage(new ScreenViewport());
+		float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
+		OrthographicCamera camera = new OrthographicCamera();
+		camera.setToOrtho(false, 1080f * aspectRatio, 1080f);
+		FitViewport view = new FitViewport(1080f * aspectRatio, 1080f, camera);
+		stage = new Stage(view); //fitviewport for different screen resolutions?
+
 		Gdx.input.setInputProcessor(stage);
 		userInterface = new UserInterface(game);
 
@@ -68,11 +75,11 @@ public class MainMenuScreen implements Screen {
 		ambience = game.getLoader().getManager().get("Music/POL-horror-ambience-2-short_16bit.ogg", Music.class);
 		ambience.setLooping(true);
 
-		int row_height = Gdx.graphics.getWidth() / 10;
-		int col_width = Gdx.graphics.getWidth() / 12;
+		int row_height = stage.getViewport().getScreenWidth() / 10;
+		int col_width = stage.getViewport().getScreenWidth() / 12;
 
-		playButton = userInterface.newButton("Play", Gdx.graphics.getWidth() / 4, Gdx.graphics.getWidth() / 3,
-				Gdx.graphics.getHeight() / 2);
+		playButton = userInterface.newButton("Play", stage.getViewport().getScreenWidth() / 4, stage.getViewport().getScreenWidth() / 3,
+				stage.getViewport().getScreenHeight() / 2);
 		playButton.addListener(new InputListener() {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -93,8 +100,8 @@ public class MainMenuScreen implements Screen {
 		});
 		stage.addActor(playButton);
 
-		creditsButton = userInterface.newButton("Credits", Gdx.graphics.getWidth() / 4, Gdx.graphics.getWidth() / 3,
-				Gdx.graphics.getHeight() / 2 - row_height / 4);
+		creditsButton = userInterface.newButton("Credits", stage.getViewport().getScreenWidth() / 4, stage.getViewport().getScreenWidth() / 3,
+				stage.getViewport().getScreenHeight() / 2 - row_height / 4);
 		creditsButton.addListener(new InputListener() {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -109,8 +116,8 @@ public class MainMenuScreen implements Screen {
 		});
 		stage.addActor(creditsButton);
 
-		quitButton = userInterface.newButton("Quit", Gdx.graphics.getWidth() / 4, Gdx.graphics.getWidth() / 3,
-				Gdx.graphics.getHeight() / 2 - row_height / 2);
+		quitButton = userInterface.newButton("Quit", stage.getViewport().getScreenWidth() / 4, stage.getViewport().getScreenWidth() / 3,
+				stage.getViewport().getScreenHeight() / 2 - row_height / 2);
 		quitButton.addListener(new InputListener() {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -125,8 +132,8 @@ public class MainMenuScreen implements Screen {
 		});
 		stage.addActor(quitButton);
 
-		muteButton = userInterface.newSoundButton(row_height / 3, Gdx.graphics.getWidth() - row_height / 2,
-				Gdx.graphics.getHeight() / 10);
+		muteButton = userInterface.newSoundButton(row_height / 3, stage.getViewport().getScreenWidth() - row_height / 2,
+				stage.getViewport().getScreenHeight() / 10);
 		muteButton.addListener(new InputListener() {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -161,24 +168,24 @@ public class MainMenuScreen implements Screen {
 		currentScore = Integer.toString(game.getLoader().getScore()) + "     " + DateToStr;
 		tmp = checkScores();
 
-		label1 = userInterface.newLabel("Highscores: ", Gdx.graphics.getWidth() / 2,
-				Gdx.graphics.getHeight() - row_height * 0.8f, Align.topRight, Gdx.graphics.getWidth() / 4);
-		label2 = userInterface.newLabel("Your score: " + game.getLoader().getScore(), Gdx.graphics.getWidth() / 4.1f,
-				Gdx.graphics.getHeight() - row_height * 1.8f, Align.topLeft, Gdx.graphics.getWidth() / 5.5f);
-		label3 = userInterface.newLabel("1. " + game.getLoader().getHighScore(), Gdx.graphics.getWidth() / 1.5f,
-				Gdx.graphics.getHeight() - row_height * 1.1f, Align.left, Gdx.graphics.getWidth() / 4);
-		label4 = userInterface.newLabel("2. " + game.getLoader().getSecond(), Gdx.graphics.getWidth() / 1.5f,
-				Gdx.graphics.getHeight() - row_height * 1.3f, Align.left, Gdx.graphics.getWidth() / 4);
-		label5 = userInterface.newLabel("3. " + game.getLoader().getThird(), Gdx.graphics.getWidth() / 1.5f,
-				Gdx.graphics.getHeight() - row_height * 1.5f, Align.left, Gdx.graphics.getWidth() / 4);
-		label6 = userInterface.newLabel("4. " + game.getLoader().getFourth(), Gdx.graphics.getWidth() / 1.5f,
-				Gdx.graphics.getHeight() - row_height * 1.7f, Align.left, Gdx.graphics.getWidth() / 4);
-		label7 = userInterface.newLabel("5. " + game.getLoader().getFifth(), Gdx.graphics.getWidth() / 1.5f,
-				Gdx.graphics.getHeight() - row_height * 1.9f, Align.left, Gdx.graphics.getWidth() / 4);
-		label8 = userInterface.newLabel("Yo", Gdx.graphics.getWidth() / 4.1f, Gdx.graphics.getHeight() - row_height * 1.5f,
-				Align.topLeft, Gdx.graphics.getWidth() / 5.5f);
-		label9 = userInterface.newLabel("Jo", Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
-				Align.topLeft, Gdx.graphics.getWidth() / 4);
+		label1 = userInterface.newLabel("Highscores: ", stage.getViewport().getScreenWidth() / 2,
+				stage.getViewport().getScreenHeight() - row_height * 0.8f, Align.topRight, stage.getViewport().getScreenWidth() / 4);
+		label2 = userInterface.newLabel("Your score: " + game.getLoader().getScore(), stage.getViewport().getScreenWidth() / 4.1f,
+				stage.getViewport().getScreenHeight() - row_height * 1.8f, Align.topLeft, stage.getViewport().getScreenWidth() / 5.5f);
+		label3 = userInterface.newLabel("1. " + game.getLoader().getHighScore(), stage.getViewport().getScreenWidth() / 1.5f,
+				stage.getViewport().getScreenHeight() - row_height * 1.1f, Align.left, stage.getViewport().getScreenWidth() / 4);
+		label4 = userInterface.newLabel("2. " + game.getLoader().getSecond(), stage.getViewport().getScreenWidth() / 1.5f,
+				stage.getViewport().getScreenHeight() - row_height * 1.3f, Align.left, stage.getViewport().getScreenWidth() / 4);
+		label5 = userInterface.newLabel("3. " + game.getLoader().getThird(), stage.getViewport().getScreenWidth() / 1.5f,
+				stage.getViewport().getScreenHeight() - row_height * 1.5f, Align.left, stage.getViewport().getScreenWidth() / 4);
+		label6 = userInterface.newLabel("4. " + game.getLoader().getFourth(), stage.getViewport().getScreenWidth() / 1.5f,
+				stage.getViewport().getScreenHeight() - row_height * 1.7f, Align.left, stage.getViewport().getScreenWidth() / 4);
+		label7 = userInterface.newLabel("5. " + game.getLoader().getFifth(), stage.getViewport().getScreenWidth() / 1.5f,
+				stage.getViewport().getScreenHeight() - row_height * 1.9f, Align.left, stage.getViewport().getScreenWidth() / 4);
+		label8 = userInterface.newLabel("Yo", stage.getViewport().getScreenWidth() / 4.1f, stage.getViewport().getScreenHeight() - row_height * 1.5f,
+				Align.topLeft, stage.getViewport().getScreenWidth() / 5.5f);
+		label9 = userInterface.newLabel("Jo", stage.getViewport().getScreenWidth(), stage.getViewport().getScreenHeight(),
+				Align.topLeft, stage.getViewport().getScreenWidth() / 4);
 
 		stage.addActor(label2); //current score
 		stage.addActor(label8); //end result of the game
@@ -278,8 +285,8 @@ public class MainMenuScreen implements Screen {
 		mySkin.getFont("font-label").getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		mySkin.getFont("font-label").getData().setScale(1.7f);
 		list = new List(mySkin, "dimmed");
-		list.setSize(Gdx.graphics.getWidth() / 4, Gdx.graphics.getWidth() / 7);
-		list.setPosition(Gdx.graphics.getWidth() / 1.6f, Gdx.graphics.getHeight() - row_height * 2.5f);
+		list.setSize(stage.getViewport().getScreenWidth() / 4, stage.getViewport().getScreenWidth() / 7);
+		list.setPosition(stage.getViewport().getScreenWidth() / 1.6f, stage.getViewport().getScreenHeight() - row_height * 2.5f);
 		list.setItems(labels);
 
 		if (game.getLoader().getScore() != 0) {
@@ -302,8 +309,8 @@ public class MainMenuScreen implements Screen {
 		stage.addActor(list);
 		
 		instructions = new ScrollPane(label9, mySkin);
-		instructions.setSize(Gdx.graphics.getWidth() / 3.95f, Gdx.graphics.getHeight() / 6);
-		instructions.setPosition(Gdx.graphics.getWidth() / 1.605f, Gdx.graphics.getHeight() - row_height * 3.5f);
+		instructions.setSize(stage.getViewport().getScreenWidth() / 3.95f, stage.getViewport().getScreenHeight() / 6);
+		instructions.setPosition(stage.getViewport().getScreenWidth() / 1.605f, stage.getViewport().getScreenHeight() - row_height * 3.5f);
 		stage.addActor(instructions);
 
 	}

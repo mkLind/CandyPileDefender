@@ -52,8 +52,9 @@ public class UserInterface {
 			label = new Label(name, mySkin, "title");
 		} else if (name.substring(0, 2).equals("Jo")) {
 			label = new Label(name, mySkin, "title");
+			label.setWrap(true);
 			label.setText(
-					"Protect your candy pile from the\nother kids who want to steal your\ncandy! Move around with A, S, D, W\nkeys and shoot with the mouse.");
+					"Protect your candy pile from the other kids who want to steal your candy! Move around with A, S, D, W keys and shoot with the mouse.");
 		} else {
 			label = new Label(name, style);
 		}
@@ -127,6 +128,7 @@ public class UserInterface {
 		dialog.getBackground().setMinHeight(500f);
 		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 		Label text = new Label("Here are the\ncredits. \n", mySkin);
+		text.setWrap(true);
 		text.setAlignment(Align.left);
 		// text.setWrap(true);
 		dialog.text(text);
