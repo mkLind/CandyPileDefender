@@ -754,7 +754,12 @@ public class Updater implements Screen {
 					for (int k = 0; k < borders.size; k++) {
 
 						if (Intersector.overlaps(borders.get(k).getRectangle(), enemies.get(i).getHitbox())) {
-
+								
+							if(enemies.get(i) instanceof StealingEnemy) {
+						    	enemies.get(i).goAround(borders.get(k).getRectangle(),pile.getHitbox());
+							}else if (enemies.get(i) instanceof ChaserEnemy)  {
+								enemies.get(i).goAround(borders.get(k).getRectangle(),player.getHitbox());
+							}
 						
 							  
 							
