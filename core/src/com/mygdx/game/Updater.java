@@ -679,7 +679,7 @@ public class Updater implements Screen {
 				for (int k = i + 1; k < enemies.size(); k++) {
 					if (Intersector.overlaps(enemies.get(i).getHitbox(), enemies.get(k).getHitbox())) {
 
-						// miksi tämä on random
+						// miksi tï¿½mï¿½ on random
 						int tmp = MathUtils.random(30, 100);
 						enemies.get(i).setTimeoutTimer(tmp);
 
@@ -698,7 +698,9 @@ public class Updater implements Screen {
 					// damages player if no shield
 					if (player.getPowerupType() != POWERUPTYPE.SHIELD) {
 						player.setHP(player.getHP() - 1);
-						hurt.play();
+						if (game.getLoader().getMasterVolume()) {
+							hurt.play();
+						}
 						// Update healthbar
 						healthBar.setValue(healthBar.getValue() - 0.1f);
 						player.setIsHit(true);
