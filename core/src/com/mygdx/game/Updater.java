@@ -770,24 +770,12 @@ public class Updater implements Screen {
 								enemies.get(i).goAround(borders.get(k).getRectangle(),player.getHitbox());
 								break;
 							}
-						
-							  
-							
+							break;
 
 						}
 						
-						
-						
-						
-						
-									 }
+					}
 
-			
-					
-						
-						
-	
-		
 					
 					// move enemies
 					enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
