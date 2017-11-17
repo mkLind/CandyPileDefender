@@ -306,6 +306,7 @@ public boolean existsObstaclesinLine(Rectangle obstacle, Rectangle Target) {
 	float futureY = y;
 	
 	int additions = 0;
+	
 	while(additions<30) {
 		futureX = futureX + xDelta;
 		futureY = futureY + yDelta;
