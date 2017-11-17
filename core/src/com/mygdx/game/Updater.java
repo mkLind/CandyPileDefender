@@ -529,8 +529,9 @@ public class Updater implements Screen {
 							
 					
 							
-							enemies.get(i).setxVel(((float) (1.5f / hypot * newTarget.x - enemies.get(i).getX())));
-							enemies.get(i).setyVel(((float) (1.5f / hypot * newTarget.y - enemies.get(i).getY())));
+							enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
+							enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
+							break;
 
 						}
 					
@@ -545,8 +546,8 @@ public class Updater implements Screen {
 						
 				
 						
-						enemies.get(i).setxVel(((float) (1.5f / hypot * newTarget.x - enemies.get(i).getX())));
-						enemies.get(i).setyVel(((float) (1.5f / hypot * newTarget.y - enemies.get(i).getY())));
+						enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
+						enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
 
 				
 						
@@ -573,8 +574,9 @@ public class Updater implements Screen {
 							hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
 									enemies.get(i).getY() - newTarget.y);
 							
-							enemies.get(i).setxVel(((float) (1.5f / hypot * newTarget.x - enemies.get(i).getX())));
-							enemies.get(i).setyVel(((float) (1.5f / hypot * newTarget.y - enemies.get(i).getY())));
+							enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
+							enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
+							break;
 					
 						}
 					
@@ -582,7 +584,7 @@ public class Updater implements Screen {
 					
 						
 					
-					// Maybe correct direction to stealer?
+				
 
 
 				} else if (enemies.get(i) instanceof ThirdEnemy) {
@@ -606,8 +608,8 @@ public class Updater implements Screen {
 								hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
 										enemies.get(i).getY() - newTarget.y);
 								
-								enemies.get(i).setxVel(((float) (1.5f / hypot * newTarget.x - enemies.get(i).getX())));
-								enemies.get(i).setyVel(((float) (1.5f / hypot * newTarget.y - enemies.get(i).getY())));
+								enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
+								enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
 								
 								break;
 							}
@@ -624,8 +626,8 @@ public class Updater implements Screen {
 							
 					
 							
-							enemies.get(i).setxVel(((float) (1.5f / hypot * newTarget.x - enemies.get(i).getX())));
-							enemies.get(i).setyVel(((float) (1.5f / hypot * newTarget.y - enemies.get(i).getY())));
+							enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
+							enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
 
 						}
 					
@@ -650,8 +652,8 @@ public class Updater implements Screen {
 								hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
 										enemies.get(i).getY() - newTarget.y);
 								
-								enemies.get(i).setxVel(((float) (1.5f / hypot * newTarget.x - enemies.get(i).getX())));
-								enemies.get(i).setyVel(((float) (1.5f / hypot * newTarget.y - enemies.get(i).getY())));
+								enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
+								enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
 								
 								break;
 							}
@@ -748,7 +750,13 @@ public class Updater implements Screen {
 						// implemented in SpriteCommons
 						
 						
-					
+						Vector2 newTarget = enemies.get(i).investigatePath(pile.getHitbox());
+						
+						hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
+								enemies.get(i).getY() - newTarget.y);
+						
+						enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
+						enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
 						
 						
 						
@@ -768,13 +776,29 @@ public class Updater implements Screen {
 						if (Intersector.overlaps(borders.get(k).getRectangle(), enemies.get(i).getHitbox())) {
 								
 							if(enemies.get(i) instanceof StealingEnemy) {
-						    	enemies.get(i).goAround(borders.get(k).getRectangle(),pile.getHitbox());
+								Vector2 newTarget = enemies.get(i).investigatePath(borders.get(k).getRectangle());
+								
+								hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
+										enemies.get(i).getY() - newTarget.y);
+								
+								enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
+								enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
+								
 						    	break;
 							}else if (enemies.get(i) instanceof ChaserEnemy)  {
-								enemies.get(i).goAround(borders.get(k).getRectangle(),player.getHitbox());
-								break;
+								
+								Vector2 newTarget = enemies.get(i).investigatePath(borders.get(k).getRectangle());
+								
+								hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
+										enemies.get(i).getY() - newTarget.y);
+								
+								enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
+								enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
+								
+						    	break;
+								
 							}
-							break;
+						
 
 						}
 						
