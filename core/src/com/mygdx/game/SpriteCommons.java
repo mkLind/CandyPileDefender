@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 /*
@@ -15,8 +16,10 @@ private float x;
 private float y;
 private float targetX;
 private float targetY;
-private float xVel;
-private float yVel;
+
+private float xVel; 
+private float yVel; 
+
 private int width;
 private int height;
 private int HP;
@@ -63,6 +66,71 @@ public SpriteCommons(int width, int height, float x, float y,float xVel, float y
 	
 }
 
+//pathfinding method for going around a obstacle towards a target
+public void goAround(SpriteCommons obstacle, SpriteCommons target) {
+	
+	if ((target.getY() - this.getY() > 0)) { // target is up
+		
+		// replace 1.2f with right velocity
+		this.moveHitbox(this.getX(), this.getY() + 1.2f);
+
+		// check if up is clear
+		if (!(Intersector.overlaps(this.getHitbox(), obstacle.getHitbox()))) {
+
+			// move enemy up
+			this.setY(this.getY() + 1.2f);
+
+		} else { // up is blocked -> right or left
+
+			if (target.getX() - this.getX() > 0) { // target is right and up
+
+				// move enemy right
+				this.setX(this.getX() + 1.2f);
+
+			} else { // target is left and up
+
+				// move enemy left
+				this.setX(this.getX() - 1.2f);
+
+			}
+
+		}
+
+	} else { // target is down
+
+		this.moveHitbox(this.getX(), this.getY() - 1.2f);
+
+		// check if down is clear
+		if (!(Intersector.overlaps(this.getHitbox(), obstacle.getHitbox()))) {
+
+			// move enemy down
+			this.setY(this.getY() - 1.2f);
+
+		} else { // down is blocked -> right or left
+
+			if (target.getX() - this.getX() > 0) { // target is right and down
+
+				// move enemy right
+				this.setX(this.getX() + 1.2f);
+
+			} else { // target is left and down
+
+				// move enemy left
+				this.setX(this.getX() - 1.2f);
+
+			}
+
+		}
+
+	}
+	
+}
+
+public void move() {
+	this.setX(this.getX() + this.getxVel());
+	this.setY(this.getY() + this.getyVel());
+}
+	
 public boolean isTargetSet() {
 	return targetSet;
 }
@@ -177,6 +245,15 @@ public float getxVel() {
 	return xVel;
 }
 
+public float getXCenter() {
+	return this.getX() + this.getWidth() / 2;
+}
+
+public float getYCenter() {
+	return this.getX() + this.getHeight() / 2;
+}
+
+
 public void setxVel(float xVel) {
 	this.xVel = xVel;
 }
@@ -218,6 +295,7 @@ public int getTimeoutTimer() {
 public void setTimeoutTimer(int timeoutTimer) {
 	this.timeoutTimer = timeoutTimer;
 }
+
 public Vector2 investigatePath(Rectangle obstacle) {
 	
 	
@@ -231,31 +309,33 @@ public Vector2 investigatePath(Rectangle obstacle) {
 		int additions = 0;
 		float futureX = x;
 		float futureY = y;
-		while(additions < 30) {
-		futureX = futureX + xVel;
-		futureY = futureY + yVel;
 		
-		if(tmp.contains(futureX,futureY)) {
-			// calculates a target point around the pile
-			while(tmp.contains(futureX,futureY)){
-				
-				if(Math.abs(tmp.getX() - futureX) <Math.abs((tmp.getX() + tmp.getWidth()) - futureX)) {
-					futureX --;
-				}else {
+		while(additions < 30) {
+			futureX = futureX + xVel;
+			futureY = futureY + yVel;
+			
+			if(tmp.contains(futureX,futureY)) {
+				// calculates a target point around the pile
+				while(tmp.contains(futureX,futureY)){
 					
-					futureX++;
-				}
-				if(Math.abs(tmp.getY() - futureY) <Math.abs((tmp.getY() + tmp.getHeight()) - futureY)) {
-					futureY --;
-				}else {
+					if(Math.abs(tmp.getX() - futureX) <Math.abs((tmp.getX() + tmp.getWidth()) - futureX)) {
+						futureX --;
+					}else {
+						
+						futureX++;
+					}
+					if(Math.abs(tmp.getY() - futureY) <Math.abs((tmp.getY() + tmp.getHeight()) - futureY)) {
+						futureY --;
+					}else {
+						
+						futureY ++;
+					}
 					
-					futureY ++;
+					
 				}
-				
 				
 			}
-			
-		}
+		
 		additions ++;
 		}
 		

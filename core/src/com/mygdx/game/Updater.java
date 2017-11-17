@@ -67,6 +67,9 @@ public class Updater implements Screen {
 	private Pile pile;
 	private ArrayList<SpriteCommons> enemies;
 	private ArrayList<SpriteCommons> enemyAdd;
+	
+	// the distance between the third enemy type and player, when the third attacks
+	private float attackDistance = 75;
 
 	boolean noEnemies;
 
@@ -175,6 +178,7 @@ public class Updater implements Screen {
 		walk1 = game.getLoader().getManager().get("Sounds/walking/grass1.wav", Sound.class);
 		walk2 = game.getLoader().getManager().get("Sounds/walking/gravel1.wav", Sound.class);
 		hurt = game.getLoader().getManager().get("Sounds/hit/NFF-kid-hurt.wav",Sound.class);
+		
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
@@ -264,6 +268,7 @@ public class Updater implements Screen {
 				tmp2 = MathUtils.random(0, monsterSpawns.size - 1);
 
 				// new stealer
+				// why tmp here and chaser in the second one?
 				StealingEnemy tmpSE = new StealingEnemy(30, 40, monsterSpawns.get(tmp).getRectangle().getX(),
 						monsterSpawns.get(tmp).getRectangle().getY(), 1);
 				tmpSE.setAnimations(4, 3, 0.10f,
@@ -279,6 +284,15 @@ public class Updater implements Screen {
 				chaser.setId(timesCalled + i);
 
 				enemyAdd.add(chaser);
+				
+				//THIRD ENEMY TRY, NO IDEA ABOUT ID
+				ThirdEnemy thirdEnemy = new ThirdEnemy(30, 40, monsterSpawns.get(tmp).getRectangle().getX(),
+						monsterSpawns.get(tmp).getRectangle().getY(), 1);
+				thirdEnemy.setAnimations(4, 3, 0.10f,
+						game.getLoader().getManager().get("thirdEnemyTest.png", Texture.class));
+				//thirdEnemy.setId(); what's the point of the ID
+				enemyAdd.add(thirdEnemy);
+				
 
 			}
 		}
@@ -391,10 +405,10 @@ public class Updater implements Screen {
 
 		} else {
 			// Move the player
-			player.setX(player.getX() + player.getxVel());
-			player.setY(player.getY() + player.getyVel());
+			player.move();
 
 			// Tar trail behind the player
+			
 			if (player.getPowerupType() == POWERUPTYPE.SLOWDOWN
 					&& TimeUtils.timeSinceMillis(mpObjLastSet) > mpObjCooldown) {
 
@@ -412,6 +426,7 @@ public class Updater implements Screen {
 		noEnemies = true;
 		
 		// ALL ENEMY STUFF
+		enemyloop:
 		for (int i = 0; i < enemies.size(); i++) {
 			
 			double hypot = Math.hypot(enemies.get(i).getX() - player.getX(), enemies.get(i).getY() - player.getY());
@@ -490,19 +505,24 @@ public class Updater implements Screen {
 
 			// checks if the enemy is on timeout and does nothing if is
 			if (enemies.get(i).getTimeoutTimer() == 0) {
-				// Calculates enemy velocities
+
+				
+			// Calculates enemy velocities
 				if (enemies.get(i) instanceof ChaserEnemy) {
 					
 					hypot = Math.hypot(enemies.get(i).getX() - player.getPreviousX(),
 							enemies.get(i).getY() - player.getPreviousY());
 					
+
 					enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
 					enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
 					
 					
-					
-						for(RectangleMapObject obj : borders) {
-							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
+
+					for(RectangleMapObject obj : borders) {
+						if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
+							
+
 							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
 									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
 							
@@ -511,14 +531,14 @@ public class Updater implements Screen {
 							
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
-						
-							
-							}
-						
+
 						}
+					
+					}
+					
+			
+					if(enemies.get(i).existsObstaclesinLine(pile.getHitbox(), player.getHitbox())) {
 						
-				
-						if(enemies.get(i).existsObstaclesinLine(pile.getHitbox(), player.getHitbox())) {
 						hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(pile.getHitbox()).x,
 								enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
 						
@@ -527,43 +547,114 @@ public class Updater implements Screen {
 						
 						enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).x - enemies.get(i).getX()))));
 						enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).y - enemies.get(i).getY()))));
+
 				
 						
 						}
 					
 					
-					
-					
-					
-				}
 
-				if (enemies.get(i) instanceof StealingEnemy) {
+					
+				} else if (enemies.get(i) instanceof StealingEnemy) {
+
+				
 					
 					hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
 							enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
-					// TEST SPEED 3! was 1.2
-					enemies.get(i).setxVel(
-							((float) (1.2f / hypot * (pile.getX()+ (pile.getWidth() / 2) - enemies.get(i).getX()))));
-					enemies.get(i).setyVel(
-							((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
-					
-				
+	
+					enemies.get(i).setxVel(((float) (1.2f / hypot * (pile.getX()+ (pile.getWidth() / 2) - enemies.get(i).getX()))));
+					enemies.get(i).setyVel(((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
 						
-						for(RectangleMapObject obj : borders) {
-							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
+					for(RectangleMapObject obj : borders) {
+						if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
+							
 							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
 									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
 							
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
+					
 						}
-						
-						}
+					
+					}
 					
 						
 					
 					// Maybe correct direction to stealer?
 
+
+				} else if (enemies.get(i) instanceof ThirdEnemy) {
+					
+					// Tests if the player is closer than attackDistance (75) and chases if it is
+					if( (Math.abs(enemies.get(i).getX() - player.getPreviousX()) < attackDistance) || (Math.abs(enemies.get(i).getY() - player.getPreviousY()) < attackDistance) ) {
+						
+						//Copied from chaser, might not work
+						hypot = Math.hypot(enemies.get(i).getX() - player.getPreviousX(),
+								enemies.get(i).getY() - player.getPreviousY());
+						
+
+						enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
+						enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
+						
+						
+						for(RectangleMapObject obj : borders) {
+							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
+								
+								hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
+										enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
+								
+								enemies.get(i).setTargetX(enemies.get(i).investigatePath(obj.getRectangle()).x);
+								enemies.get(i).setTargetY(enemies.get(i).investigatePath(obj.getRectangle()).y);
+								
+								enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
+								enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
+							}
+						
+						}
+						
+				
+						if(enemies.get(i).existsObstaclesinLine(pile.getHitbox(), player.getHitbox())) {
+							
+							hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(pile.getHitbox()).x,
+									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
+							
+							enemies.get(i).setTargetX(enemies.get(i).investigatePath(pile.getHitbox()).x);
+							enemies.get(i).setTargetY(enemies.get(i).investigatePath(pile.getHitbox()).y);
+							
+							enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).x - enemies.get(i).getX()))));
+							enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(pile.getHitbox()).y - enemies.get(i).getY()))));
+						}
+					
+					} else {
+						
+						// Copied from stealer, might not work properly
+						hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
+								enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
+						enemies.get(i).setxVel(
+								((float) (1.5f / hypot * (pile.getX()+ (pile.getWidth() / 2) - enemies.get(i).getX()))));
+						enemies.get(i).setyVel(
+								((float) (1.5f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
+						
+					
+							
+						for(RectangleMapObject obj : borders) {
+							
+							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
+							
+								hypot = Math.hypot(enemies.get(i).getX() - enemies.get(i).investigatePath(obj.getRectangle()).x,
+									enemies.get(i).getY() - enemies.get(i).investigatePath(pile.getHitbox()).y);
+							
+								enemies.get(i).setxVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).x - enemies.get(i).getX()))));
+								enemies.get(i).setyVel(((float) (1.5f / hypot * (enemies.get(i).investigatePath(obj.getRectangle()).y - enemies.get(i).getY()))));
+							
+							}
+						
+						}
+						
+						
+					}
+					
+					
 				}
 
 				// SLOW THE ENEMIES DOWN IF ONE OF THEM HITS A POOL OF TAR
@@ -590,15 +681,22 @@ public class Updater implements Screen {
 				// Enemy collisions with each other
 				for (int k = i + 1; k < enemies.size(); k++) {
 					if (Intersector.overlaps(enemies.get(i).getHitbox(), enemies.get(k).getHitbox())) {
+
+						// miksi tämä on random
+						int tmp = MathUtils.random(30, 100);
+						enemies.get(i).setTimeoutTimer(tmp);
+
 						enemies.get(i).setTimeoutTimer(30);
+
 						enemies.get(k).setTimeoutTimer(0);
+						
+						
+						enemies.get(i).updateHitbox(); // pulls the hitbox back
+						continue enemyloop; // jumps to next i in enemies
 					}
 				}
-
+				// Enemy collides with the player
 				if (Intersector.overlaps(enemies.get(i).getHitbox(), player.getHitbox())) {
-
-					// pulls the hitbox back
-					// enemies.get(i).updateHitbox();
 
 					// damages player if no shield
 					if (player.getPowerupType() != POWERUPTYPE.SHIELD) {
@@ -613,19 +711,6 @@ public class Updater implements Screen {
 					// enemy is on a timeout after attacking, randomly selected 100 frames
 					// timeoutTimer atm
 					enemies.get(i).setTimeoutTimer(100);
-
-					/*
-					 * timeoutTimer can replace this
-					 * 
-					 * enemies.get(i).setHP(enemies.get(i).getHP() - 1);
-					 * 
-					 * if (enemies.get(i).getHP() <= 0) { // Get points if (enemies.get(i)
-					 * instanceof StealingEnemy) {
-					 * game.getLoader().setScore(game.getLoader().getScore() + 500); } if
-					 * (enemies.get(i) instanceof ChaserEnemy) {
-					 * game.getLoader().setScore(game.getLoader().getScore() + 1000); }
-					 * enemies.remove(i); }
-					 */
 
 					if (player.getHP() < 1) {
 						System.out.println("Player HP now zero");
@@ -642,7 +727,7 @@ public class Updater implements Screen {
 				} else if (Intersector.overlaps(enemies.get(i).getHitbox(), pile.getHitbox())) {
 
 					// steal from the pile
-					if (enemies.get(i) instanceof StealingEnemy) {
+					if (enemies.get(i) instanceof StealingEnemy || enemies.get(i) instanceof ThirdEnemy) {
 
 						if (Intersector.overlaps((enemies.get(i).getHitbox()), pile.getHitbox())) {
 							pile.reduceHealth();
@@ -653,14 +738,127 @@ public class Updater implements Screen {
 					} else {
 
 						// "pathfinding" around the pile (probably badly optimized)
+						// implemented in SpriteCommons
+						enemies.get(i).goAround(pile, player);
+						
+					}
+
+					// enemies.get(i).updateHitbox();
+		
+				
+				} else {
+					// Enemy collisions with borders					
+					 for (int k = 0; k < borders.size; k++) {
+
+						if (Intersector.overlaps(borders.get(k).getRectangle(), enemies.get(i).getHitbox())) {
+							
+							// The enemy just stops 
+							 enemies.get(i).setxVel(0);
+							 enemies.get(i).setyVel(0);
+							 
+							 break;
+						}
+					 }
+					 /* 
+					 * if(borders.get(k).getRectangle().getX() +
+					 * borders.get(k).getRectangle().getWidth() < enemies.get(i).getX()) {
+					 * 
+					 * 
+					 * enemies.get(i).setX(borders.get(k).getRectangle().getX() +
+					 * borders.get(k).getRectangle().getWidth() + 0.5f);
+					 * 
+					 * 
+					 * if(enemies.get(i).getY() + enemies.get(i).getHeight()<
+					 * borders.get(k).getRectangle().getY() ) { // Down and Right
+					 * enemies.get(i).setY(borders.get(k).getRectangle().getY() -
+					 * enemies.get(k).getHeight() - 0.5f);
+					 * 
+					 * 
+					 * }else if(enemies.get(i).getY()> borders.get(k).getRectangle().getY() +
+					 * borders.get(k).getRectangle().getHeight()) { // up and right
+					 * enemies.get(i).setY(borders.get(k).getRectangle().getY() +
+					 * borders.get(k).getRectangle().getHeight() + 0.5f);
+					 * 
+					 * 
+					 * }
+					 * 
+					 * 
+					 * 
+					 * } if(borders.get(k).getRectangle().getX()>enemies.get(i).getX() +
+					 * enemies.get(i).getWidth()) { // The enemy is left
+					 * 
+					 * enemies.get(i).setX(borders.get(k).getRectangle().getX() -
+					 * enemies.get(i).getWidth() - 0.5f);
+					 * 
+					 * if(enemies.get(i).getY() + enemies.get(i).getHeight()<
+					 * borders.get(k).getRectangle().getY() ) { //Down and left
+					 * enemies.get(i).setY(borders.get(k).getRectangle().getY() -
+					 * enemies.get(i).getHeight() - 0.5f);
+					 * 
+					 * 
+					 * }else if(enemies.get(i).getY()> borders.get(k).getRectangle().getY() +
+					 * borders.get(k).getRectangle().getHeight()) { // up and left
+					 * 
+					 * enemies.get(i).setY(borders.get(k).getRectangle().getY() +
+					 * borders.get(k).getRectangle().getHeight() + 0.5f);
+					 * 
+					 * }
+					 * 
+					 * } if(borders.get(k).getRectangle().getY() +
+					 * borders.get(k).getRectangle().getHeight() < enemies.get(i).getY()) { // The
+					 * enemy is up System.out.println("ENEMY COLLIDING UP");
+					 * 
+					 * enemies.get(i).setY(borders.get(k).getRectangle().getY() +
+					 * borders.get(k).getRectangle().getHeight() + 0.5f);
+					 * 
+					 * if(enemies.get(i).getX() + enemies.get(i).getWidth()<
+					 * borders.get(k).getRectangle().getX() ) { // up and left
+					 * enemies.get(i).setX(borders.get(k).getRectangle().getX() -
+					 * enemies.get(i).getWidth() - 0.5f); }else if(enemies.get(i).getX()>
+					 * borders.get(k).getRectangle().getX() +
+					 * borders.get(k).getRectangle().getWidth()) { // up and right
+					 * enemies.get(i).setX(borders.get(k).getRectangle().getX() +
+					 * borders.get(k).getRectangle().getWidth() + 0.5f); }
+					 * 
+					 * } if(borders.get(k).getRectangle().getY()>enemies.get(i).getY() +
+					 * enemies.get(i).getHeight()) {// The enemy is down
+					 * System.out.println("ENEMY COLLIDING DOWN");
+					 * enemies.get(i).setY(borders.get(k).getRectangle().getY() -
+					 * enemies.get(i).getHeight() - 0.5f);
+					 * 
+					 * if(enemies.get(i).getX() + enemies.get(i).getWidth()<
+					 * borders.get(k).getRectangle().getX() ) { // Down and left
+					 * enemies.get(i).setX(borders.get(k).getRectangle().getX() -
+					 * enemies.get(i).getWidth() - 0.5f); }else if(enemies.get(i).getX()>
+					 * borders.get(k).getRectangle().getX() +
+					 * borders.get(k).getRectangle().getWidth()) { // Down and right
+					 * enemies.get(i).setX(borders.get(k).getRectangle().getX() +
+					 * borders.get(k).getRectangle().getWidth() + 0.5f); }
+					 * 
+					 * 
+					 * 
+					 * }
+					 * 
+					 * 
+					 */
+					
+			 		
+			 /*
+					
+					if (enemies.get(i) instanceof ChaserEnemy) {
+						// "pathfinding" around the pile (probably badly optimized)
+
+=======
 						System.out.println("ENEMY WITH ID: " + i + " TRYING TO GET AROUND PILE");
 						
+>>>>>>> f1505460815d23110c4db6ff6d253637c4c4e113
 						if ((player.getPreviousY() - enemies.get(i).getY() > 0)) { // player is up
 
 							enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() + 1.5f);
 
 							// check if up is clear
-							if (!(Intersector.overlaps(enemies.get(i).getHitbox(), pile.getHitbox()))) {
+							if (!(Intersector.overlaps(enemies.get(i).getHitbox(),
+									borders.get(k).getRectangle()))) {
 
 								// move enemy up
 								enemies.get(i).setY(enemies.get(i).getY() + 1.5f);
@@ -669,7 +867,8 @@ public class Updater implements Screen {
 								
 							} else { // up is blocked -> right or left
 
-								if (player.getPreviousX() - enemies.get(i).getX() > 0) { // player is right and up
+								if (player.getPreviousX() - enemies.get(i).getX() > 0) { // player is right and
+																							// up
 
 									// move enemy right
 									enemies.get(i).setX(enemies.get(i).getX() + 1.5f);
@@ -688,14 +887,16 @@ public class Updater implements Screen {
 							enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() - 1.5f);
 
 							// check if down is clear
-							if (!(Intersector.overlaps(enemies.get(i).getHitbox(), pile.getHitbox()))) {
+							if (!(Intersector.overlaps(enemies.get(i).getHitbox(),
+									borders.get(k).getRectangle()))) {
 
 								// move enemy down
 								enemies.get(i).setY(enemies.get(i).getY() - 1.5f);
 								
 							} else { // down is blocked -> right or left
 
-								if (player.getPreviousX() - enemies.get(i).getX() > 0) { // player is right and down
+								if (player.getPreviousX() - enemies.get(i).getX() > 0) { // player is right and
+									// down
 
 									// move enemy right
 									enemies.get(i).setX(enemies.get(i).getX() + 1.5f);
@@ -712,7 +913,14 @@ public class Updater implements Screen {
 						}
 
 					}
+					if (enemies.get(i) instanceof StealingEnemy) {
+						// "pathfinding" around the pile (probably badly optimized)
 
+<<<<<<< HEAD
+						if ((pile.getY() - enemies.get(i).getY() > 0)) { // player is up
+
+							enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() + 1.2f);
+=======
 					// enemies.get(i).updateHitbox();
 
 				} else {
@@ -882,65 +1090,107 @@ public class Updater implements Screen {
 
 										// move enemy up
 										enemies.get(i).setY(enemies.get(i).getY() + 1.5f);
+>>>>>>> f1505460815d23110c4db6ff6d253637c4c4e113
 
-									} else { // up is blocked -> right or left
+							// check if up is clear
+							if (!(Intersector.overlaps(enemies.get(i).getHitbox(),
+									borders.get(k).getRectangle()))) {
 
+<<<<<<< HEAD
+								// move enemy up
+								enemies.get(i).setY(enemies.get(i).getY() + 1.2f);
+
+							} else { // up is blocked -> right or left
+=======
 										if (pile.getY() - enemies.get(i).getX() >= 0) { // player is right and
 																						// up
 
 											// move enemy right
 											enemies.get(i).setX(enemies.get(i).getX() + 1.5f);
+>>>>>>> f1505460815d23110c4db6ff6d253637c4c4e113
 
-										} else { // player is left and up
+								if (pile.getX() - enemies.get(i).getX() > 0) { // player is right and up
 
+<<<<<<< HEAD
+									// move enemy right
+									enemies.get(i).setX(enemies.get(i).getX() + 1.2f);
+=======
 											// move enemy left
 											enemies.get(i).setX(enemies.get(i).getX() - 1.5f);
+>>>>>>> f1505460815d23110c4db6ff6d253637c4c4e113
 
-										}
+								} else { // player is left and up
 
-									}
+									// move enemy left
+									enemies.get(i).setX(enemies.get(i).getX() - 1.2f);
 
-								} else { // player is down
+								}
 
+<<<<<<< HEAD
+							}
+=======
 									enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() - 1.5f);
+>>>>>>> f1505460815d23110c4db6ff6d253637c4c4e113
 
-									// check if down is clear
-									if (!(Intersector.overlaps(enemies.get(i).getHitbox(),
-											borders.get(k).getRectangle()))) {
+						} else { // player is down
 
+<<<<<<< HEAD
+							enemies.get(i).moveHitbox(enemies.get(i).getX(), enemies.get(i).getY() - 1.2f);
+=======
 										// move enemy down
 										enemies.get(i).setY(enemies.get(i).getY() - 1.5f);
+>>>>>>> f1505460815d23110c4db6ff6d253637c4c4e113
 
-									} else { // down is blocked -> right or left
+							// check if down is clear
+							if (!(Intersector.overlaps(enemies.get(i).getHitbox(),
+									borders.get(k).getRectangle()))) {
 
+<<<<<<< HEAD
+								// move enemy down
+								enemies.get(i).setY(enemies.get(i).getY() - 1.2f);
+
+							} else { // down is blocked -> right or left
+=======
 										if (pile.getX() - enemies.get(i).getX() >= 0) { // player is right and
 																						// down
 
 											// move enemy right
 											enemies.get(i).setX(enemies.get(i).getX() + 1.5f);
+>>>>>>> f1505460815d23110c4db6ff6d253637c4c4e113
 
-										} else { // player is left and down
+								if (pile.getX() - enemies.get(i).getX() > 0) { // player is right and down
 
+<<<<<<< HEAD
+									// move enemy right
+									enemies.get(i).setX(enemies.get(i).getX() + 1.2f);
+=======
 											// move enemy left
 											enemies.get(i).setX(enemies.get(i).getX() - 1.5f);
+>>>>>>> f1505460815d23110c4db6ff6d253637c4c4e113
 
-										}
+								} else { // player is left and down
 
-									}
+									// move enemy left
+									enemies.get(i).setX(enemies.get(i).getX() - 1.2f);
 
 								}
 
 							}
+							
 
-						}
 
-					}
 
+				}
+				
+
+			}
+			*/
+					
 					// move enemies
 					enemies.get(i).setX(enemies.get(i).getX() + enemies.get(i).getxVel());
 					enemies.get(i).setY(enemies.get(i).getY() + enemies.get(i).getyVel());
-
 				}
+				
 			} else {
 
 				// reduce the enemy timeoutTimer
@@ -962,6 +1212,7 @@ public class Updater implements Screen {
 		// PLAYER INPUT STUFF
 		statetime += delta;
 		// Movement logic template for the character
+		// Should this be a switch. Now every if statement if handled 
 
 		if (Gdx.input.isKeyPressed(Keys.A)) {
 			player.setDir(Player.DIRECTION.LEFT);
@@ -1366,28 +1617,6 @@ public class Updater implements Screen {
 				}
 			}
 		}
-		// If enemy and player touch they both lose HP
-		// Teppo moved this elsewhere
-		/*
-		 * for (int i = 0; i < enemies.size(); i++) { if
-		 * (Intersector.overlaps(player.getHitbox(), enemies.get(i).getHitbox()) &&
-		 * enemies.get(i).getHP() > 0 && player.getHP() > 0) {
-		 * 
-		 * if (player.getPowerupType() != POWERUPTYPE.SHIELD) {
-		 * player.setHP(player.getHP() - 1); // Update healthbar
-		 * healthBar.setValue(healthBar.getValue() - 0.1f); }
-		 * enemies.get(i).setHP(enemies.get(i).getHP() - 1);
-		 * 
-		 * if (enemies.get(i).getHP() <= 0) { // Get points if (enemies.get(i)
-		 * instanceof StealingEnemy) {
-		 * game.getLoader().setScore(game.getLoader().getScore() + 500); } if
-		 * (enemies.get(i) instanceof ChaserEnemy) {
-		 * game.getLoader().setScore(game.getLoader().getScore() + 1000); }
-		 * enemies.remove(i); } if (player.getHP() < 1) {
-		 * System.out.println("Player HP now zero");
-		 * 
-		 * game.setScreen(new LoadingScreen(game)); this.dispose(); } } }
-		 */
 
 		camera.position.set(
 				MathUtils.clamp(player.getX(), camera.viewportWidth * .5f,
@@ -1526,7 +1755,28 @@ public class Updater implements Screen {
 					game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
 							enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 				}
+			
+			// Third Enemy
+			} else  if (enemies.get(i) instanceof ThirdEnemy) {
+				
+				// Copied from stealing enemy, so may not work
+				if (enemies.get(i).getIsHit()) {
+					
+					game.batch.setColor(Color.RED);
+					game.batch.draw(enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
+							enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
+					game.batch.setColor(Color.WHITE);
+				
+				} else {
+					
+					game.batch.draw(enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
+							enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
+					
+				}
+				
 			}
+						
+			
 			if (TimeUtils.timeSinceMillis(enemyIsHitTime) > 500) {
 				enemies.get(i).setIsHit(false);
 			}

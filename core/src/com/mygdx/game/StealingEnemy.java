@@ -42,6 +42,8 @@ public class StealingEnemy extends SpriteCommons {
 	public void setDir(DIRECTION dir) {
 		this.dir = dir;
 	}
+	
+	
 	public void setDir(float xVel, float yVel) {
 		if(xVel > 0 && yVel > 0) {
 			dir = DIRECTION.UP;
@@ -56,6 +58,7 @@ public class StealingEnemy extends SpriteCommons {
 			dir = DIRECTION.DOWN;
 		}	
 		
+
 		if(xVel > 0 && yVel == 0) {
 			dir = DIRECTION.RIGHT;
 		}
@@ -70,6 +73,8 @@ public class StealingEnemy extends SpriteCommons {
 		}	
 		
 		}
+
+
 	
 	
 	// Sets all the animations
