@@ -456,6 +456,7 @@ public void setIsHit(boolean hit) {
 public boolean getIsHit() {
 	return isHit;
 	}
+/*
 public boolean getCollisionForecast(Rectangle obstacle) {
 	float futureX = x ;
 	float futureY = y ;
@@ -473,6 +474,7 @@ public boolean getCollisionForecast(Rectangle obstacle) {
 	}
 	return aboutToCollide;
 }
+*/
 
 public boolean existsObstaclesinLine(Rectangle obstacle, Rectangle Target) {
 	
