@@ -353,8 +353,8 @@ public class Updater implements Screen {
 		}
 
 		if (TimeUtils.timeSinceMillis(player.getLastPreviousSet()) > 200) {
-			player.setPreviousX(player.getX());
-			player.setPreviousY(player.getY());
+			player.setPreviousX(player.getMiddleX());
+			player.setPreviousY(player.getMiddleY());
 			player.setLastPreviousSet(TimeUtils.millis());
 		}
 
