@@ -11,35 +11,15 @@ import com.mygdx.game.StealingEnemy.DIRECTION;
 public class ChaserEnemy extends SpriteCommons {
 	
 	private Texture chaserTexture;
-	private DIRECTION dir; 
-	// private Animator animations;
+	private DIRECTION dir;
 
 	public ChaserEnemy(int width, int height, float x, float y, int HP, Texture chaserTexture) {
 		super(width, height, x, y, 0f, 0f, HP);
 		this.chaserTexture = chaserTexture;
 
-		// Looks the side of the spawn 
-		/*
-		if(x == 0 ) {
-			
-			dir = DIRECTION.RIGHT;			
-			
-		}else if(y == 0 ) {
-			
-			dir = DIRECTION.UP;
-			
-		}else if(y == (Gdx.graphics.getWidth() - width)) {
-			
-			dir = DIRECTION.LEFT;
-			
-		}else if(y == (Gdx.graphics.getHeight() - height)) {
-			
-			dir = DIRECTION.DOWN;		
-		}
-		
-		*/
 	}
-	
+
+
 	public Texture getTexture() {
 		return chaserTexture;
 	}
@@ -51,14 +31,10 @@ public class ChaserEnemy extends SpriteCommons {
 	public DIRECTION getDir() {
 		return dir;
 	}
-	public void setDir(DIRECTION dir) {
+	
+public void setDir(DIRECTION dir) {
 		this.dir = dir;
 	}
-	
-	
-	
-
-	
 	
 	/*
 	// Sets all the animations

@@ -74,9 +74,6 @@ public class Player extends SpriteCommons {
 		
 	}
 	
-	
-	
-	
 	/*
 	 * Method for changing the frame of current animation. 
 	 * @param row = which row from the spritesheet is used
@@ -88,9 +85,6 @@ public class Player extends SpriteCommons {
 		return lastPreviousSet;
 	}
 
-
-
-
 	public Texture getCandyIndicator() {
 		return candyIndicator;
 	}
@@ -101,24 +95,26 @@ public class Player extends SpriteCommons {
 	public void setCandyIndicator(Texture candyIndicator) {
 		this.candyIndicator = candyIndicator;
 	}
-public void setGoAround(int enemyId, Vector2 path) {
-	if(goAround.containsKey(enemyId)) {
-		goAround.get(enemyId).add(path);
+
+	public void setGoAround(int enemyId, Vector2 path) {
+		if(goAround.containsKey(enemyId)) {
+			goAround.get(enemyId).add(path);
+			
+			if(goAround.get(enemyId).size()>5) {
+				goAround.get(enemyId).remove(0);
+			}
+			
+		}else {
+	     
+		 ArrayList<Vector2> coords = new ArrayList<Vector2>();
+	     coords.add(path);
+		 goAround.put(enemyId, coords );
 		
-		if(goAround.get(enemyId).size()>5) {
-			goAround.get(enemyId).remove(0);
 		}
-		
-	}else {
-     
-	 ArrayList<Vector2> coords = new ArrayList<Vector2>();
-     coords.add(path);
-	 goAround.put(enemyId, coords );
-	
 	}
 	
 	
-}
+
 
 
 
@@ -132,9 +128,6 @@ public void setGoAround(int enemyId, Vector2 path) {
 	public void setCollectedCandy(int collectedCandy) {
 		this.collectedCandy = collectedCandy;
 	}
-
-
-
 
 	public void setLastPreviousSet(long lastPreviousSet) {
 		this.lastPreviousSet = lastPreviousSet;
@@ -345,22 +338,19 @@ public void setPreviousY(float y) {
 }
 	
 public float getPreviousX() {
+
 	float x = 0f;
 	
-	   
-        x = previousX.get(0);
-	  
-	
+	x = previousX.get(0);	
+
 	return x;
 }
 
 public float getPreviousY() {
+
 	float y = 0f;
 	  
 		    y = previousY.get(0);
-	
-	
-	
 	
 	return y;
 }

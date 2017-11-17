@@ -42,20 +42,25 @@ public class StealingEnemy extends SpriteCommons {
 	public void setDir(DIRECTION dir) {
 		this.dir = dir;
 	}
+	
+	/*
 	public void setDir(float xVel, float yVel) {
 		
-	if(yVel>0) {
-		dir = DIRECTION.UP;
-	}else {
-		dir = DIRECTION.DOWN;
-	}
-	if(xVel > 0) {
-		dir = DIRECTION.RIGHT;
-	}else {
-		dir = DIRECTION.LEFT;
-	}
+
+		if(yVel>0) {
+			dir = DIRECTION.UP;
+		}else {
+			dir = DIRECTION.DOWN;
+		}
+		// ALWAYS LEFT OR RIGHT
+		if(xVel > 0) {
+			dir = DIRECTION.RIGHT;
+		}else {
+			dir = DIRECTION.LEFT;
+		}
 		
 	}
+	*/
 	
 	
 	// Sets all the animations
