@@ -420,16 +420,16 @@ public Vector2 investigatePath(Rectangle obstacle) {
 				while(tmp.contains(futureX,futureY)){
 					
 					if(Math.abs(tmp.getX() - futureX) <Math.abs((tmp.getX() + tmp.getWidth()) - futureX)) {
-						futureX  = futureX - width-20;
+						futureX --;
 					}else {
 						
-						futureX = futureX + width+20;
+						futureX ++;
 					}
 					if(Math.abs(tmp.getY() - futureY) <Math.abs((tmp.getY() + tmp.getHeight()) - futureY)) {
-						futureY = futureY - height-20;
+						futureY --;
 					}else {
 						
-						futureY = futureY + height+20;
+						futureY++;
 					}
 					
 					
