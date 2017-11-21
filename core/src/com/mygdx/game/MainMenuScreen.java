@@ -54,10 +54,10 @@ public class MainMenuScreen implements Screen {
 	private String tmp;
 	// private String name;
 	private Music ambience;
-
+	
 	public MainMenuScreen(final Core game) {
 		this.game = game;
-		stage = new Stage(new ScreenViewport());
+		stage = new Stage(new ScreenViewport()); //fitviewport?
 		Gdx.input.setInputProcessor(stage);
 		userInterface = new UserInterface(game);
 
@@ -98,7 +98,7 @@ public class MainMenuScreen implements Screen {
 		creditsButton.addListener(new InputListener() {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				Dialog dialog = userInterface.newDialog();
+				Dialog dialog = userInterface.newCreditsDialog();
 				dialog.show(stage);
 			}
 
