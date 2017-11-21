@@ -24,6 +24,7 @@ public class ResourceManager {
 	private boolean masterVolume;
 	private boolean playerDead;
 	private boolean pileStolen;
+	private boolean gamePaused;
 
 	public ResourceManager() {
 		// System.out.println("Internal storage path: " +
@@ -31,6 +32,7 @@ public class ResourceManager {
 		masterVolume = true;
 		playerDead = false;
 		pileStolen = false;
+		gamePaused = false;
 		manager = new AssetManager();
 		prefs = Gdx.app.getPreferences("Scores");
 		if (!prefs.contains("highScore")) {
@@ -213,5 +215,11 @@ public class ResourceManager {
 	}
 	public boolean getPileStolen() {
 		return pileStolen;
+	}
+	public void setGamePaused(boolean value) {
+		gamePaused = value;
+	}
+	public boolean getGamePaused() {
+		return gamePaused;
 	}
 }

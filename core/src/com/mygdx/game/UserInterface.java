@@ -38,8 +38,10 @@ public class UserInterface {
 	private TextButton button;
 	private Button musicButton;
 	private BitmapFont font;
+	final Core game;
 
 	public UserInterface(final Core game) {
+		this.game = game;
 		this.font = game.font;
 		manager = game.getLoader().getManager();
 		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
@@ -52,12 +54,12 @@ public class UserInterface {
 			label = new Label(name, mySkin, "title");
 		} else if (name.substring(0, 2).equals("Jo")) {
 			label = new Label(name, mySkin, "title");
-			label.setWrap(true);
 			label.setText(
 					"Protect your candy pile from the other kids who want to steal your candy! Move around with A, S, D, W keys and shoot with the mouse.");
 		} else {
 			label = new Label(name, style);
 		}
+		label.setWrap(true);
 		label.setPosition(x, y);
 		label.setAlignment(align);
 		label.setWidth(width);
@@ -85,11 +87,11 @@ public class UserInterface {
 		healthBar.getStyle().knobBefore = drawable;
 
 		healthBar.setWidth(Gdx.graphics.getWidth() / 5);
-		// healthBar.setHeight(19);
+		//healthBar.setHeight(19);
 		healthBar.getStyle().background.setMinHeight(Gdx.graphics.getHeight() / 25);
 		healthBar.getStyle().knobBefore.setMinHeight(Gdx.graphics.getHeight() / 25);
 		healthBar.getStyle().knob.setMinHeight(Gdx.graphics.getHeight() / 25);
-		// healthBar.setAnimateDuration(0.5f);
+		//healthBar.setAnimateDuration(0.5f);
 		healthBar.setValue(1f);
 		healthBar.setPosition(x, y);
 		return healthBar;
@@ -114,27 +116,49 @@ public class UserInterface {
 	}
 
 	public Button newSoundButton(float width, float x, float y) {
-		// ButtonStyle buttonStyle = mySkin.get("sound", ButtonStyle.class);
+		//ButtonStyle buttonStyle = mySkin.get("sound", ButtonStyle.class);
 		musicButton = new Button(mySkin, "sound");
+		musicButton.setChecked(game.getLoader().getMasterVolume());
 		musicButton.setWidth(width);
 		musicButton.setHeight(width);
 		musicButton.setPosition(x - musicButton.getWidth() / 2, y - musicButton.getHeight() / 2);
 		return musicButton;
 	}
 
-	public Dialog newDialog() {
-		Dialog dialog = new Dialog("", mySkin, "dialog");
+	public Dialog newCreditsDialog() {
+		Dialog dialog = new Dialog("", mySkin);
 		dialog.getBackground().setMinWidth(500f);
 		dialog.getBackground().setMinHeight(500f);
-		mySkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-		Label text = new Label("Here are the\ncredits. \n", mySkin);
+		Label text = new Label("Shade UI Skin by Raymond 'Raeleus' Buckley / CC BY 4.0\n...\n...", mySkin);
 		text.setWrap(true);
-		text.setAlignment(Align.left);
-		// text.setWrap(true);
+		text.setAlignment(Align.center);
 		dialog.text(text);
-		dialog.align(Align.left);
-		dialog.button("Exit", true); // sends "true" as the result
+		//dialog.align(Align.top);
+		dialog.button("Close", true); // sends "true" as the result
 		dialog.key(Keys.ENTER, true); // sends "true" when the ENTER key is pressed
+		return dialog;
+	}
+
+	public Dialog newPauseDialog() {
+		Dialog dialog = new Dialog("", mySkin) {
+			protected void result(Object object) {
+				if (object.equals(true)) {
+					Gdx.app.exit();
+				} else {
+					Gdx.graphics.setContinuousRendering(true);
+					game.getLoader().setGamePaused(false);
+				}
+			}
+		};
+		dialog.getBackground().setMinWidth(400f);
+		dialog.getBackground().setMinHeight(300f);
+		Label text = new Label("Are you sure you want to quit the game?", mySkin);
+		text.setWrap(true);
+		text.setAlignment(Align.center);
+		dialog.text(text);
+		dialog.button("Continue", false); // sends "false" as the result
+		dialog.button("Quit", true);
+		dialog.key(Keys.ENTER, false);
 		return dialog;
 	}
 
