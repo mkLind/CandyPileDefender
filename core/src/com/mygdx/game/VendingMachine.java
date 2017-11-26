@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.AudioRecorder;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -22,12 +23,14 @@ public class VendingMachine extends SpriteCommons {
 		return machine;
 	}
 	
-	public int distributeCandy(Rectangle player) {
+	public int distributeCandy(Rectangle player, Sound collect, boolean play) {
 		int additionToCandy = 0;
 
 		if(super.getHitbox().overlaps(player) && TimeUtils.timeSinceMillis(candyDistributed)>2000) {
 			additionToCandy = 1;
-		
+			if(play) {
+				collect.play();
+				}
 			candyDistributed = TimeUtils.millis();
 		}
 		return additionToCandy;

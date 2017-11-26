@@ -99,6 +99,7 @@ public class ResourceManager {
 			
 			manager.load("Sounds/game_over/NFF-death-bell.wav", Sound.class);
 			manager.load("Sounds/game_over/NFF-zomboid.wav", Sound.class);
+			manager.load("Sounds/NFF-coin-03.wav", Sound.class);
 		
 			
 			manager.load("Sounds/hit/NFF-dusty-hit.wav", Sound.class);
