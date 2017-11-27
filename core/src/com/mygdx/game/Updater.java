@@ -384,11 +384,13 @@ public class Updater implements Screen {
 					player.updateHitbox();
 				}
 			}
-			// Player fetching candy from machine
-			if (Intersector.overlaps(player.getHitbox(), machine.getHitbox())) {
+			// Player fetching candy from machine. If player is within player.getWidth + 10 distance, candy will be distributed
+			
+			
+			Vector2 hb = new Vector2(machine.getHitbox().getX(), machine.getHitbox().getY()); 
+			if (hb.dst(player.getX(), player.getY())<player.getWidth() + 10) {
 				
-				player.setxVel(0);
-				player.setyVel(0);
+			
 	
 				player.setCollectedCandy(player.getCollectedCandy() + machine.distributeCandy(player.getHitbox(),Collect,game.getLoader().getMasterVolume()));
 	
@@ -569,6 +571,8 @@ public class Updater implements Screen {
 		
 						enemies.get(i).setxVel(((float) (1.2f / hypot * (pile.getX()+ (pile.getWidth() / 2) - enemies.get(i).getX()))));
 						enemies.get(i).setyVel(((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
+						
+						((StealingEnemy) enemies.get(i)).setDir(enemies.get(i).getxVel(),enemies.get(i).getyVel());
 							
 						for(RectangleMapObject obj : borders) {
 							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
@@ -1486,7 +1490,7 @@ public class Updater implements Screen {
 			stage.draw();
 	
 			// shape renderer for debugging
-			
+			/*
 			  r.setProjectionMatrix(camera.combined); 
 			  r.begin(ShapeType.Line);
 			  r.setColor(Color.RED);
@@ -1495,12 +1499,16 @@ public class Updater implements Screen {
 			  for(int i = 0; i<enemies.size();i++) {
 				  for(RectangleMapObject b : borders) {
 					  r.line(enemies.get(i).getX() + enemies.get(i).getWidth()/2, enemies.get(i).getY()+ enemies.get(i).getHeight()/2,enemies.get(i).investigatePath(b.getRectangle()).x, enemies.get(i).investigatePath(b.getRectangle()).y);
-					  
+					
 				  }
 				  r.line(enemies.get(i).getX()+ enemies.get(i).getWidth()/2, enemies.get(i).getY()+ enemies.get(i).getHeight()/2,enemies.get(i).investigatePath(pile.getHitbox()).x, enemies.get(i).investigatePath(pile.getHitbox()).y);
 			  }
-			  
+			  for(RectangleMapObject b : borders) {
+				  r.rect(b.getRectangle().getX(), b.getRectangle().getY(), b.getRectangle().getWidth(), b.getRectangle().getHeight());
+			  }
+			  r.rect(pile.getHitbox().getX(), pile.getHitbox().getY(), pile.getHitbox().getWidth(), pile.getHitbox().getHeight());
 			  r.end();
+			  */
 		}
 		else {
 			Gdx.gl.glClearColor(0, 0, 0, 0);
