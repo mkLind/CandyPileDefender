@@ -402,6 +402,10 @@ public Vector2 investigatePath(Rectangle obstacle) {
 	
 	
 		Rectangle tmp = new Rectangle(obstacle);
+		tmp.setX(tmp.getX() - 20);
+		tmp.setY(tmp.getY() - 20);
+		tmp.setWidth(tmp.getWidth() + 20);
+		tmp.setHeight(tmp.getHeight() + 20);
 		
 		
 		

@@ -129,10 +129,13 @@ public class UserInterface {
 		Dialog dialog = new Dialog("", mySkin);
 		dialog.getBackground().setMinWidth(500f);
 		dialog.getBackground().setMinHeight(500f);
-		Label text = new Label("Shade UI Skin by Raymond 'Raeleus' Buckley / CC BY 4.0\n...\n...", mySkin);
+		Label text = new Label("Shade UI Skin by Raymond 'Raeleus' Buckley / CC BY 4.0\nBackground Music by PlayOnLoop.com " + "\n" +
+						"Licensed under Creative Commons By Attribution 4.0\nSound Effects by NoiseForFun.com" + " \n"+ 
+				"Licensed under the CC-BY-ND 3.0 Attribution license.", mySkin);
 		text.setWrap(true);
 		text.setAlignment(Align.center);
 		dialog.text(text);
+		
 		//dialog.align(Align.top);
 		dialog.button("Close", true); // sends "true" as the result
 		dialog.key(Keys.ENTER, true); // sends "true" when the ENTER key is pressed

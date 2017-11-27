@@ -34,7 +34,7 @@
    eJxjYBgFQxUIDbQDaASGmr94B9oBSGDULdjBqFuwg8HmlsGS9wdbuAwWMOoW7GAkuYWUPEort5BTToykOCIWDJbydhQMLQAAixgBPQ==
   </data>
  </layer>
- <objectgroup name="Borders" visible="0">
+ <objectgroup name="Borders">
   <object id="1" x="0" y="10.667" width="600" height="132.667"/>
   <object id="2" x="693.333" y="9.667" width="355.667" height="135"/>
   <object id="4" x="5.33333" y="648.667" width="1044" height="131"/>

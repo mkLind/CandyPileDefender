@@ -109,6 +109,7 @@ public class Updater implements Screen {
 	private Sound walk1;
 	private Sound walk2;
 	private Sound hurt;
+	private Sound Collect;
 
 	private long walkSet;
 
@@ -179,7 +180,7 @@ public class Updater implements Screen {
 		walk1 = game.getLoader().getManager().get("Sounds/walking/grass1.wav", Sound.class);
 		walk2 = game.getLoader().getManager().get("Sounds/walking/gravel1.wav", Sound.class);
 		hurt = game.getLoader().getManager().get("Sounds/hit/NFF-kid-hurt.wav",Sound.class);
-		
+		Collect = game.getLoader().getManager().get("Sounds/NFF-coin-03.wav", Sound.class);
 		// Set initial coordinates from map to player and candypile
 		for (int i = 0; i < spawnPoints.size; i++) {
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("Player")) {
@@ -200,7 +201,7 @@ public class Updater implements Screen {
 			}
 			if (spawnPoints.get(i).getProperties().get("Spawnpoint").toString().equals("vendingmachine")) {
 
-				machine = new VendingMachine(14, 42, spawnPoints.get(i).getRectangle().getX(),
+				machine = new VendingMachine(20, 48, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(), 0, 0,
 						game.getLoader().getManager().get("VendingMachine.png", Texture.class));
 
@@ -385,11 +386,11 @@ public class Updater implements Screen {
 			}
 			// Player fetching candy from machine
 			if (Intersector.overlaps(player.getHitbox(), machine.getHitbox())) {
-	
+				
 				player.setxVel(0);
 				player.setyVel(0);
 	
-				player.setCollectedCandy(player.getCollectedCandy() + machine.distributeCandy(player.getHitbox()));
+				player.setCollectedCandy(player.getCollectedCandy() + machine.distributeCandy(player.getHitbox(),Collect,game.getLoader().getMasterVolume()));
 	
 			}
 			// Add collected candy to pile
@@ -730,23 +731,23 @@ public class Updater implements Screen {
 						}
 	
 						// checks if collides with the candy pile
-					} else if (Intersector.overlaps(enemies.get(i).getHitbox(), pile.getHitbox())) {
+					} else if (Intersector.overlaps(enemies.get(i).getHitbox(), pile.getHitbox()) && (enemies.get(i) instanceof StealingEnemy || enemies.get(i) instanceof ThirdEnemy)) {
 	
 						// steal from the pile
-						if (enemies.get(i) instanceof StealingEnemy || enemies.get(i) instanceof ThirdEnemy) {
+			
 	
 							if (Intersector.overlaps((enemies.get(i).getHitbox()), pile.getHitbox())) {
 								pile.reduceHealth();
 								enemies.remove(i);
 	
-							}
+							
 	
 						} else {
 	
 							// "pathfinding" around the pile (probably badly optimized)
 							// implemented in SpriteCommons
 							
-							
+							if(enemies.get(i).existsObstaclesinLine(pile.getHitbox(), player.getHitbox())) {
 							Vector2 newTarget = enemies.get(i).investigatePath(pile.getHitbox());
 							
 							hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
@@ -757,8 +758,9 @@ public class Updater implements Screen {
 							
 							
 							
+						
+							}
 							enemies.get(i).goAround(pile, player);
-							
 						}
 	
 						// enemies.get(i).updateHitbox();
@@ -766,38 +768,42 @@ public class Updater implements Screen {
 					
 									
 						
-					} else {
-						// Enemy collisions with borders
+					}else {
+						// Enemy collisions avoidance, detect possible collision with exists Obstacles in line and correct path with investigate path
 						for (int k = 0; k < borders.size; k++) {
-	
-							if (Intersector.overlaps(borders.get(k).getRectangle(), enemies.get(i).getHitbox())) {
-									
-								if(enemies.get(i) instanceof StealingEnemy) {
-									Vector2 newTarget = enemies.get(i).investigatePath(borders.get(k).getRectangle());
-									
-									hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
-											enemies.get(i).getY() - newTarget.y);
-									
-									enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
-									enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
-									
-							    	break;
-								}else if (enemies.get(i) instanceof ChaserEnemy)  {
-									
-									Vector2 newTarget = enemies.get(i).investigatePath(borders.get(k).getRectangle());
-									
-									hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
-											enemies.get(i).getY() - newTarget.y);
-									
-									enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
-									enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
-									
-							    	break;
-									
-								}
 							
-	
+							if(enemies.get(i) instanceof StealingEnemy && enemies.get(i).existsObstaclesinLine(borders.get(k).getRectangle(), pile.getHitbox())) {
+								Vector2 newTarget = enemies.get(i).investigatePath(borders.get(k).getRectangle());
+								
+								hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
+										enemies.get(i).getY() - newTarget.y);
+								
+								enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
+								enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
+								
+						    	break;
+							}else if(enemies.get(i) instanceof ChaserEnemy && enemies.get(i).existsObstaclesinLine(borders.get(k).getRectangle(), player.getHitbox())) {
+								Vector2 newTarget = enemies.get(i).investigatePath(borders.get(k).getRectangle());
+								
+								hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
+										enemies.get(i).getY() - newTarget.y);
+								
+								enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
+								enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
+								
+						    	break;
+							}else if(enemies.get(i) instanceof ThirdEnemy && enemies.get(i).existsObstaclesinLine(borders.get(k).getRectangle(), player.getHitbox())) {
+									Vector2 newTarget = enemies.get(i).investigatePath(borders.get(k).getRectangle());
+								
+								hypot = Math.hypot(enemies.get(i).getX() - newTarget.x,
+										enemies.get(i).getY() - newTarget.y);
+								
+								enemies.get(i).setxVel(((float) (1.5f / hypot * (newTarget.x - enemies.get(i).getX()))));
+								enemies.get(i).setyVel(((float) (1.5f / hypot * (newTarget.y - enemies.get(i).getY()))));
+								
+						    	break;
 							}
+
 							
 						}
 	
@@ -1484,7 +1490,7 @@ public class Updater implements Screen {
 			stage.draw();
 	
 			// shape renderer for debugging
-			/*
+			
 			  r.setProjectionMatrix(camera.combined); 
 			  r.begin(ShapeType.Line);
 			  r.setColor(Color.RED);
@@ -1498,7 +1504,7 @@ public class Updater implements Screen {
 				  r.line(enemies.get(i).getX()+ enemies.get(i).getWidth()/2, enemies.get(i).getY()+ enemies.get(i).getHeight()/2,enemies.get(i).investigatePath(pile.getHitbox()).x, enemies.get(i).investigatePath(pile.getHitbox()).y);
 			  }
 			  
-			  r.end();*/
+			  r.end();
 		}
 		else {
 			Gdx.gl.glClearColor(0, 0, 0, 0);
