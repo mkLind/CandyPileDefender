@@ -1207,6 +1207,12 @@ public class Updater implements Screen {
 	
 				}
 			}
+			//remove projectile if hits pile
+			for (int i = 0; i < proj.size(); i++) {
+				if (Intersector.overlaps(proj.get(i).getHitbox(), pile.getHitbox())) {
+					proj.remove(i);
+				}
+			}
 	
 			for (int i = 0; i < enemies.size(); i++) {
 	
@@ -1233,8 +1239,6 @@ public class Updater implements Screen {
 							enemies.remove(i);
 							break;
 						}
-					} else if (Intersector.overlaps(proj.get(j).getHitbox(), pile.getHitbox())) {
-						proj.remove(j);
 					}
 				}
 			}
