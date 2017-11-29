@@ -45,32 +45,36 @@ public class StealingEnemy extends SpriteCommons {
 	
 	
 	public void setDir(float xVel, float yVel) {
-		if(xVel > 0 && yVel > 0) {
-			dir = DIRECTION.UP;
-		}
-		if(xVel > 0 && yVel < 0) {
-			dir = DIRECTION.DOWN;
-		}
-		if(xVel < 0 && yVel > 0) {
-			dir = DIRECTION.UP;
-		}
-		if(xVel < 0 && yVel < 0) {
-			dir = DIRECTION.DOWN;
-		}	
+		float yplus = 0.5f;
+		float yminus = -0.5f;
 		
-
-		if(xVel > 0 && yVel == 0) {
+		float xplus = 0.5f;
+		float xminus = -0.5f;
+		
+		if(yVel>=yplus && xVel<xplus) {
+			dir = DIRECTION.UP;
+		}
+		else if(yVel>=yplus && xVel>=xplus) {
 			dir = DIRECTION.RIGHT;
 		}
-		if(xVel < 0 && yVel == 0) {
+		else if(yVel<yminus && xVel<xplus) {
+			dir = DIRECTION.DOWN;
+		}
+		else if(yVel<yminus && xVel>=xplus) {
+			dir = DIRECTION.RIGHT;
+			
+		}else if(yVel>=yplus && xVel<xminus) {
 			dir = DIRECTION.LEFT;
 		}
-		if(xVel == 0 && yVel > 0) {
+		else if(yVel>=yplus && xVel>xminus && xVel < xplus) {
 			dir = DIRECTION.UP;
 		}
-		if(xVel == 0 && yVel < 0) {
+		else if(yVel<yminus && xVel<xminus) {
+			dir = DIRECTION.LEFT;
+		}
+		else if(yVel<yminus && xVel>xminus && xVel < xplus) {
 			dir = DIRECTION.DOWN;
-		}	
+		}
 		
 		}
 

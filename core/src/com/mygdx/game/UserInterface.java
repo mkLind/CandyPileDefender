@@ -131,7 +131,8 @@ public class UserInterface {
 		dialog.getBackground().setMinHeight(500f);
 		Label text = new Label("Shade UI Skin by Raymond 'Raeleus' Buckley / CC BY 4.0\nBackground Music by PlayOnLoop.com " + "\n" +
 						"Licensed under Creative Commons By Attribution 4.0\nSound Effects by NoiseForFun.com" + " \n"+ 
-				"Licensed under the CC-BY-ND 3.0 Attribution license.", mySkin);
+				"Licensed under the CC-BY-ND 3.0 Attribution license " + "\n" + "Programming: Tommi Hilanne, Teppo Huhtala, Markus Lindberg" + "\n" + "Graphics: Sanne Jelink" 
+						+ "\n" + "Sounds: Maria Kejonen", mySkin);
 		text.setWrap(true);
 		text.setAlignment(Align.center);
 		dialog.text(text);

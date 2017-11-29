@@ -412,8 +412,8 @@ public Vector2 investigatePath(Rectangle obstacle) {
 		
 		
 		int additions = 0;
-		float futureX = x;
-		float futureY = y;
+		float futureX = x + width/2;
+		float futureY = y + height/2;
 		
 		while(additions < 30) {
 			futureX = futureX + xVel;
@@ -489,8 +489,8 @@ public boolean existsObstaclesinLine(Rectangle obstacle, Rectangle Target) {
 	
 	boolean existsObstacles = false;
 	
-	float futureX = x;
-	float futureY = y;
+	float futureX = x+width/2;
+	float futureY = y+height/2;
 	
 	int additions = 0;
 	

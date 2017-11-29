@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.AudioRecorder;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class VendingMachine extends SpriteCommons {
@@ -25,8 +26,9 @@ public class VendingMachine extends SpriteCommons {
 	
 	public int distributeCandy(Rectangle player, Sound collect, boolean play) {
 		int additionToCandy = 0;
+		Vector2 hb = new Vector2(super.getHitbox().getX(), super.getHitbox().getY()); 
 
-		if(super.getHitbox().overlaps(player) && TimeUtils.timeSinceMillis(candyDistributed)>2000) {
+		if(hb.dst(player.getX(), player.getY())<player.getWidth() + 10 && TimeUtils.timeSinceMillis(candyDistributed)>2000) {
 			additionToCandy = 1;
 			if(play) {
 				collect.play();
