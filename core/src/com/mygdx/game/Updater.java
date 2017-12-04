@@ -280,8 +280,9 @@ public class Updater implements Screen {
 
 				// new chaser
 				ChaserEnemy chaser = new ChaserEnemy(21, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
-						monsterSpawns.get(tmp2).getRectangle().getY(), 2,
-						game.getLoader().getManager().get("chaserTest.png", Texture.class));
+						monsterSpawns.get(tmp2).getRectangle().getY(), 2);
+				chaser.setAnimations(4, 3, 0.10f, game.getLoader().getManager().get("PumpkinTileset.png", Texture.class));
+			
 				// Id that differs from stealer id's
 				chaser.setId(timesCalled + i);
 
@@ -291,7 +292,7 @@ public class Updater implements Screen {
 				ThirdEnemy thirdEnemy = new ThirdEnemy(30, 40, monsterSpawns.get(tmp).getRectangle().getX(),
 						monsterSpawns.get(tmp).getRectangle().getY(), 1);
 				thirdEnemy.setAnimations(4, 3, 0.10f,
-						game.getLoader().getManager().get("thirdEnemyTest.png", Texture.class));
+						game.getLoader().getManager().get("WitchTileset.png", Texture.class));
 				//thirdEnemy.setId(); what's the point of the ID
 				enemyAdd.add(thirdEnemy);
 				
@@ -523,6 +524,7 @@ public class Updater implements Screen {
 						enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
 						enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
 						
+						((ChaserEnemy) enemies.get(i)).setDir(enemies.get(i).getxVel(),enemies.get(i).getyVel());
 						
 	
 						for(RectangleMapObject obj : borders) {
@@ -608,7 +610,7 @@ public class Updater implements Screen {
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
 							
-							
+							((ThirdEnemy) enemies.get(i)).setDir(enemies.get(i).getxVel(),enemies.get(i).getyVel());
 							for(RectangleMapObject obj : borders) {
 								if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
 									Vector2 newTarget = enemies.get(i).investigatePath(obj.getRectangle());
@@ -1371,6 +1373,7 @@ public class Updater implements Screen {
 								enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 						game.batch.setColor(Color.WHITE);
 					} else {
+						System.out.println("Frame not set: " + enemies.get(i).getCurrentFrame(statetime)==null);
 						game.batch.draw(enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
 								enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 					}
@@ -1379,11 +1382,12 @@ public class Updater implements Screen {
 				} else if (enemies.get(i) instanceof ChaserEnemy) {
 					if (enemies.get(i).getIsHit()) {
 						game.batch.setColor(Color.RED);
-						game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
+						game.batch.draw( enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
 								enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 						game.batch.setColor(Color.WHITE);
 					} else {
-						game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
+						System.out.println("Frame Set: " + enemies.get(i).getCurrentFrame(statetime)==null);
+						game.batch.draw(enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
 								enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 					}
 				
@@ -1399,7 +1403,7 @@ public class Updater implements Screen {
 						game.batch.setColor(Color.WHITE);
 					
 					} else {
-						
+						System.out.println("Frame Set: " + enemies.get(i).getCurrentFrame(statetime)==null);
 						game.batch.draw(enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
 								enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 						

@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -10,19 +11,17 @@ import com.mygdx.game.StealingEnemy.DIRECTION;
 
 public class ChaserEnemy extends SpriteCommons {
 	
-	private Texture chaserTexture;
+
+	private Animator animations;
 	private DIRECTION dir;
 
-	public ChaserEnemy(int width, int height, float x, float y, int HP, Texture chaserTexture) {
+	public ChaserEnemy(int width, int height, float x, float y, int HP) {
 		super(width, height, x, y, 0f, 0f, HP);
-		this.chaserTexture = chaserTexture;
-
+	
+		setDir(super.getxVel(), super.getyVel());
 	}
 
 
-	public Texture getTexture() {
-		return chaserTexture;
-	}
 
 	public enum DIRECTION{
 		UP,DOWN,LEFT,RIGHT
@@ -36,19 +35,23 @@ public void setDir(DIRECTION dir) {
 		this.dir = dir;
 	}
 	
-	/*
+	
 	// Sets all the animations
 	public void setAnimations(int row, int column, float frametime, Texture spritesheet){
+		System.out.println("Setting animations for chasers");
+		System.out.println("ROWS: " + row  + " COLUMN: " + column + " FRAMETIME: " + frametime );
 		animations = new Animator(row, column, frametime, spritesheet);
 		
 	}
-
+     /*
 	 * Method for changing the frame of current animation. 
 	 * @param row = which row from the spritesheet is used
 	 * @param time = used to determine which frame of the animation to use
+	 */
 
 	public TextureRegion getCurrentFrame( float time){
 		
+				System.out.println("@ getCurrentFrame()");
 				
 		if(this.dir == DIRECTION.UP){
 			if(super.getxVel()== 0 && super.getyVel() == 0){
@@ -81,5 +84,41 @@ public void setDir(DIRECTION dir) {
 		return null;
 		
 		
-	} */
+	}
+	public void setDir(float xVel, float yVel) {
+		float yplus = 0.5f;
+		float yminus = -0.5f;
+		
+		float xplus = 0.5f;
+		float xminus = -0.5f;
+		
+		if(yVel>=yplus && xVel<xplus) {
+			dir = DIRECTION.UP;
+		}
+		else if(yVel>=yplus && xVel>=xplus) {
+			dir = DIRECTION.RIGHT;
+		}
+		else if(yVel<yminus && xVel<xplus) {
+			dir = DIRECTION.DOWN;
+		}
+		else if(yVel<yminus && xVel>=xplus) {
+			dir = DIRECTION.RIGHT;
+			
+		}else if(yVel>=yplus && xVel<xminus) {
+			dir = DIRECTION.LEFT;
+		}
+		else if(yVel>=yplus && xVel>xminus && xVel < xplus) {
+			dir = DIRECTION.UP;
+		}
+		else if(yVel<yminus && xVel<xminus) {
+			dir = DIRECTION.LEFT;
+		}
+		else if(yVel<yminus && xVel>xminus && xVel < xplus) {
+			dir = DIRECTION.DOWN;
+		}else if(yVel ==0 && xVel==0) {
+			dir = DIRECTION.LEFT;
+		}
+		
+		}
 }
+

@@ -14,23 +14,12 @@ public class StealingEnemy extends SpriteCommons {
 	public StealingEnemy(int width, int height, float x, float y, int HP) {
 		super(width, height, x, y, 0f, 0f, HP);
 		
-		if (y < 10) {
-			dir = DIRECTION.UP;
-		} else if (x < 10) {
-			dir = DIRECTION.RIGHT;			
-		} else if (x > 100) {
-			dir = DIRECTION.LEFT;	
-		}else {
-			dir = DIRECTION.DOWN;
-		}
+	setDir(super.getxVel(), super.getyVel());
+	
 		
 	}
 	
-	/*
-	public Texture getTexture() {
-		return stealerTexture;
-	}
-	*/
+	
 	
 	public enum DIRECTION{
 		UP,DOWN,LEFT,RIGHT
@@ -74,6 +63,8 @@ public class StealingEnemy extends SpriteCommons {
 		}
 		else if(yVel<yminus && xVel>xminus && xVel < xplus) {
 			dir = DIRECTION.DOWN;
+		}else if(yVel ==0 && xVel==0) {
+			dir = DIRECTION.LEFT;
 		}
 		
 		}
@@ -93,7 +84,7 @@ public class StealingEnemy extends SpriteCommons {
 	*/
 	public TextureRegion getCurrentFrame( float time){
 		
-				
+				System.out.println("Current direction: " + dir);
 		if(this.dir == DIRECTION.UP){
 			if(super.getxVel()== 0 && super.getyVel() == 0){
 				return (TextureRegion)animations.getAnimation(1).getKeyFrame(0,true);	
