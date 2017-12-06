@@ -271,7 +271,7 @@ public class Updater implements Screen {
 
 				// new stealer
 				// why tmp here and chaser in the second one?
-				StealingEnemy tmpSE = new StealingEnemy(30, 40, monsterSpawns.get(tmp).getRectangle().getX(),
+				StealingEnemy tmpSE = new StealingEnemy(21, 32, monsterSpawns.get(tmp).getRectangle().getX(),
 						monsterSpawns.get(tmp).getRectangle().getY(), 1);
 				tmpSE.setAnimations(4, 3, 0.10f,
 						game.getLoader().getManager().get("SkeletonTileset.png", Texture.class));
@@ -279,7 +279,7 @@ public class Updater implements Screen {
 				enemyAdd.add(tmpSE);
 
 				// new chaser
-				ChaserEnemy chaser = new ChaserEnemy(21, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
+				ChaserEnemy chaser = new ChaserEnemy(27, 36, monsterSpawns.get(tmp2).getRectangle().getX(),
 						monsterSpawns.get(tmp2).getRectangle().getY(), 2);
 				chaser.setAnimations(4, 3, 0.10f, game.getLoader().getManager().get("PumpkinTileset.png", Texture.class));
 			
@@ -289,7 +289,7 @@ public class Updater implements Screen {
 				enemyAdd.add(chaser);
 				
 				//THIRD ENEMY TRY, NO IDEA ABOUT ID
-				ThirdEnemy thirdEnemy = new ThirdEnemy(30, 40, monsterSpawns.get(tmp).getRectangle().getX(),
+				ThirdEnemy thirdEnemy = new ThirdEnemy(28, 43, monsterSpawns.get(tmp).getRectangle().getX(),
 						monsterSpawns.get(tmp).getRectangle().getY(), 1);
 				thirdEnemy.setAnimations(4, 3, 0.10f,
 						game.getLoader().getManager().get("WitchTileset.png", Texture.class));
@@ -524,7 +524,7 @@ public class Updater implements Screen {
 						enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
 						enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
 						
-						((ChaserEnemy) enemies.get(i)).setDir(enemies.get(i).getxVel(),enemies.get(i).getyVel());
+						((ChaserEnemy) enemies.get(i)).setDir(player.getHitbox());
 						
 	
 						for(RectangleMapObject obj : borders) {
@@ -574,7 +574,7 @@ public class Updater implements Screen {
 						enemies.get(i).setxVel(((float) (1.2f / hypot * (pile.getX()+ (pile.getWidth() / 2) - enemies.get(i).getX()))));
 						enemies.get(i).setyVel(((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
 						
-						((StealingEnemy) enemies.get(i)).setDir(enemies.get(i).getxVel(),enemies.get(i).getyVel());
+						((StealingEnemy) enemies.get(i)).setDir(pile.getHitbox());
 							
 						for(RectangleMapObject obj : borders) {
 							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
@@ -610,7 +610,7 @@ public class Updater implements Screen {
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
 							
-							((ThirdEnemy) enemies.get(i)).setDir(enemies.get(i).getxVel(),enemies.get(i).getyVel());
+							((ThirdEnemy) enemies.get(i)).setDir(player.getHitbox());
 							for(RectangleMapObject obj : borders) {
 								if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
 									Vector2 newTarget = enemies.get(i).investigatePath(obj.getRectangle());
@@ -642,7 +642,7 @@ public class Updater implements Screen {
 							}
 						
 						} else {
-							
+							((ThirdEnemy) enemies.get(i)).setDir(pile.getHitbox());
 							// Copied from stealer, might not work properly
 							hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
 									enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));

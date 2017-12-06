@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.StealingEnemy.DIRECTION;
 
 public class ThirdEnemy extends SpriteCommons {
@@ -31,10 +32,7 @@ public class ThirdEnemy extends SpriteCommons {
 		return dir;
 	}
 	
-	public void setDir(DIRECTION dir) {
-		this.dir = dir;
-	}
-	
+
 	// Sets all the animations
 	public void setAnimations(int row, int column, float frametime, Texture spritesheet){
 		animations = new Animator(row, column, frametime, spritesheet);
@@ -79,6 +77,27 @@ public class ThirdEnemy extends SpriteCommons {
 		return null;
 		
 		
+	}
+	public void setDir(Rectangle target) {
+		if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()>super.getY() )) {
+			dir = DIRECTION.UP;
+		}
+		 else if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()<super.getY() )) {
+		    	dir = DIRECTION.DOWN;
+			}
+				else if(target.getX()>super.getX() && target.getY()>super.getY()) {
+			dir = DIRECTION.LEFT;
+		}
+		else if(target.getX()<super.getX() && target.getY()>super.getY()) {
+			dir = DIRECTION.RIGHT;
+		}
+		else if(target.getX()>super.getX() && target.getY()<super.getY()) {
+			dir = DIRECTION.LEFT;
+	}
+		else if(target.getX()<super.getX() && target.getY()<super.getY()) {
+			dir = DIRECTION.RIGHT;
+	}
+   
 	}
 	public void setDir(float xVel, float yVel) {
 		float yplus = 0.5f;

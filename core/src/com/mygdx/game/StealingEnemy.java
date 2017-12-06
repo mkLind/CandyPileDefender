@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.ChaserEnemy.DIRECTION;
 
 public class StealingEnemy extends SpriteCommons {
 	
@@ -68,7 +69,27 @@ public class StealingEnemy extends SpriteCommons {
 		}
 		
 		}
-
+	public void setDir(Rectangle target) {
+		if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()>super.getY() )) {
+			dir = DIRECTION.UP;
+		}
+		 else if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()<super.getY() )) {
+		    	dir = DIRECTION.DOWN;
+			}
+				else if(target.getX()>super.getX() && target.getY()>super.getY()) {
+			dir = DIRECTION.LEFT;
+		}
+		else if(target.getX()<super.getX() && target.getY()>super.getY()) {
+			dir = DIRECTION.RIGHT;
+		}
+		else if(target.getX()>super.getX() && target.getY()<super.getY()) {
+			dir = DIRECTION.LEFT;
+	}
+		else if(target.getX()<super.getX() && target.getY()<super.getY()) {
+			dir = DIRECTION.RIGHT;
+	}
+   
+	}
 
 	
 	

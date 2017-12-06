@@ -85,6 +85,29 @@ public void setDir(DIRECTION dir) {
 		
 		
 	}
+	
+	public void setDir(Rectangle target) {
+		if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()>super.getY() )) {
+			dir = DIRECTION.UP;
+		}
+		 else if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()<super.getY() )) {
+		    	dir = DIRECTION.DOWN;
+			}
+				else if(target.getX()>super.getX() && target.getY()>super.getY()) {
+			dir = DIRECTION.LEFT;
+		}
+		else if(target.getX()<super.getX() && target.getY()>super.getY()) {
+			dir = DIRECTION.RIGHT;
+		}
+		else if(target.getX()>super.getX() && target.getY()<super.getY()) {
+			dir = DIRECTION.LEFT;
+	}
+		else if(target.getX()<super.getX() && target.getY()<super.getY()) {
+			dir = DIRECTION.RIGHT;
+	}
+   
+	}
+	
 	public void setDir(float xVel, float yVel) {
 		float yplus = 0.5f;
 		float yminus = -0.5f;
