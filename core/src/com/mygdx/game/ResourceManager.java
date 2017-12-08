@@ -65,6 +65,8 @@ public class ResourceManager {
 			manager.load("VendingMachine.png",Texture.class);
 			manager.load("candyindicator.png",Texture.class);
 			manager.load("Cloud.png",Texture.class);
+			manager.load("MainMenu.jpg",Texture.class);
+			manager.load("Instructions.jpg",Texture.class);
 			
 			manager.load("WalkingSpeedUp.png", Texture.class);
 			manager.load("FireRateUp.png", Texture.class);

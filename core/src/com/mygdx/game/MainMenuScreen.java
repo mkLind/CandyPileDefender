@@ -7,13 +7,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -54,6 +57,7 @@ public class MainMenuScreen implements Screen {
 	private String tmp;
 	// private String name;
 	private Music ambience;
+	private Texture background;
 	
 	public MainMenuScreen(final Core game) {
 		this.game = game;
@@ -67,7 +71,7 @@ public class MainMenuScreen implements Screen {
 
 		ambience = game.getLoader().getManager().get("Music/POL-horror-ambience-2-short_16bit.ogg", Music.class);
 		ambience.setLooping(true);
-
+		background = game.getLoader().getManager().get("MainMenu.jpg",Texture.class);
 		int row_height = Gdx.graphics.getWidth() / 10;
 		int col_width = Gdx.graphics.getWidth() / 12;
 
@@ -279,7 +283,7 @@ public class MainMenuScreen implements Screen {
 		mySkin.getFont("font-label").getData().setScale(1.7f);
 		list = new List(mySkin, "dimmed");
 		list.setSize(Gdx.graphics.getWidth() / 4, Gdx.graphics.getWidth() / 7);
-		list.setPosition(Gdx.graphics.getWidth() / 1.6f, Gdx.graphics.getHeight() - row_height * 2.5f);
+		list.setPosition(Gdx.graphics.getWidth() / 1.35f, Gdx.graphics.getHeight() - row_height * 1.75f);
 		list.setItems(labels);
 
 		if (game.getLoader().getScore() != 0) {
@@ -300,10 +304,11 @@ public class MainMenuScreen implements Screen {
 			list.setSelectedIndex(0);
 		}
 		stage.addActor(list);
+	
 		
 		instructions = new ScrollPane(label9, mySkin);
-		instructions.setSize(Gdx.graphics.getWidth() / 3.95f, Gdx.graphics.getHeight() / 6);
-		instructions.setPosition(Gdx.graphics.getWidth() / 1.605f, Gdx.graphics.getHeight() - row_height * 3.5f);
+		instructions.setSize(Gdx.graphics.getWidth() / 3.50f, Gdx.graphics.getHeight() / 5.5f);
+		instructions.setPosition(Gdx.graphics.getWidth() /  5.25f, Gdx.graphics.getHeight() - row_height * 4.65f);
 		stage.addActor(instructions);
 
 	}
@@ -351,6 +356,9 @@ public class MainMenuScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		game.batch.begin();
+		game.batch.draw(background, 0, 0, stage.getWidth(), stage.getHeight());
+		game.batch.end();
 		stage.act();
 		stage.draw();
 		if (game.getLoader().getMasterVolume()) {
