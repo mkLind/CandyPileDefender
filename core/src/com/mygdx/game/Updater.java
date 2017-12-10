@@ -93,7 +93,7 @@ public class Updater implements Screen {
 	private ArrayList<MapObject> mapObjects;
 
 	private ArrayList<Powerup> powerups;
-	private ArrayList<ParticleEffect> effects;
+
 	private long mpObjCooldown;
 	private long mpObjLastSet;
 
@@ -150,7 +150,7 @@ public class Updater implements Screen {
 		enemies = new ArrayList<SpriteCommons>();
 		enemyAdd = new ArrayList<SpriteCommons>();
 		proj = new ArrayList<Projectile>();
-		effects = new ArrayList<ParticleEffect>();
+		
 
 		camera = new OrthographicCamera();
 		aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
@@ -203,7 +203,7 @@ public class Updater implements Screen {
 
 				machine = new VendingMachine(20, 48, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(), 0, 0,
-						game.getLoader().getManager().get("VendingMachine.png", Texture.class));
+						game.getLoader().getManager().get("vendingmachine.png", Texture.class));
 
 			}
 		}
@@ -1266,11 +1266,7 @@ public class Updater implements Screen {
 	
 			mapRender.setView(camera);
 			mapRender.render();
-			if (!effects.isEmpty()) {
-				for (int i = 0; i < effects.size(); i++) {
-					effects.get(i).update(statetime);
-				}
-			}
+	
 	
 			game.batch.setProjectionMatrix(camera.combined);
 			game.batch.begin();
@@ -1464,22 +1460,7 @@ public class Updater implements Screen {
 				timeSinceWave = TimeUtils.millis();
 			}
 	
-			// Update particles in the list FURTHER WORK REQUIRED
-			if (!effects.isEmpty()) {
-				System.out.println("AMOUNT OF EFFECTS CURRENTLY RENDERING: " + effects.size());
-				for (int i = 0; i < effects.size(); i++) {
-	
-					if (!effects.get(i).isComplete()) {
-	
-						effects.get(i).draw(game.batch);
-					} else {
-						effects.get(i).dispose();
-						effects.remove(i);
-	
-					}
-				}
-	
-			}
+		
 	
 			game.batch.end();
 	
@@ -1580,11 +1561,8 @@ public class Updater implements Screen {
 
 		powerup.setTypeAndGraphic(game);
 		powerup.setTimeAlive(TimeUtils.millis());
-		ParticleEffect effect = powerup.getSpawnEffect();
-
-		effect.start();
-		effects.add(effect);
-		System.out.println("Returning a new powerup");
+		
+	
 		return powerup;
 
 	}
