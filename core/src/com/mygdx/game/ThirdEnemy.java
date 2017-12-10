@@ -82,22 +82,58 @@ public class ThirdEnemy extends SpriteCommons {
 		if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()>super.getY() )) {
 			dir = DIRECTION.UP;
 		}
-		 else if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()<super.getY() )) {
+		 if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()<super.getY() )) {
 		    	dir = DIRECTION.DOWN;
 			}
-				else if(target.getX()>super.getX() && target.getY()>super.getY()) {
-			dir = DIRECTION.LEFT;
-		}
-		else if(target.getX()<super.getX() && target.getY()>super.getY()) {
+		if(target.getX()>super.getX() && target.getY()>super.getY()) {
 			dir = DIRECTION.RIGHT;
 		}
-		else if(target.getX()>super.getX() && target.getY()<super.getY()) {
+		if(target.getX()<super.getX() && target.getY()>super.getY()) {
 			dir = DIRECTION.LEFT;
+		}
+		if(target.getX()>super.getX() && target.getY()<super.getY()) {
+			dir = DIRECTION.RIGHT;
 	}
-		else if(target.getX()<super.getX() && target.getY()<super.getY()) {
-			dir = DIRECTION.RIGHT;
+		 if(target.getX()<super.getX() && target.getY()<super.getY()) {
+			dir = DIRECTION.LEFT;
 	}
    
+	}
+	
+	
+	public void setDir() {
+		float xv = super.getxVel();
+		float yv = super.getyVel();
+		if(xv > 0 && yv > 0) {
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.RIGHT;
+			}else {
+				dir = DIRECTION.UP;
+			}
+			
+		}
+		if(xv < 0 && yv > 0) {
+			
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.LEFT;
+			}else {
+				dir = DIRECTION.UP;
+			}
+		}
+		if(xv > 0 && yv < 0) {
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.RIGHT;
+			}else {
+				dir = DIRECTION.DOWN;
+			}
+		}
+		if(xv < 0 && yv < 0) {
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.LEFT;
+			}else {
+				dir = DIRECTION.DOWN;
+			}
+}
 	}
 	public void setDir(float xVel, float yVel) {
 		float yplus = 0.5f;

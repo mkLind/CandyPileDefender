@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -106,6 +107,62 @@ public void setDir(DIRECTION dir) {
 			dir = DIRECTION.RIGHT;
 	}
    
+	}
+	
+	public void setDirc(Player target) {
+		
+	if(target.getPreviousX()>super.getX()) {
+		dir = DIRECTION.LEFT;
+		if(target.getPreviousY() - super.getY()>target.getHitbox().getHeight()) {
+			dir = DIRECTION.UP;
+		}else if(target.getPreviousY() - super.getY()<target.getHitbox().getHeight()) {
+			dir = DIRECTION.DOWN;
+		}
+		
+		
+	}else {
+		dir = DIRECTION.RIGHT;
+		if(target.getPreviousY() - super.getY()>target.getHitbox().getHeight()) {
+			dir = DIRECTION.UP;
+		}else if(target.getPreviousY() - super.getY()<target.getHitbox().getHeight()) {
+			dir = DIRECTION.DOWN;
+		}
+	}
+		
+		}
+	public void setDir() {
+		float xv = super.getxVel();
+		float yv = super.getyVel();
+		if(xv > 0 && yv > 0) {
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.LEFT;
+			}else {
+				dir = DIRECTION.UP;
+			}
+			
+		}
+		if(xv < 0 && yv > 0) {
+			
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.RIGHT;
+			}else {
+				dir = DIRECTION.UP;
+			}
+		}
+		if(xv > 0 && yv < 0) {
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.LEFT;
+			}else {
+				dir = DIRECTION.DOWN;
+			}
+		}
+		if(xv < 0 && yv < 0) {
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.RIGHT;
+			}else {
+				dir = DIRECTION.DOWN;
+			}
+}
 	}
 	
 	public void setDir(float xVel, float yVel) {

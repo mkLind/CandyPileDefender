@@ -69,26 +69,41 @@ public class StealingEnemy extends SpriteCommons {
 		}
 		
 		}
-	public void setDir(Rectangle target) {
-		if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()>super.getY() )) {
-			dir = DIRECTION.UP;
-		}
-		 else if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()<super.getY() )) {
-		    	dir = DIRECTION.DOWN;
+	
+	
+	public void setDir() {
+		float xv = super.getxVel();
+		float yv = super.getyVel();
+		if(xv > 0 && yv > 0) {
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.RIGHT;
+			}else {
+				dir = DIRECTION.UP;
 			}
-				else if(target.getX()>super.getX() && target.getY()>super.getY()) {
-			dir = DIRECTION.LEFT;
+			
 		}
-		else if(target.getX()<super.getX() && target.getY()>super.getY()) {
-			dir = DIRECTION.RIGHT;
+		if(xv < 0 && yv > 0) {
+			
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.LEFT;
+			}else {
+				dir = DIRECTION.UP;
+			}
 		}
-		else if(target.getX()>super.getX() && target.getY()<super.getY()) {
-			dir = DIRECTION.LEFT;
-	}
-		else if(target.getX()<super.getX() && target.getY()<super.getY()) {
-			dir = DIRECTION.RIGHT;
-	}
-   
+		if(xv > 0 && yv < 0) {
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.RIGHT;
+			}else {
+				dir = DIRECTION.DOWN;
+			}
+		}
+		if(xv < 0 && yv < 0) {
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.LEFT;
+			}else {
+				dir = DIRECTION.DOWN;
+			}
+}
 	}
 
 	

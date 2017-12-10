@@ -391,8 +391,8 @@ public class Updater implements Screen {
 			Vector2 hb = new Vector2(machine.getHitbox().getX(), machine.getHitbox().getY()); 
 			if (hb.dst(player.getX(), player.getY())<player.getWidth() + 10) {
 				
+						
 			
-	
 				player.setCollectedCandy(player.getCollectedCandy() + machine.distributeCandy(player.getHitbox(),Collect,game.getLoader().getMasterVolume()));
 	
 			}
@@ -524,7 +524,7 @@ public class Updater implements Screen {
 						enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
 						enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
 						
-						((ChaserEnemy) enemies.get(i)).setDir(player.getHitbox());
+						((ChaserEnemy) enemies.get(i)).setDir();
 						
 	
 						for(RectangleMapObject obj : borders) {
@@ -574,7 +574,7 @@ public class Updater implements Screen {
 						enemies.get(i).setxVel(((float) (1.2f / hypot * (pile.getX()+ (pile.getWidth() / 2) - enemies.get(i).getX()))));
 						enemies.get(i).setyVel(((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
 						
-						((StealingEnemy) enemies.get(i)).setDir(pile.getHitbox());
+						((StealingEnemy) enemies.get(i)).setDir();
 							
 						for(RectangleMapObject obj : borders) {
 							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
@@ -610,7 +610,7 @@ public class Updater implements Screen {
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
 							
-							((ThirdEnemy) enemies.get(i)).setDir(player.getHitbox());
+							((ThirdEnemy) enemies.get(i)).setDir();
 							for(RectangleMapObject obj : borders) {
 								if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
 									Vector2 newTarget = enemies.get(i).investigatePath(obj.getRectangle());
@@ -642,7 +642,7 @@ public class Updater implements Screen {
 							}
 						
 						} else {
-							((ThirdEnemy) enemies.get(i)).setDir(pile.getHitbox());
+							((ThirdEnemy) enemies.get(i)).setDir();
 							// Copied from stealer, might not work properly
 							hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
 									enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
@@ -1542,8 +1542,18 @@ public class Updater implements Screen {
 				boolean overlaps = true;
 				while (overlaps) {
 					if (borders.get(i).getRectangle().contains(x, y)) {
-						x++;
-						y++;
+						if(pile.getX()>x) {
+							x++;
+						}else {
+							x--;
+						}
+						if(pile.getY()>y) {
+							y++;
+						}else {
+							y--;
+						}
+						
+						
 					} else {
 						overlaps = false;
 					}
