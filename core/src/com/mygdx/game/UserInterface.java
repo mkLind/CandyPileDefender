@@ -170,8 +170,6 @@ public class UserInterface {
 		Dialog dialog = new Dialog("", mySkin);
 		dialog.getBackground().setMinWidth(600f);
 		dialog.getBackground().setMinHeight(600f);
-		dialog.getButtonTable();
-		dialog.row();
 		dialog.getContentTable().add(instr);
 		dialog.button("Close", true); 
 		dialog.key(Keys.ENTER, true); 
