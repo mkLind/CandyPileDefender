@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="35" height="26" tilewidth="30" tileheight="30" nextobjectid="43">
- <tileset firstgid="1" name="BaseTiles" tilewidth="30" tileheight="30" tilecount="12" columns="4">
-  <image source="BaseTilesets.png" trans="ffffff" width="120" height="90"/>
+ <tileset firstgid="1" name="BaseTiles" tilewidth="30" tileheight="30" tilecount="36" columns="6">
+  <image source="BaseTilesets.png" trans="ffffff" width="180" height="180"/>
  </tileset>
- <tileset firstgid="13" name="DecoTiles" tilewidth="30" tileheight="30" tilecount="60" columns="12">
+ <tileset firstgid="37" name="DecoTiles" tilewidth="30" tileheight="30" tilecount="60" columns="12">
   <image source="DecoTilesets.png" trans="ffffff" width="360" height="158"/>
   <tile id="0">
    <animation>
@@ -16,22 +16,22 @@
  </tileset>
  <layer name="Base" width="35" height="26">
   <data encoding="base64" compression="zlib">
-   eJztlUEOwCAIBLWJtv9/cT3UpCGKC2jCgcNcWqHjSuyVUrqCIDBTG3fjYd5XYN1pRy8O9Ps7nLjeaAYaj3Iop+6xcik/NPXI99E+NAvLvNFaWr8j91F22j6WfXMOo7OQzuPKBc3BMpO7QfYicbDcQdZcac2JO3rmMPLLH/357F7tSDwyYeZD13EgZ8s5aPt6YnVGHv7/0tkI/PEC0C8I2w==
+   eJztlTEOwCAIRbWLtvc/cB1q0hDFD2jCwPCWVujzS+yVUrqCIDBTG3fjYd5XYN1pRy8O9Ps7nLjeaAYaj3Iop+6xcik/NPXI99E+NAvLvNFaWr8j91F22j6WfXMOo7OQzuPKBc3BMpO7QfYicbDcQdZcac2JO3rmMPLLH/357F7tSDwyYeZD13EgZ8s5aPt6YnVGHv7/0tkI/PEC4DAJ4Q==
   </data>
  </layer>
  <layer name="Middle" width="35" height="26">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFgx1wATE3GuZCEsfHxkZjMxsXjS7GSWWMDCjROwpGwSgYBaNgFIyCUUAtIDTQDhiBgGsQYWq3d6nVVh5oAACXGAUc
+   eJxjYBgFgx3wATE/GuZDEsfHxkZjMxsXjS7GS2WMDCjROwpGwSgYBaNgFIyCUUAtoDXQDhiBgG8QYWq3d6nVVh5oAAAiGgdM
   </data>
  </layer>
  <layer name="Top" width="35" height="26">
   <data encoding="base64" compression="zlib">
-   eJztlk0OhCAMhRsX7lzgbjyA9z/ibMbYvPQXMHYxX9KIpcCzQCzRzcFM8h1KHMZcdiYM58I+z8ffpbU1jZpmgjaB7zR8me/O5KYCmI83qahlG5hjZCxHysusubNE96ix9lNaK56XClTWgmehUR+r0/8JaJnFSr4eJPsPyNyhrBYrL9a6S1AL1+ON6d2jiBaiXG5GtUQ1RXjrTkv7f9UwvXd3Jtmaav89pTpYozmxWG9Ga1Orto7Gj9TomnGi8Zb/T32+W7sY/g==
+   eJztlk0OhCAMhRtXXsQF7sYDeP9jzWaMzUt/AWMX8yWNWAo8C8QS3RzMJN+hxGHMZWfCcC7s83z8XVpb06hpJmgT+E7Dl/nuTG4qgPl4k4patoE5RsZypLzMmjtLdI8aaz+lteJ5qUBlLXgWGvWxOv2fgJZZrOTrQbL/gMwdymqx8mKtuwS1cD3emN49imghyuVmVEtUU4S37rS0/1cN03t3Z5KtqfbfU6qDNZoTi/VmtDa1auto/EiNrhknGm/5/9TnC0hqK7Q=
   </data>
  </layer>
  <layer name="Decorations" width="35" height="26">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFQxUIDbQDaASGmr94B9oBSGDULdjBqFuwg8HmlsGS9wdbuAwWMOoW7GAkuYWUPEort5BTToykOCIWDJbydhQMLQAAixgBPQ==
+   eJxjYBgFQxVoDbQDaASGmr9UB9oBSGDULdjBqFuwg8HmlsGS9wdbuAwWMOoW7GAkuYWUPEort5BTToykOCIWDJbydhQMLQAAt0oDTQ==
   </data>
  </layer>
  <objectgroup name="Borders">

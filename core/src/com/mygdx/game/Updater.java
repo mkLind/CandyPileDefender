@@ -93,7 +93,7 @@ public class Updater implements Screen {
 	private ArrayList<MapObject> mapObjects;
 
 	private ArrayList<Powerup> powerups;
-	private ArrayList<ParticleEffect> effects;
+
 	private long mpObjCooldown;
 	private long mpObjLastSet;
 
@@ -150,7 +150,7 @@ public class Updater implements Screen {
 		enemies = new ArrayList<SpriteCommons>();
 		enemyAdd = new ArrayList<SpriteCommons>();
 		proj = new ArrayList<Projectile>();
-		effects = new ArrayList<ParticleEffect>();
+		
 
 		camera = new OrthographicCamera();
 		aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
@@ -203,7 +203,7 @@ public class Updater implements Screen {
 
 				machine = new VendingMachine(20, 48, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(), 0, 0,
-						game.getLoader().getManager().get("VendingMachine.png", Texture.class));
+						game.getLoader().getManager().get("vendingmachine.png", Texture.class));
 
 			}
 		}
@@ -271,7 +271,7 @@ public class Updater implements Screen {
 
 				// new stealer
 				// why tmp here and chaser in the second one?
-				StealingEnemy tmpSE = new StealingEnemy(30, 40, monsterSpawns.get(tmp).getRectangle().getX(),
+				StealingEnemy tmpSE = new StealingEnemy(21, 32, monsterSpawns.get(tmp).getRectangle().getX(),
 						monsterSpawns.get(tmp).getRectangle().getY(), 1);
 				tmpSE.setAnimations(4, 3, 0.10f,
 						game.getLoader().getManager().get("SkeletonTileset.png", Texture.class));
@@ -279,19 +279,20 @@ public class Updater implements Screen {
 				enemyAdd.add(tmpSE);
 
 				// new chaser
-				ChaserEnemy chaser = new ChaserEnemy(21, 32, monsterSpawns.get(tmp2).getRectangle().getX(),
-						monsterSpawns.get(tmp2).getRectangle().getY(), 2,
-						game.getLoader().getManager().get("chaserTest.png", Texture.class));
+				ChaserEnemy chaser = new ChaserEnemy(27, 36, monsterSpawns.get(tmp2).getRectangle().getX(),
+						monsterSpawns.get(tmp2).getRectangle().getY(), 2);
+				chaser.setAnimations(4, 3, 0.10f, game.getLoader().getManager().get("PumpkinTileset.png", Texture.class));
+			
 				// Id that differs from stealer id's
 				chaser.setId(timesCalled + i);
 
 				enemyAdd.add(chaser);
 				
 				//THIRD ENEMY TRY, NO IDEA ABOUT ID
-				ThirdEnemy thirdEnemy = new ThirdEnemy(30, 40, monsterSpawns.get(tmp).getRectangle().getX(),
+				ThirdEnemy thirdEnemy = new ThirdEnemy(28, 43, monsterSpawns.get(tmp).getRectangle().getX(),
 						monsterSpawns.get(tmp).getRectangle().getY(), 1);
 				thirdEnemy.setAnimations(4, 3, 0.10f,
-						game.getLoader().getManager().get("thirdEnemyTest.png", Texture.class));
+						game.getLoader().getManager().get("WitchTileset.png", Texture.class));
 				//thirdEnemy.setId(); what's the point of the ID
 				enemyAdd.add(thirdEnemy);
 				
@@ -390,8 +391,8 @@ public class Updater implements Screen {
 			Vector2 hb = new Vector2(machine.getHitbox().getX(), machine.getHitbox().getY()); 
 			if (hb.dst(player.getX(), player.getY())<player.getWidth() + 10) {
 				
+						
 			
-	
 				player.setCollectedCandy(player.getCollectedCandy() + machine.distributeCandy(player.getHitbox(),Collect,game.getLoader().getMasterVolume()));
 	
 			}
@@ -523,6 +524,7 @@ public class Updater implements Screen {
 						enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
 						enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
 						
+						((ChaserEnemy) enemies.get(i)).setDir();
 						
 	
 						for(RectangleMapObject obj : borders) {
@@ -572,7 +574,7 @@ public class Updater implements Screen {
 						enemies.get(i).setxVel(((float) (1.2f / hypot * (pile.getX()+ (pile.getWidth() / 2) - enemies.get(i).getX()))));
 						enemies.get(i).setyVel(((float) (1.2f / hypot * (pile.getY() + (pile.getHeight() / 2) - enemies.get(i).getY()))));
 						
-						((StealingEnemy) enemies.get(i)).setDir(enemies.get(i).getxVel(),enemies.get(i).getyVel());
+						((StealingEnemy) enemies.get(i)).setDir();
 							
 						for(RectangleMapObject obj : borders) {
 							if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), pile.getHitbox())) {
@@ -608,7 +610,7 @@ public class Updater implements Screen {
 							enemies.get(i).setxVel(((float) (1.5f / hypot * (player.getPreviousX() - enemies.get(i).getX()))));
 							enemies.get(i).setyVel(((float) (1.5f / hypot * (player.getPreviousY() - enemies.get(i).getY()))));
 							
-							
+							((ThirdEnemy) enemies.get(i)).setDir();
 							for(RectangleMapObject obj : borders) {
 								if(enemies.get(i).existsObstaclesinLine(obj.getRectangle(), player.getHitbox())) {
 									Vector2 newTarget = enemies.get(i).investigatePath(obj.getRectangle());
@@ -640,7 +642,7 @@ public class Updater implements Screen {
 							}
 						
 						} else {
-							
+							((ThirdEnemy) enemies.get(i)).setDir();
 							// Copied from stealer, might not work properly
 							hypot = Math.hypot(enemies.get(i).getX() - pile.getX()+ (pile.getWidth() / 2),
 									enemies.get(i).getX() - pile.getY() + (pile.getHeight() / 2));
@@ -1268,11 +1270,7 @@ public class Updater implements Screen {
 	
 			mapRender.setView(camera);
 			mapRender.render();
-			if (!effects.isEmpty()) {
-				for (int i = 0; i < effects.size(); i++) {
-					effects.get(i).update(statetime);
-				}
-			}
+	
 	
 			game.batch.setProjectionMatrix(camera.combined);
 			game.batch.begin();
@@ -1375,6 +1373,7 @@ public class Updater implements Screen {
 								enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 						game.batch.setColor(Color.WHITE);
 					} else {
+						System.out.println("Frame not set: " + enemies.get(i).getCurrentFrame(statetime)==null);
 						game.batch.draw(enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
 								enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 					}
@@ -1383,11 +1382,12 @@ public class Updater implements Screen {
 				} else if (enemies.get(i) instanceof ChaserEnemy) {
 					if (enemies.get(i).getIsHit()) {
 						game.batch.setColor(Color.RED);
-						game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
+						game.batch.draw( enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
 								enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 						game.batch.setColor(Color.WHITE);
 					} else {
-						game.batch.draw(((ChaserEnemy) enemies.get(i)).getTexture(), enemies.get(i).getX(),
+						System.out.println("Frame Set: " + enemies.get(i).getCurrentFrame(statetime)==null);
+						game.batch.draw(enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
 								enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 					}
 				
@@ -1403,7 +1403,7 @@ public class Updater implements Screen {
 						game.batch.setColor(Color.WHITE);
 					
 					} else {
-						
+						System.out.println("Frame Set: " + enemies.get(i).getCurrentFrame(statetime)==null);
 						game.batch.draw(enemies.get(i).getCurrentFrame(statetime), enemies.get(i).getX(),
 								enemies.get(i).getY(), enemies.get(i).getWidth(), enemies.get(i).getHeight());
 						
@@ -1464,22 +1464,7 @@ public class Updater implements Screen {
 				timeSinceWave = TimeUtils.millis();
 			}
 	
-			// Update particles in the list FURTHER WORK REQUIRED
-			if (!effects.isEmpty()) {
-				System.out.println("AMOUNT OF EFFECTS CURRENTLY RENDERING: " + effects.size());
-				for (int i = 0; i < effects.size(); i++) {
-	
-					if (!effects.get(i).isComplete()) {
-	
-						effects.get(i).draw(game.batch);
-					} else {
-						effects.get(i).dispose();
-						effects.remove(i);
-	
-					}
-				}
-	
-			}
+		
 	
 			game.batch.end();
 	
@@ -1542,8 +1527,18 @@ public class Updater implements Screen {
 				boolean overlaps = true;
 				while (overlaps) {
 					if (borders.get(i).getRectangle().contains(x, y)) {
-						x++;
-						y++;
+						if(pile.getX()>x) {
+							x++;
+						}else {
+							x--;
+						}
+						if(pile.getY()>y) {
+							y++;
+						}else {
+							y--;
+						}
+						
+						
 					} else {
 						overlaps = false;
 					}
@@ -1570,11 +1565,8 @@ public class Updater implements Screen {
 
 		powerup.setTypeAndGraphic(game);
 		powerup.setTimeAlive(TimeUtils.millis());
-		ParticleEffect effect = powerup.getSpawnEffect();
-
-		effect.start();
-		effects.add(effect);
-		System.out.println("Returning a new powerup");
+		
+	
 		return powerup;
 
 	}

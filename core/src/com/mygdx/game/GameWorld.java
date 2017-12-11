@@ -20,7 +20,7 @@ public class GameWorld {
 
 	
 	public GameWorld(){
-		map = new TmxMapLoader().load("CandyPileMap.tmx");
+		map = new TmxMapLoader().load("CandyMap2.tmx");
 
 		borders = map.getLayers().get("Borders").getObjects();
 		spawnPoints = map.getLayers().get("Coordinates").getObjects();

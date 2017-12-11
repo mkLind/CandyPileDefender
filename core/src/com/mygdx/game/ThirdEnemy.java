@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.StealingEnemy.DIRECTION;
 
 public class ThirdEnemy extends SpriteCommons {
@@ -19,15 +20,7 @@ public class ThirdEnemy extends SpriteCommons {
 	public ThirdEnemy(int width, int height, float x, float y, int HP) {
 		super(width, height, x, y, 0, 0, HP);
 		
-		if (y < 10) {
-			dir = DIRECTION.UP;
-		} else if (x < 10) {
-			dir = DIRECTION.RIGHT;			
-		} else if (x > 100) {
-			dir = DIRECTION.LEFT;	
-		}else {
-			dir = DIRECTION.DOWN;
-		}
+		setDir(super.getxVel(), super.getyVel());
 		
 	}
 
@@ -39,10 +32,7 @@ public class ThirdEnemy extends SpriteCommons {
 		return dir;
 	}
 	
-	public void setDir(DIRECTION dir) {
-		this.dir = dir;
-	}
-	
+
 	// Sets all the animations
 	public void setAnimations(int row, int column, float frametime, Texture spritesheet){
 		animations = new Animator(row, column, frametime, spritesheet);
@@ -88,5 +78,97 @@ public class ThirdEnemy extends SpriteCommons {
 		
 		
 	}
+	public void setDir(Rectangle target) {
+		if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()>super.getY() )) {
+			dir = DIRECTION.UP;
+		}
+		 if((Math.abs(target.getX() - super.getX())<target.getWidth() && target.getY()<super.getY() )) {
+		    	dir = DIRECTION.DOWN;
+			}
+		if(target.getX()>super.getX() && target.getY()>super.getY()) {
+			dir = DIRECTION.RIGHT;
+		}
+		if(target.getX()<super.getX() && target.getY()>super.getY()) {
+			dir = DIRECTION.LEFT;
+		}
+		if(target.getX()>super.getX() && target.getY()<super.getY()) {
+			dir = DIRECTION.RIGHT;
+	}
+		 if(target.getX()<super.getX() && target.getY()<super.getY()) {
+			dir = DIRECTION.LEFT;
+	}
+   
+	}
+	
+	
+	public void setDir() {
+		float xv = super.getxVel();
+		float yv = super.getyVel();
+		if(xv > 0 && yv > 0) {
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.RIGHT;
+			}else {
+				dir = DIRECTION.UP;
+			}
+			
+		}
+		if(xv < 0 && yv > 0) {
+			
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.LEFT;
+			}else {
+				dir = DIRECTION.UP;
+			}
+		}
+		if(xv > 0 && yv < 0) {
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.RIGHT;
+			}else {
+				dir = DIRECTION.DOWN;
+			}
+		}
+		if(xv < 0 && yv < 0) {
+			if(Math.abs(xv)>Math.abs(yv)) {
+				dir = DIRECTION.LEFT;
+			}else {
+				dir = DIRECTION.DOWN;
+			}
+}
+	}
+	public void setDir(float xVel, float yVel) {
+		float yplus = 0.5f;
+		float yminus = -0.5f;
+		
+		float xplus = 0.5f;
+		float xminus = -0.5f;
+		
+		if(yVel>=yplus && xVel<xplus) {
+			dir = DIRECTION.UP;
+		}
+		else if(yVel>=yplus && xVel>=xplus) {
+			dir = DIRECTION.RIGHT;
+		}
+		else if(yVel<yminus && xVel<xplus) {
+			dir = DIRECTION.DOWN;
+		}
+		else if(yVel<yminus && xVel>=xplus) {
+			dir = DIRECTION.RIGHT;
+			
+		}else if(yVel>=yplus && xVel<xminus) {
+			dir = DIRECTION.LEFT;
+		}
+		else if(yVel>=yplus && xVel>xminus && xVel < xplus) {
+			dir = DIRECTION.UP;
+		}
+		else if(yVel<yminus && xVel<xminus) {
+			dir = DIRECTION.LEFT;
+		}
+		else if(yVel<yminus && xVel>xminus && xVel < xplus) {
+			dir = DIRECTION.DOWN;
+		}else if(yVel ==0 && xVel==0) {
+			dir = DIRECTION.LEFT;
+		}
+		
+		}
 	
 }

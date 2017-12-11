@@ -58,13 +58,15 @@ public class ResourceManager {
 
 		try {
 			manager.load("Pointer.png", Texture.class);
-			manager.load("chaserTest.png", Texture.class);
-			manager.load("stealTest.png", Texture.class);
+		
+	
 			manager.load("pileTest.png", Texture.class);
 			manager.load("pileTest2.png", Texture.class);
-			manager.load("VendingMachine.png",Texture.class);
+			manager.load("vendingmachine.png",Texture.class);
 			manager.load("candyindicator.png",Texture.class);
-			manager.load("Cloud.png",Texture.class);
+		
+			manager.load("MainMenu.jpg",Texture.class);
+			manager.load("Instructions.jpg",Texture.class);
 			
 			manager.load("WalkingSpeedUp.png", Texture.class);
 			manager.load("FireRateUp.png", Texture.class);
@@ -79,6 +81,8 @@ public class ResourceManager {
 			manager.load("PirateTileset.png",Texture.class);
 			
 			manager.load("SkeletonTileset.png", Texture.class);
+			manager.load("PumpkinTileset.png",Texture.class);
+			manager.load("WitchTileset.png",Texture.class);
 			manager.load("thirdEnemyTest.png", Texture.class);
 			// Each candy pile phase is a different .png
 			manager.load("CPBigCrop.png", Texture.class);
