@@ -203,7 +203,7 @@ public class Updater implements Screen {
 
 				machine = new VendingMachine(20, 48, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(), 0, 0,
-						game.getLoader().getManager().get("vendingmachine.png", Texture.class));
+						game.getLoader().getManager().get("VendingMachine.png", Texture.class));
 
 			}
 		}
@@ -1219,6 +1219,12 @@ public class Updater implements Screen {
 	
 				}
 			}
+			//remove projectile if hits pile
+			for (int i = 0; i < proj.size(); i++) {
+				if (Intersector.overlaps(proj.get(i).getHitbox(), pile.getHitbox())) {
+					proj.remove(i);
+				}
+			}
 	
 			for (int i = 0; i < enemies.size(); i++) {
 	
@@ -1245,8 +1251,6 @@ public class Updater implements Screen {
 							enemies.remove(i);
 							break;
 						}
-					} else if (Intersector.overlaps(proj.get(j).getHitbox(), pile.getHitbox())) {
-						proj.remove(j);
 					}
 				}
 			}

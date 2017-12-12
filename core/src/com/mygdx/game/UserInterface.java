@@ -108,7 +108,7 @@ public class UserInterface {
 	}
 
 	public TextButton newButton(String name, float width, float x, float y) {
-		button = new TextButton(name, mySkin);
+		button = new TextButton(name, mySkin, "round");
 		button.setWidth(width);
 		button.setPosition(x - button.getWidth() / 2, y - button.getHeight() / 2);
 
@@ -165,5 +165,14 @@ public class UserInterface {
 		dialog.key(Keys.ENTER, false);
 		return dialog;
 	}
-
+	
+	public Dialog newInstructionsDialog(Image instr) {
+		Dialog dialog = new Dialog("", mySkin);
+		dialog.getBackground().setMinWidth(600f);
+		dialog.getBackground().setMinHeight(600f);
+		dialog.getContentTable().add(instr);
+		dialog.button("Close", true); 
+		dialog.key(Keys.ENTER, true); 
+		return dialog;
+	}
 }
