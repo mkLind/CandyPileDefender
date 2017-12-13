@@ -203,7 +203,7 @@ public class Updater implements Screen {
 
 				machine = new VendingMachine(20, 48, spawnPoints.get(i).getRectangle().getX(),
 						spawnPoints.get(i).getRectangle().getY(), 0, 0,
-						game.getLoader().getManager().get("VendingMachine.png", Texture.class));
+						game.getLoader().getManager().get("vendingmachine.png", Texture.class));
 
 			}
 		}
